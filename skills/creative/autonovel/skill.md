@@ -1,7 +1,7 @@
 ---
 name: autonovel
-description: "Autonomous novel-writing pipeline. Generates full 75,000-word novels using a 4-phase pipeline: Foundation → First Draft → Revision Cycles → PDF Export. Powered by NousResearch/autonovel."
-tags: [novel, writing, creative, fiction, book, story, pipeline, autonovel]
+description: "Autonomous novel-writing pipeline. Generates full 75,000-word novels using a 4-phase pipeline: Foundation → First Draft → Revision Cycles → PDF Export. Uses Groq/OpenRouter (free) instead of Anthropic. Includes free cover art via image search + composition."
+tags: [novel, writing, creative, fiction, book, story, pipeline, autonovel, groq, openrouter]
 platforms: [linux, macos, windows]
 triggers:
   - write a novel
@@ -13,139 +13,133 @@ triggers:
   - write fiction
   - novel pipeline
   - autonovel
+  - write a story
 ---
 
 # Autonovel — Autonomous Novel Writing Pipeline
 
-The autonovel pipeline lives at: `C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel\`
-
-It produces full novels (~75,000 words) in 4 phases using Claude/Anthropic models.
-Timeline: ~15–30 hours of API time per novel.
+Pipeline lives at: `C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel\`
+Produces full novels (~75,000 words) in 4 phases.
+**Uses Groq + OpenRouter (no Anthropic needed).**
 
 ---
 
-## Setup (First Time Only)
+## Model Setup (Groq/OpenRouter instead of Anthropic)
+
+The pipeline uses an OpenAI-compatible API. Point it at Groq or OpenRouter:
+
+### Option A — Groq (fastest, free tier)
+```
+AUTONOVEL_API_BASE_URL=https://api.groq.com/openai/v1
+AUTONOVEL_WRITER_MODEL=moonshotai/kimi-k2-instruct   # via OpenRouter, or:
+AUTONOVEL_WRITER_MODEL=llama-3.3-70b-versatile        # native Groq
+AUTONOVEL_JUDGE_MODEL=llama-3.1-70b-versatile
+AUTONOVEL_REVIEW_MODEL=llama-3.3-70b-versatile
+ANTHROPIC_API_KEY=<your groq key here>  # library reads this var
+```
+
+### Option B — OpenRouter (more model choice)
+```
+AUTONOVEL_API_BASE_URL=https://openrouter.ai/api/v1
+AUTONOVEL_WRITER_MODEL=anthropic/claude-sonnet-4-5    # or any free model
+AUTONOVEL_JUDGE_MODEL=google/gemini-2.5-flash
+AUTONOVEL_REVIEW_MODEL=anthropic/claude-opus-4
+ANTHROPIC_API_KEY=<your openrouter key here>
+```
+
+The `.env` is at: `C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel\.env`
+
+---
+
+## Cover Art (Free — No Paid APIs)
+
+The agent handles cover art WITHOUT fal.ai/Midjourney. Strategy:
+
+1. **Unsplash free API** — search for thematic imagery (free, no key needed for basic)
+2. **Pexels API** — `PEXELS_API_KEY` already in hermes .env
+3. **Pixabay API** — `PIXABAY_API_KEY` in hermes .env
+4. **Compose in Python** — use PIL/Pillow to layer image + title + author text
+
+The agent runs `gen_cover_composite.py` which:
+- Downloads 3-5 candidate images from free APIs
+- Selects best match for genre/theme
+- Overlays title, subtitle, author in book-cover typography
+- Outputs a print-ready `cover.jpg`
 
 ```bash
 cd C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel
-uv sync
-# Copy .env.example to .env and fill in API keys
-copy .env.example .env
+python gen_cover_composite.py --title "My Novel" --author "MWIJAY" --theme "sci-fi dystopia"
 ```
-
-Required keys in `.env`:
-- `ANTHROPIC_API_KEY` — for Claude (writer + judge + reviewer)
-- `FAL_KEY` — optional, for cover art generation
-- `ELEVENLABS_API_KEY` — optional, for audiobook generation
-
-Model defaults (can override in `.env`):
-- Writer: `claude-sonnet-4-6`
-- Judge: `claude-sonnet-4-6`
-- Reviewer: `claude-opus-4-6`
 
 ---
 
 ## The 4 Phases
 
-### Phase 1 — Foundation (2–4 hours)
-Build the world, characters, and outline before writing a word.
-
+### Phase 1 — Foundation (2–4 hrs)
 ```bash
-python seed.py          # Create initial seed from a concept
-python gen_world.py     # World-building pass
-python gen_characters.py # Character profiles
-python gen_canon.py     # Lore / rules of the world
-python gen_outline.py   # Full chapter-by-chapter outline
-python evaluate.py --foundation  # Score: target >7.5 on all dimensions
+python seed.py            # Concept → seed
+python gen_world.py       # World-building
+python gen_characters.py  # Character profiles
+python gen_canon.py       # Lore / rules
+python gen_outline.py     # Chapter-by-chapter outline
+python evaluate.py --foundation  # Target score >7.5
 ```
 
-Iterate until foundation scores ≥ 7.5 on all dimensions.
-
-### Phase 2 — First Draft (8–16 hours)
-Draft all chapters sequentially. Each chapter is scored; retry if < 6.0.
-
+### Phase 2 — First Draft (8–16 hrs)
 ```bash
-python draft_chapter.py --chapter 1
-python evaluate.py --chapter 1
-# ... repeat for all chapters
-# OR run the full pipeline:
-python run_drafts.py
+python run_drafts.py      # Draft all chapters (retries if score < 6.0)
 ```
 
-### Phase 3 — Revision Cycles (4–8 hours)
-Up to 6 revision cycles. Stop when no major unqualified issues remain.
-
+### Phase 3 — Revision Cycles (4–8 hrs, max 6 cycles)
 ```bash
-python adversarial_edit.py   # Find OVER-EXPLAIN / REDUNDANT patterns
+python adversarial_edit.py   # Find OVER-EXPLAIN / REDUNDANT
 python apply_cuts.py         # Apply mechanical cuts
-python reader_panel.py       # Simulated reader panel feedback
-python review.py             # Full dual-persona manuscript review
-python gen_brief.py --auto   # Auto-generate revision brief for weakest chapter
-python gen_revision.py       # Rewrite chapter from brief
+python reader_panel.py       # Simulated reader feedback
+python review.py             # Dual-persona manuscript review
+python gen_brief.py --auto   # Brief for weakest chapter
+python gen_revision.py       # Rewrite from brief
 ```
+
+Stop when: no major unqualified issues remain, OR reviewer is hedging >50%.
 
 ### Phase 4 — Export
 ```bash
 cd typeset
-python build_tex.py     # Compile to LaTeX
-# Edit novel.tex: set title, author, epigraph
-tectonic novel.tex      # Render to PDF
+python build_tex.py      # → chapters_content.tex
+# Edit novel.tex: title, author, epigraph
+tectonic novel.tex       # → novel.pdf
 ```
 
 ---
 
-## Quick Start — Full Pipeline
-
+## Full Pipeline (One Command)
 ```bash
 cd C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel
-python run_pipeline.py --seed my_novel_idea.md --tag run1
+python run_pipeline.py --seed my_idea.md --tag run1
 ```
 
 ---
 
-## Key Files
+## Top Anti-Patterns (ANTI-PATTERNS.md)
 
-| File | Purpose |
-|------|---------|
-| `seed.py` | Create a novel seed from a concept |
-| `gen_outline.py` | Generate full chapter outline |
-| `draft_chapter.py` | Draft a single chapter |
-| `run_drafts.py` | Draft all chapters sequentially |
-| `evaluate.py` | Score chapters / foundation |
-| `adversarial_edit.py` | Find prose anti-patterns |
-| `apply_cuts.py` | Apply cuts from edit log |
-| `reader_panel.py` | Simulate reader feedback |
-| `review.py` | Deep dual-persona manuscript review |
-| `gen_revision.py` | Rewrite a chapter from a brief |
-| `run_pipeline.py` | Full end-to-end orchestrator |
-| `chapters/` | All chapter markdown files |
-| `state.json` | Pipeline state tracking |
+| Pattern | Freq | Fix |
+|---------|------|-----|
+| OVER-EXPLAIN | ~32% | Cut narrator restating what scene showed |
+| REDUNDANT | ~26% | Same insight once only |
+| TRIADIC LISTING | common | Use 2 or 4 items instead of 3 |
+| NEGATIVE-ASSERTION | max 1/ch | "He did not X" — replace with active |
+| CATALOGING-BY-THINKING | cut | "He thought about X, Y, Z" → dramatize |
 
 ---
 
-## Top Prose Anti-Patterns to Avoid (from ANTI-PATTERNS.md)
+## Hermes Integration
 
-1. **OVER-EXPLAIN** (~32% of cuts) — narrator restates what scene already showed. Cut it.
-2. **REDUNDANT** (~26%) — same insight 3-4 times. Once is enough.
-3. **TRIADIC LISTING** — AI defaults to groups of 3. Use 2 or 4.
-4. **NEGATIVE-ASSERTION REPETITION** — "He did not X" max 1 per chapter.
-5. **CATALOGING-BY-THINKING** — "He thought about X. He thought about Y."
-
----
-
-## Connection to Hermes
-
-Autonovel runs via the `.venv` in its own folder using `uv sync`.
-API keys are shared via a symlinked or copied `.env`.
-To let Hermes drive a novel session, have Hermes run the pipeline scripts
-in `C:\Users\MWIJAY TECH\AppData\Local\hermes\autonovel\` using bash/shell tools.
-
-Example Hermes command that triggers this skill:
-> "Write me a sci-fi novel about a memory trader in Lagos 2089"
+Say to Hermes: **"Write me a sci-fi novel about [concept]"**
 
 Hermes will:
-1. Create a seed file from the concept
-2. Run Phase 1 foundation generation
-3. Draft all chapters
+1. Create seed file from your concept
+2. Run Phase 1 foundation
+3. Draft all chapters via Groq/OpenRouter
 4. Run revision cycles
-5. Export to PDF
+5. Generate cover art from free image APIs
+6. Export to PDF
