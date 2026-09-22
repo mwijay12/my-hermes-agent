@@ -1799,6 +1799,38 @@ def patch_tool(mode: str = "replace", path: str = None, old_string: str = None,
                 _reset_patch_failures(task_id, [
                     _r for _r in (_path_to_resolved.get(_p) for _p in _paths_to_check) if _r
                 ])
+        if (mode == "fast_apply") or (
+            result_dict.get("error") and (
+                "Could not find" in str(result_dict["error"]) or
+                "// ... existing code ..." in (old_string or "") or
+                "// ... existing code ..." in (new_string or "") or
+                "# ... existing code ..." in (old_string or "") or
+                "# ... existing code ..." in (new_string or "")
+            )
+        ):
+            try:
+                from tools.fast_apply import fast_apply_merge
+                _t_path = _path_to_resolved.get(path) or path
+                if _t_path and Path(_t_path).is_file():
+                    _orig = Path(_t_path).read_text(encoding="utf-8", errors="ignore")
+                    _edit = new_string or old_string or patch or ""
+                    _ok, _merged = fast_apply_merge(_orig, _edit, instructions=f"Update {path}")
+                    if _ok and _merged and _merged != _orig:
+                        Path(_t_path).write_text(_merged, encoding="utf-8")
+                        _update_read_timestamp(path, task_id)
+                        _r = _path_to_resolved.get(path)
+                        if _r:
+                            file_state.note_write(task_id, _r)
+                        result_dict = {
+                            "success": True,
+                            "applied_via": "morph-fast-apply",
+                            "files_modified": [_t_path],
+                            "resolved_path": _t_path,
+                            "message": "Successfully applied edit using Morph Fast Apply at 10,500 tok/s"
+                        }
+            except Exception as _fa_exc:
+                logger.debug("Morph Fast Apply attempt in patch_tool: %s", _fa_exc)
+
         # Hint when old_string not found — saves iterations where the agent
         # retries with stale content instead of re-reading the file.
         # Suppressed when patch_replace already attached a rich "Did you mean?"
@@ -2092,7 +2124,67 @@ def _handle_search_files(args, **kw):
         output_mode=args.get("output_mode", "content"), context=args.get("context", 0), task_id=tid)
 
 
+EDIT_FILE_SCHEMA = {
+    "name": "edit_file",
+    "description": "Edit a file using Morph Fast Apply at 10,500 tok/s. Specify code changes using '// ... existing code ...' to represent unchanged sections. The tool will merge your changes cleanly with the original file.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "target_file": {
+                "type": "string",
+                "description": "Path of the file to edit"
+            },
+            "code_edit": {
+                "type": "string",
+                "description": "The code changes to apply. Use // ... existing code ... for unchanged sections."
+            },
+            "instructions": {
+                "type": "string",
+                "description": "A brief description of what the edit does",
+                "default": "Apply code edits"
+            }
+        },
+        "required": ["target_file", "code_edit"]
+    }
+}
+
+
+def _handle_edit_file(args, **kw):
+    tid = kw.get("task_id") or "default"
+    target = args.get("target_file") or args.get("path")
+    code_edit = args.get("code_edit") or args.get("content") or args.get("new_string")
+    instructions = args.get("instructions", "Apply updates")
+    if not target or not code_edit:
+        return tool_error("target_file and code_edit required")
+
+    try:
+        resolved = _resolve_path_for_task(target, tid)
+        p = Path(resolved)
+        if not p.exists():
+            return tool_error(f"File not found: {target}")
+
+        original = p.read_text(encoding="utf-8", errors="ignore")
+        from tools.fast_apply import fast_apply_merge
+        ok, merged = fast_apply_merge(original, code_edit, instructions)
+        if not ok:
+            return tool_error(f"Fast Apply failed: {merged}")
+
+        p.write_text(merged, encoding="utf-8")
+        _update_read_timestamp(str(resolved), tid)
+        file_state.note_write(tid, str(resolved))
+        return json.dumps({
+            "success": True,
+            "applied_via": "morph-fast-apply",
+            "file": str(resolved),
+            "message": f"Successfully updated {target} at 10,500 tok/s via Morph Fast Apply"
+        })
+    except Exception as exc:
+        return tool_error(str(exc))
+
+
 registry.register(name="read_file", toolset="file", schema=READ_FILE_SCHEMA, handler=_handle_read_file, check_fn=_check_file_reqs, emoji="📖", max_result_size_chars=100_000)
 registry.register(name="write_file", toolset="file", schema=WRITE_FILE_SCHEMA, handler=_handle_write_file, check_fn=_check_file_reqs, emoji="✍️", max_result_size_chars=100_000)
 registry.register(name="patch", toolset="file", schema=PATCH_SCHEMA, handler=_handle_patch, check_fn=_check_file_reqs, emoji="🔧", max_result_size_chars=100_000)
 registry.register(name="search_files", toolset="file", schema=SEARCH_FILES_SCHEMA, handler=_handle_search_files, check_fn=_check_file_reqs, emoji="🔎", max_result_size_chars=100_000)
+registry.register(name="edit_file", toolset="file", schema=EDIT_FILE_SCHEMA, handler=_handle_edit_file, check_fn=_check_file_reqs, emoji="⚡", max_result_size_chars=100_000)
+

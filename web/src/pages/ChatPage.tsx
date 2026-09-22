@@ -25,10 +25,30 @@ import "@xterm/xterm/css/xterm.css";
 import { Button } from "@nous-research/ui/ui/components/button";
 import { Typography } from "@nous-research/ui/ui/components/typography/index";
 import { cn } from "@/lib/utils";
-import { Copy, PanelRight, RotateCcw, X } from "lucide-react";
+import {
+  Copy,
+  PanelRight,
+  RotateCcw,
+  Sparkles,
+  X,
+  HelpCircle,
+  Cpu,
+  Package,
+  Activity,
+  Wrench,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  BookOpen,
+  Terminal as TerminalIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useSearchParams } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
+
+import { JarvisChatFeed } from "@/components/jarvis/JarvisChatFeed";
+import { useJarvisGateway } from "@/hooks/useJarvisGateway";
+import { useJarvisVoice } from "@/hooks/useJarvisVoice";
 
 import { ChatSidebar } from "@/components/ChatSidebar";
 import { ChatSessionList } from "@/components/ChatSessionList";
@@ -262,6 +282,18 @@ export default function ChatPage({ isActive = true }: { isActive?: boolean }) {
     setPtyState("connecting");
     setReconnectNonce((n) => n + 1);
   }, [clearReconnectTimer, searchParams, setSearchParams]);
+
+  const [showHelpGuide, setShowHelpGuide] = useState(false);
+  const sendTerminalCommand = useCallback((cmd: string) => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      setBanner("Chat is not connected — reconnecting...");
+      reconnectPty();
+      return;
+    }
+    ws.send(cmd + "\r");
+    termRef.current?.focus();
+  }, [reconnectPty]);
   // Raw state for the mobile side-sheet + a derived value that force-
   // closes whenever the chat tab isn't active.  The *derived* value is
   // what side-effects (body-scroll lock, keydown listener, portal render)
@@ -311,6 +343,20 @@ export default function ChatPage({ isActive = true }: { isActive?: boolean }) {
   // management profile. Changing it remounts the terminal (key below /
   // effect dep) so the user explicitly starts a fresh scoped session.
   const { profile: scopedProfile } = useProfileScope();
+
+  // Visual Chat (ChatGPT style) vs Raw Terminal mode
+  const [chatViewMode, setChatViewMode] = useState<"visual" | "terminal">("visual");
+  const {
+    messages: visualMessages,
+    isGenerating: isVisualGenerating,
+    submitPrompt: submitVisualPrompt,
+    clearChat: clearVisualChat,
+  } = useJarvisGateway({ profile: scopedProfile });
+
+  const visualVoice = useJarvisVoice({
+    onPromptSubmit: (text) => submitVisualPrompt(text),
+  });
+
   const channel = useMemo(
     () => generateChannelId(`${resumeParam ?? ""}\0${scopedProfile}`),
     [resumeParam, scopedProfile],
@@ -1451,86 +1497,264 @@ export default function ChatPage({ isActive = true }: { isActive?: boolean }) {
         </div>
       )}
 
-      <div className="flex min-h-0 flex-1 flex-col gap-2 lg:flex-row lg:gap-3">
-        <div
-          className={cn(
-            "relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-lg",
-            "p-2 sm:p-3",
-          )}
-          style={{
-            backgroundColor: terminalBg,
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-          }}
-        >
-          <div
-            ref={hostRef}
-            className="hermes-chat-xterm-host min-h-0 min-w-0 flex-1"
-          />
+      {/* Quick Actions & Mode Bar */}
+      <div className="flex flex-col gap-2 p-3 rounded-xl bg-black/60 border border-cyan-500/30 backdrop-blur-md shadow-[0_0_20px_rgba(0,240,255,0.08)]">
+        {/* Top Row: Modes & JARVIS Link */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-cyan-500/20">
+          {/* Mode Switcher Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setChatViewMode("visual")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                chatViewMode === "visual"
+                  ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-[0_0_12px_rgba(0,240,255,0.4)]"
+                  : "text-neutral-400 hover:text-cyan-300 bg-black/40 border border-transparent"
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>✨ Visual AI Chat (ChatGPT Style)</span>
+            </button>
 
-          {showReconnectOverlay && (
-            <div className="absolute inset-x-3 top-3 z-20 flex justify-center sm:inset-x-auto sm:right-3 sm:justify-end">
-              <div className="flex max-w-[min(28rem,calc(100vw-3rem))] flex-col items-start gap-2 border border-warning/60 bg-black/80 px-3 py-2 text-xs text-warning shadow-lg">
-                <div className="tracking-wide">
-                  {ptyState === "reconnecting"
-                    ? "Chat is reconnecting."
-                    : "Chat disconnected."}
+            <button
+              type="button"
+              onClick={() => setChatViewMode("terminal")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all ${
+                chatViewMode === "terminal"
+                  ? "bg-neutral-800 border border-cyan-500/40 text-cyan-300 shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+                  : "text-neutral-400 hover:text-cyan-300 bg-black/40 border border-transparent"
+              }`}
+            >
+              <TerminalIcon className="w-3.5 h-3.5" />
+              <span>💻 Terminal Console</span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowHelpGuide((prev) => !prev)}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neutral-900 border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400 text-xs font-mono transition-colors"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>{showHelpGuide ? "Hide Guide" : "How To Use"}</span>
+              {showHelpGuide ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
+
+            <NavLink
+              to="/jarvis"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/60 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:text-white font-mono text-xs font-bold transition-all shadow-[0_0_12px_rgba(0,240,255,0.2)]"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-cyan-300 animate-pulse" />
+              <span>JARVIS 3D HUD 💎</span>
+            </NavLink>
+          </div>
+        </div>
+
+        {/* Bottom Row: 1-Click Interactive Command Chips (Only in Terminal mode) */}
+        {chatViewMode === "terminal" && (
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="text-[10px] font-mono text-neutral-400 uppercase font-bold mr-1">
+              Terminal Actions:
+            </span>
+
+            <button
+              type="button"
+              onClick={startFreshDashboardChat}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-mono transition-colors"
+              title="Start a brand new chat session"
+            >
+              <Plus className="w-3 h-3 text-cyan-400" />
+              <span>New Chat</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => sendTerminalCommand("/model")}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-mono transition-colors"
+              title="Switch AI brain (Ollama, Gemini, Claude, Groq)"
+            >
+              <Cpu className="w-3 h-3 text-cyan-400" />
+              <span>/model</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => sendTerminalCommand("/skills")}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-mono transition-colors"
+              title="List and manage skills"
+            >
+              <Package className="w-3 h-3 text-cyan-400" />
+              <span>/skills</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => sendTerminalCommand("/status")}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-mono transition-colors"
+              title="Check token speeds and connection status"
+            >
+              <Activity className="w-3 h-3 text-cyan-400" />
+              <span>/status</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => sendTerminalCommand("/doctor")}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white text-xs font-mono transition-colors"
+              title="Run diagnostics on keys and dependencies"
+            >
+              <Wrench className="w-3 h-3 text-cyan-400" />
+              <span>/doctor</span>
+            </button>
+          </div>
+        )}
+
+        {/* Collapsible Explainer & Cheatsheet */}
+        {showHelpGuide && (
+          <div className="mt-2 p-3 rounded-lg bg-neutral-950/90 border border-cyan-500/40 text-neutral-200 text-xs font-sans space-y-2 animate-fadeIn">
+            <div className="flex items-center justify-between pb-1 border-b border-white/10">
+              <span className="font-mono font-bold text-cyan-300 text-xs uppercase flex items-center gap-1.5">
+                <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
+                How To Use This Page
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowHelpGuide(false)}
+                className="text-neutral-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-neutral-300 text-[11px] leading-relaxed">
+              Use <strong>Visual AI Chat Mode</strong> for a clean ChatGPT-like experience with message bubbles and voice input. Switch to <strong>Terminal Console</strong> if you want direct command-line access.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+              <div
+                onClick={() => sendTerminalCommand("/model")}
+                className="p-2 rounded bg-black/60 border border-cyan-900/40 hover:border-cyan-400 cursor-pointer transition-colors"
+              >
+                <div className="font-bold text-cyan-300">/model</div>
+                <div className="text-[10px] text-neutral-400">Change AI model (Ollama, Gemini, Claude, Groq)</div>
+              </div>
+
+              <div
+                onClick={() => sendTerminalCommand("/skills")}
+                className="p-2 rounded bg-black/60 border border-cyan-900/40 hover:border-cyan-400 cursor-pointer transition-colors"
+              >
+                <div className="font-bold text-cyan-300">/skills</div>
+                <div className="text-[10px] text-neutral-400">Inspect installed abilities, web search, & tools</div>
+              </div>
+
+              <div
+                onClick={() => sendTerminalCommand("/status")}
+                className="p-2 rounded bg-black/60 border border-cyan-900/40 hover:border-cyan-400 cursor-pointer transition-colors"
+              >
+                <div className="font-bold text-cyan-300">/status</div>
+                <div className="text-[10px] text-neutral-400">Check tokens, active session ID & model info</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex min-h-0 flex-1 flex-col gap-2 lg:flex-row lg:gap-3">
+        {chatViewMode === "visual" ? (
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl">
+            <JarvisChatFeed
+              messages={visualMessages}
+              isGenerating={isVisualGenerating}
+              onSendMessage={(text) => submitVisualPrompt(text)}
+              onSpeakMessage={(text) => visualVoice.speak(text)}
+              isSpeaking={visualVoice.isSpeaking}
+              onStopSpeaking={visualVoice.stopSpeaking}
+              isListening={visualVoice.isListening}
+              interimTranscript={visualVoice.interimTranscript}
+              onStartListening={visualVoice.startListening}
+              onStopListening={visualVoice.stopListening}
+              onResetSession={clearVisualChat}
+            />
+          </div>
+        ) : (
+          <div
+            className={cn(
+              "relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-lg",
+              "p-2 sm:p-3",
+            )}
+            style={{
+              backgroundColor: terminalBg,
+              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+            }}
+          >
+            <div
+              ref={hostRef}
+              className="hermes-chat-xterm-host min-h-0 min-w-0 flex-1"
+            />
+
+            {showReconnectOverlay && (
+              <div className="absolute inset-x-3 top-3 z-20 flex justify-center sm:inset-x-auto sm:right-3 sm:justify-end">
+                <div className="flex max-w-[min(28rem,calc(100vw-3rem))] flex-col items-start gap-2 border border-warning/60 bg-black/80 px-3 py-2 text-xs text-warning shadow-lg">
+                  <div className="tracking-wide">
+                    {ptyState === "reconnecting"
+                      ? "Chat is reconnecting."
+                      : "Chat disconnected."}
+                  </div>
+                  <Button
+                    size="sm"
+                    outlined
+                    onClick={reconnectPty}
+                    prefix={<RotateCcw className="h-4 w-4" />}
+                    aria-label="Reconnect chat"
+                  >
+                    Reconnect now
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {ptyState === "ended" && (
+              <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-black/60">
+                <div className="text-sm tracking-wide text-white/80">
+                  Session ended.
                 </div>
                 <Button
-                  size="sm"
-                  outlined
-                  onClick={reconnectPty}
+                  onClick={startFreshPty}
                   prefix={<RotateCcw className="h-4 w-4" />}
-                  aria-label="Reconnect chat"
+                  aria-label="Start a new chat session"
                 >
-                  Reconnect now
+                  Start new session
                 </Button>
               </div>
-            </div>
-          )}
-
-          {/* NS-504: the agent process exited (e.g. `/exit` or a new session).
-              Offer an in-place restart so the user never has to refresh the
-              whole page to get a working chat back. */}
-          {ptyState === "ended" && (
-            <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 bg-black/60">
-              <div className="text-sm tracking-wide text-white/80">
-                Session ended.
-              </div>
-              <Button
-                onClick={startFreshPty}
-                prefix={<RotateCcw className="h-4 w-4" />}
-                aria-label="Start a new chat session"
-              >
-                Start new session
-              </Button>
-            </div>
-          )}
-
-          <Button
-            ghost
-            onClick={handleCopyLast}
-            title="Copy last assistant response as raw markdown"
-            aria-label="Copy last assistant response"
-            className={cn(
-              "absolute z-10",
-              "normal-case tracking-normal font-normal",
-              "rounded border border-current/30",
-              "bg-black/20",
-              "opacity-70 hover:opacity-100 hover:border-current/60",
-              "transition-opacity duration-150",
-              "bottom-2 right-2 px-2 py-1 text-xs sm:bottom-3 sm:right-3 sm:px-2.5 sm:py-1.5",
-              "lg:bottom-4 lg:right-4",
             )}
-            style={{ color: terminalFg }}
-          >
-            <span className="inline-flex items-center gap-1.5">
-              <Copy className="h-3 w-3 shrink-0" />
-              <span className="hidden min-[400px]:inline tracking-wide">
-                {copyState === "copied" ? "copied" : "copy last response"}
+
+            <Button
+              ghost
+              onClick={handleCopyLast}
+              title="Copy last assistant response as raw markdown"
+              aria-label="Copy last assistant response"
+              className={cn(
+                "absolute z-10",
+                "normal-case tracking-normal font-normal",
+                "rounded border border-current/30",
+                "bg-black/20",
+                "opacity-70 hover:opacity-100 hover:border-current/60",
+                "transition-opacity duration-150",
+                "bottom-2 right-2 px-2 py-1 text-xs sm:bottom-3 sm:right-3 sm:px-2.5 sm:py-1.5",
+                "lg:bottom-4 lg:right-4",
+              )}
+              style={{ color: terminalFg }}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Copy className="h-3 w-3 shrink-0" />
+                <span className="hidden min-[400px]:inline tracking-wide">
+                  {copyState === "copied" ? "copied" : "copy last response"}
+                </span>
               </span>
-            </span>
-          </Button>
-        </div>
+            </Button>
+          </div>
+        )}
 
         {!narrow && (
           <div

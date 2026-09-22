@@ -81,11 +81,11 @@ def check_open_dashboard_requirements() -> bool:
 OPEN_DASHBOARD_SCHEMA = {
     "name": "open_dashboard",
     "description": (
-        "Open the Hermes Web UI Dashboard in the default browser. "
-        "Use this when the user asks to open the web interface, launch dashboard, "
-        "access web controls, or manage Profiles, Sessions, Channels, Models, Cron, "
+        "Open the Hermes Web UI Dashboard / JARVIS Command Center in the default browser. "
+        "Use this when the user asks to open the web interface, launch dashboard, open JARVIS, "
+        "access voice & vision HUD, or manage Profiles, Sessions, Channels, Models, Cron, "
         "MCP, Webhooks, Skills, or Logs on the web. Optional 'section' parameter "
-        "can specify a page like 'models', 'skills', 'profiles', 'cron', 'mcp', 'sessions'."
+        "can specify a page like 'jarvis', 'chat', 'models', 'skills', 'profiles', 'cron', 'mcp', 'sessions'."
     ),
     "parameters": {
         "type": "object",
@@ -93,8 +93,8 @@ OPEN_DASHBOARD_SCHEMA = {
             "section": {
                 "type": "string",
                 "description": (
-                    "Optional section/page to open: 'models', 'skills', 'profiles', "
-                    "'cron', 'mcp', 'channels', 'sessions', 'logs', 'env', 'config'."
+                    "Optional section/page to open: 'jarvis' (for multimodal voice/vision command center), "
+                    "'chat', 'models', 'skills', 'profiles', 'cron', 'mcp', 'channels', 'sessions', 'logs', 'env', 'config'."
                 ),
             }
         },

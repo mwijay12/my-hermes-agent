@@ -228,7 +228,40 @@ export const defaultLargeTheme: DashboardTheme = {
   },
 };
 
+export const jarvisTheme: DashboardTheme = {
+  name: "jarvis",
+  label: "Stark JARVIS",
+  description: "Holographic Stark cyan and electric blue Arc Reactor glow",
+  palette: {
+    background: { hex: "#020a10", alpha: 1 },
+    midground: { hex: "#00f0ff", alpha: 1 },
+    foreground: { hex: "#ffffff", alpha: 0 },
+    warmGlow: "rgba(0, 240, 255, 0.35)",
+    noiseOpacity: 0.8,
+  },
+  typography: {
+    ...DEFAULT_TYPOGRAPHY,
+    fontSans: `"JetBrains Mono", "Share Tech Mono", ${SYSTEM_MONO}`,
+    fontMono: `"JetBrains Mono", ${SYSTEM_MONO}`,
+    fontUrl:
+      "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap",
+  },
+  layout: {
+    ...DEFAULT_LAYOUT,
+    radius: "0.75rem",
+  },
+  terminalBackground: "#01080d",
+  terminalForeground: "#00f0ff",
+  colorOverrides: {
+    success: "#00ffaa",
+    warning: "#ffd700",
+    destructive: "#ff3366",
+  },
+  swatchColors: ["#020a10", "#00f0ff", "#0088ff"],
+};
+
 export const BUILTIN_THEMES: Record<string, DashboardTheme> = {
+  jarvis: jarvisTheme,
   default: defaultTheme,
   "default-large": defaultLargeTheme,
   "nous-blue": nousBlueTheme,
@@ -238,3 +271,4 @@ export const BUILTIN_THEMES: Record<string, DashboardTheme> = {
   cyberpunk: cyberpunkTheme,
   rose: roseTheme,
 };
+

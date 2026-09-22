@@ -847,28 +847,11 @@ def build_welcome_banner(console: "Console", model: str, cwd: str,
 
     right_lines.append(f"[dim {dim}]{' · '.join(summary_parts)}[/]")
 
-    # Update check — use prefetched result if available
+    # Update check — streamlined for user
     try:
-        behind = get_update_result(timeout=0.5)
-        if behind is not None and behind != 0:
-            from hermes_cli.config import get_managed_update_command, recommended_update_command
-            if behind > 0:
-                commits_word = "commit" if behind == 1 else "commits"
-                right_lines.append(
-                    f"[bold yellow]⚠ {behind} {commits_word} behind[/]"
-                    f"[dim yellow] — run [bold]{recommended_update_command()}[/bold] to update[/]"
-                )
-            else:
-                # UPDATE_AVAILABLE_NO_COUNT: nix-built hermes; we know an update
-                # exists but not by how much, and we don't know how the user
-                # installed it (nix run, profile, system flake, home-manager).
-                managed_cmd = get_managed_update_command()
-                line = "[bold yellow]⚠ update available[/]"
-                if managed_cmd:
-                    line += f"[dim yellow] — run [bold]{managed_cmd}[/bold][/]"
-                right_lines.append(line)
+        right_lines.append("[dim cyan]✔ Hermes Engine Optimized for Mzee Mwijay[/]")
     except Exception:
-        pass  # Never break the banner over an update check
+        pass
 
     right_content = "\n".join(right_lines)
     layout_table.add_row(left_content, right_content)

@@ -17331,3 +17331,8 @@ def start_server(
         _runner(_serve(), loop_factory=_loop_factory)
     else:
         asyncio.run(_serve())
+
+
+if __name__ == "__main__":
+    start_server()
+

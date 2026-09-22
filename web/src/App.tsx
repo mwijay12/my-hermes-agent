@@ -95,6 +95,7 @@ const ChannelsPage = lazy(() => import("@/pages/ChannelsPage"));
 const WebhooksPage = lazy(() => import("@/pages/WebhooksPage"));
 const SystemPage = lazy(() => import("@/pages/SystemPage"));
 const ChatPage = lazy(() => import("@/pages/ChatPage"));
+const JarvisPage = lazy(() => import("@/pages/JarvisPage"));
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { useI18n } from "@/i18n";
@@ -123,7 +124,7 @@ function RouteFallback({ label = "Loading…" }: { label?: string }) {
 }
 
 function RootRedirect() {
-  return <Navigate to="/sessions" replace />;
+  return <Navigate to="/jarvis" replace />;
 }
 
 function UnknownRouteFallback({ pluginsLoading }: { pluginsLoading: boolean }) {
@@ -131,7 +132,7 @@ function UnknownRouteFallback({ pluginsLoading }: { pluginsLoading: boolean }) {
     // Render nothing during the plugin-load window — a spinner here would just flash.
     return null;
   }
-  return <Navigate to="/sessions" replace />;
+  return <Navigate to="/jarvis" replace />;
 }
 
 const CHAT_NAV_ITEM: NavItem = {
@@ -154,6 +155,7 @@ const CHAT_NAV_ITEM: NavItem = {
  */
 const BUILTIN_ROUTES_CORE: Record<string, ComponentType> = {
   "/": RootRedirect,
+  "/jarvis": JarvisPage,
   "/sessions": SessionsPage,
   "/files": FilesPage,
   "/analytics": AnalyticsPage,
@@ -183,6 +185,11 @@ function ChatRouteSink() {
 }
 
 const BUILTIN_NAV_REST: NavItem[] = [
+  {
+    path: "/jarvis",
+    label: "JARVIS HUD",
+    icon: Sparkles,
+  },
   {
     path: "/sessions",
     labelKey: "sessions",
@@ -456,9 +463,16 @@ export default function App() {
   );
 
   const builtinNav = useMemo(() => {
-    const base = embeddedChat
-      ? [CHAT_NAV_ITEM, ...BUILTIN_NAV_REST]
-      : BUILTIN_NAV_REST;
+    const jarvisItem: NavItem = {
+      path: "/jarvis",
+      label: "JARVIS HUD 💎",
+      icon: Sparkles,
+    };
+    const base = [
+      jarvisItem,
+      ...(embeddedChat ? [CHAT_NAV_ITEM] : []),
+      ...BUILTIN_NAV_REST.filter((n) => n.path !== "/jarvis"),
+    ];
     return showTokenAnalytics
       ? base
       : base.filter((n) => n.path !== "/analytics");
