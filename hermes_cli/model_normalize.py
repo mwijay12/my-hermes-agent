@@ -496,8 +496,9 @@ def normalize_model_for_provider(model_input: str, target_provider: str) -> str:
     if provider in _AUTHORITATIVE_NATIVE_PROVIDERS:
         return name
 
-    # --- Custom & all others: pass through as-is ---
-    return name
+    # --- Custom & all others: strip matching provider prefix if present, otherwise pass through as-is ---
+    return _strip_matching_provider_prefix(name, provider)
+
 
 
 # ---------------------------------------------------------------------------

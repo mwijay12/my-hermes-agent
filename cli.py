@@ -15107,6 +15107,11 @@ class HermesCLI(CLIAgentSetupMixin, CLICommandsMixin, CLIBillingMixin):
                 # History stores real pasted content, not the placeholder, so
                 # up-arrow recall restores the actual text.
                 self._inline_pastes(event.app.current_buffer)
+                try:
+                    if event.app.current_buffer.text:
+                        event.app.current_buffer.text = event.app.current_buffer.text.encode("utf-16", "surrogatepass").decode("utf-16", "replace")
+                except Exception:
+                    pass
                 event.app.current_buffer.reset(append_to_history=True)
 
         _bind_prompt_submit_keys(kb, handle_enter)

@@ -337,6 +337,7 @@ _MODEL_NOT_FOUND_PATTERNS = [
     # and the error surfaces as a confusing "model not found" message
     # instead of automatically failing over.  See PR #58446.
     "no endpoints found that support tool use",
+    "model must be one of the following",
 ]
 
 # Malformed-message-array 400s.  Deterministic request-shape rejections that
