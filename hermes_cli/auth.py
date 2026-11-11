@@ -592,6 +592,101 @@ def has_usable_secret(value: Any, *, min_length: int = 4) -> bool:
     return True
 
 
+def _credential_pool_first_enabled(provider_id: str) -> bool:
+    """Whether a multi-key credential pool may outrank .env / env variables.
+
+    Opt-in, default **off** so the documented resolution order (env vars, then
+    the pool as a fallback) stays authoritative for every existing setup.
+
+    Turn it on when you keep several keys for one provider and want them to
+    rotate instead of pinning every request to the first key:
+
+    * env:   ``HERMES_CREDENTIAL_POOL_FIRST=1`` (all providers), or
+             ``HERMES_CREDENTIAL_POOL_FIRST=groq,gemini`` (only those)
+    * config:
+        .. code-block:: yaml
+
+           auth:
+             credential_pool_first: true          # all providers
+             # credential_pool_first: [groq, gemini]   # or just these
+
+    Accepts ``1/true/yes/all`` (or ``*``) for "every provider", a comma or
+    space separated provider list, or ``0/false/no/""`` for off.
+    """
+
+    def _matches(raw: object) -> bool | None:
+        """Return True/False when *raw* states a preference, else None."""
+        if raw is None or isinstance(raw, bool):
+            return bool(raw) if raw is not None else None
+        if isinstance(raw, (list, tuple, set)):
+            ids = {str(v).strip().lower() for v in raw if str(v).strip()}
+            if not ids:
+                return None
+            return "*" in ids or "all" in ids or provider_id.lower() in ids
+        text = str(raw).strip().lower()
+        if not text:
+            return None
+        if text in {"1", "true", "yes", "on", "all", "*"}:
+            return True
+        if text in {"0", "false", "no", "off", "none"}:
+            return False
+        ids = {p for p in text.replace(",", " ").split() if p}
+        return provider_id.lower() in ids
+
+    for source in (os.environ.get("HERMES_CREDENTIAL_POOL_FIRST"),):
+        verdict = _matches(source)
+        if verdict is not None:
+            return verdict
+    try:
+        from hermes_cli.config import read_raw_config_readonly
+
+        auth_cfg = read_raw_config_readonly().get("auth") or {}
+        if isinstance(auth_cfg, dict):
+            verdict = _matches(auth_cfg.get("credential_pool_first"))
+            if verdict is not None:
+                return verdict
+    except Exception:
+        pass
+    return False
+
+
+def _pool_entry_key(entry: object) -> str:
+    """Return the usable secret held by a credential-pool *entry*.
+
+    Returns "" for entries whose token is not a real string (``MagicMock``
+    attributes in tests, sentinels, ``None``) so callers can fall back to the
+    next candidate instead of propagating a non-string "key" into the client.
+    """
+    token = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
+    return token.strip() if isinstance(token, str) else ""
+
+
+def _select_pool_entry(pool: object) -> object | None:
+    """Pick a credential from *pool*: rotation-aware ``select()``, else ``peek()``.
+
+    Pools are duck-typed: newer multi-key pools expose ``select()`` (round-robin
+    rotation) while single-entry pools — and the lightweight pool doubles used
+    across the test-suite — only implement ``peek()``. Prefer ``select()`` when
+    it yields a usable secret; otherwise fall back to ``peek()`` so a pool that
+    implements only one of the two still resolves.
+    """
+    select = getattr(pool, "select", None)
+    if callable(select):
+        try:
+            entry = select()
+        except Exception:
+            entry = None
+        if entry is not None and has_usable_secret(_pool_entry_key(entry)):
+            return entry
+    peek = getattr(pool, "peek", None)
+    if callable(peek):
+        try:
+            return peek()
+        except Exception:
+            return None
+    return None
+
+
 def _resolve_api_key_provider_secret(
     provider_id: str, pconfig: ProviderConfig
 ) -> tuple[str, str]:
@@ -610,23 +705,26 @@ def _resolve_api_key_provider_secret(
             pass
         return "", ""
 
-    # 1. If a multi-key credential pool is configured for this provider (e.g.,
-    #    15 Gemini keys, 16 Groq keys, 14 OpenCode keys), select from the pool
-    #    first using its configured strategy (round_robin) so keys rotate across
-    #    accounts instead of getting pinned to a single static .env variable.
-    try:
-        from agent.credential_pool import load_pool
-        pool = load_pool(provider_id)
-        if pool and pool.has_credentials() and len(pool.entries()) > 1:
-            entry = pool.select() or pool.peek()
-            if entry:
-                key = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
-                key = str(key).strip()
-                if has_usable_secret(key):
-                    label = getattr(entry, "label", "") or getattr(entry, "id", "")
-                    return key, f"credential_pool:{provider_id}:{label}"
-    except Exception:
-        pass
+    # 1. OPTIONAL: multi-key credential pool (e.g. 15 Gemini keys, 16 Groq
+    #    keys, 14 OpenCode keys) may outrank the static .env variables and
+    #    rotate across accounts (round_robin) instead of staying pinned to one
+    #    key. This is opt-in — see _credential_pool_first_enabled() — because
+    #    the documented resolution order gives .env / env vars priority, and
+    #    silently preferring the pool changes which key a user's setup uses.
+    if _credential_pool_first_enabled(provider_id):
+        try:
+            from agent.credential_pool import load_pool
+            pool = load_pool(provider_id)
+            if pool and pool.has_credentials() and len(pool.entries()) > 1:
+                entry = pool.select() or pool.peek()
+                if entry:
+                    key = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
+                    key = str(key).strip()
+                    if has_usable_secret(key):
+                        label = getattr(entry, "label", "") or getattr(entry, "id", "")
+                        return key, f"credential_pool:{provider_id}:{label}"
+        except Exception:
+            pass
 
     from hermes_cli.config import get_env_value_prefer_dotenv
     for env_var in pconfig.api_key_env_vars:
@@ -642,12 +740,10 @@ def _resolve_api_key_provider_secret(
         from agent.credential_pool import load_pool
         pool = load_pool(provider_id)
         if pool and pool.has_credentials():
-            entry = pool.select() or pool.peek()
-            if entry:
-                key = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
-                key = str(key).strip()
-                if has_usable_secret(key):
-                    return key, f"credential_pool:{provider_id}"
+            entry = _select_pool_entry(pool)
+            key = _pool_entry_key(entry) if entry else ""
+            if has_usable_secret(key):
+                return key, f"credential_pool:{provider_id}"
     except Exception:
         pass
 

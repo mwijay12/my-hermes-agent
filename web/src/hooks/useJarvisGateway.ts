@@ -21,11 +21,27 @@ export interface ChatMessage {
   toolCalls?: ToolExecution[];
 }
 
+/** Loosely-typed gateway payloads (JSON-RPC events carry arbitrary shapes). */
+interface JarvisDeltaPayload {
+  text?: string;
+}
+
+interface JarvisToolStartPayload {
+  id?: string;
+  name?: string;
+  args?: unknown;
+}
+
+/** Narrow an unknown `catch` value to a human-readable message. */
+function errorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
 export interface ToolExecution {
   id: string;
   name: string;
-  args?: any;
-  result?: any;
+  args?: unknown;
+  result?: unknown;
   status: "running" | "completed" | "error";
   startTime: Date;
   endTime?: Date;
@@ -76,8 +92,8 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
     const gw = new GatewayClient();
     gwRef.current = gw;
 
-    gw.on("connection.change", (ev: GatewayEvent<any>) => {
-      const state = (ev.payload ?? ev) as ConnectionState;
+    gw.on("connection.change", (ev: GatewayEvent<ConnectionState>) => {
+      const state = ev.payload;
       if (typeof state === "string") {
         setConnectionState(state);
       }
@@ -98,7 +114,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
         if (sessionRes?.session_id) {
           setSessionId(sessionRes.session_id);
         }
-      } catch (err: any) {
+      } catch (err) {
         console.warn("Gateway connection fallback:", err);
         // If gateway WS fails, fallback gracefully to REST mode
         setConnectionState("open");
@@ -109,7 +125,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
     initialWelcome();
 
     // Subscribe to streaming events from gateway
-    gw.on("message.delta", (ev: GatewayEvent<any>) => {
+    gw.on("message.delta", (ev: GatewayEvent<JarvisDeltaPayload>) => {
       const text = ev.payload?.text || "";
       if (!text) return;
 
@@ -125,7 +141,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
       });
     });
 
-    gw.on("reasoning.delta", (ev: GatewayEvent<any>) => {
+    gw.on("reasoning.delta", (ev: GatewayEvent<JarvisDeltaPayload>) => {
       const reasoning = ev.payload?.text || "";
       setMessages((prev) => {
         const last = prev[prev.length - 1];
@@ -139,7 +155,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
       });
     });
 
-    gw.on("tool.start", (ev: GatewayEvent<any>) => {
+    gw.on("tool.start", (ev: GatewayEvent<JarvisToolStartPayload>) => {
       const tool: ToolExecution = {
         id: ev.payload?.id || `tool-${Date.now()}`,
         name: ev.payload?.name || "Tool Execution",
@@ -249,13 +265,13 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
             });
           }, 800);
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error("Failed to submit prompt:", err);
-        setError(`Failed to submit prompt: ${err.message || err}`);
+        setError(`Failed to submit prompt: ${errorMessage(err)}`);
         setIsGenerating(false);
         triggerAttention("Action Required", {
           title: "Hermes • Jarvis",
-          body: `Error: ${err.message || err}`,
+          body: `Error: ${errorMessage(err)}`,
         });
       }
     },

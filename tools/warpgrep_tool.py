@@ -248,7 +248,7 @@ def _check_warpgrep_reqs() -> bool:
 
 registry.register(
     name="codebase_search",
-    toolset="file",
+    toolset="hermes-cli",
     schema=WARPGREP_SCHEMA,
     handler=_handle_codebase_search,
     check_fn=_check_warpgrep_reqs,

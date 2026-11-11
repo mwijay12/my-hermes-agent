@@ -10,6 +10,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+/** Narrow an unknown `catch` value to a human-readable message. */
+function errorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
 export interface CapturedImage {
   id: string;
   dataUrl: string;
@@ -63,9 +68,9 @@ export function useJarvisVision() {
         videoRef.current.srcObject = stream;
         videoRef.current.play().catch(() => {});
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Camera access error:", err);
-      setError(`Camera access denied or unavailable: ${err.message || err}`);
+      setError(`Camera access denied or unavailable: ${errorMessage(err)}`);
     }
   }, [stopStream]);
 
@@ -74,7 +79,7 @@ export function useJarvisVision() {
     try {
       stopStream();
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { displaySurface: "monitor" } as any,
+        video: { displaySurface: "monitor" } as MediaTrackConstraints,
         audio: false,
       });
 
@@ -93,9 +98,9 @@ export function useJarvisVision() {
         videoRef.current.srcObject = stream;
         videoRef.current.play().catch(() => {});
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Screen share error:", err);
-      setError(`Screen share cancelled or unavailable: ${err.message || err}`);
+      setError(`Screen share cancelled or unavailable: ${errorMessage(err)}`);
     }
   }, [stopStream]);
 

@@ -45,7 +45,7 @@ skills:
   creation_nudge_interval: 15   # Agent anajikumbusha kutengeneza skill mpya baada ya kazi ngumu
   # external_dirs:
   #   - "C:\\Users\\MWIJAY\\my-hermes-agent\\mwijay-hermes\\skills"    # Windows
-  #   - "~/my-hermes-agent/mwijay-hermes/skills"                      # Linux/WSL2
+  #   - "~/my-hermes-agent/skills/mwijay-ai"                          # Linux/WSL2
 
 # --- Toolsets: All-Rounder (kila kitu) ---
 platform_toolsets:

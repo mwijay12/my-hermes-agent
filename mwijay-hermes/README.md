@@ -67,12 +67,6 @@ mwijay-hermes/
 ├── config/
 │   ├── config.yaml            ← Config ya Groq/Gemini/OpenRouter + personalities
 │   └── .env.example           ← Wapi pa kupata API keys (USIWEKE keys halisi hapa)
-├── skills/
-│   ├── mwijay-allrounder/     ← Skill kuu: All-Rounder (coding+business+research)
-│   ├── swahili-english/       ← Kuzungumza Swahili/English kama Mwijay
-│   ├── coding-assistant/      ← Coding & debugging
-│   ├── business-content/      ← Biashara, content, social media
-│   └── research-learning/     ← Research & kujifunza
 ├── scripts/
 │   ├── install-windows.ps1    ← Install kwenye Windows (PowerShell)
 │   └── install-linux.sh       ← Install kwenye Linux/WSL2
@@ -80,6 +74,11 @@ mwijay-hermes/
     ├── README.md              ← Maelezo kamili ya Kimi K3 in C
     └── kimi_bridge.py         ← Bridge ya majaribio: K3 → OpenAI-compatible API
 ```
+
+> 🧩 **Skills za Mwijay AI zimehamishwa** kwenda `skills/mwijay-ai/` kwenye mzizi wa repo,
+> ili Hermes izigundue moja kwa moja (na `/skills` izionyeshe):
+> `skills/mwijay-ai/` → `mwijay-allrounder`, `swahili-english`, `coding-assistant`,
+> `business-content`, `research-learning`.
 
 ---
 
@@ -133,7 +132,7 @@ Copy-Item .\mwijay-hermes\config\config.yaml "$env:LOCALAPPDATA\hermes\config.ya
 
 # Skills za Mwijay
 New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\hermes\skills" | Out-Null
-Copy-Item .\mwijay-hermes\skills\* "$env:LOCALAPPDATA\hermes\skills\" -Recurse -Force
+Copy-Item .\skills\mwijay-ai\* "$env:LOCALAPPDATA\hermes\skills\" -Recurse -Force
 ```
 
 Kwenye **Linux/WSL2**:
@@ -141,7 +140,7 @@ Kwenye **Linux/WSL2**:
 ```bash
 cp mwijay-hermes/profile/SOUL.md mwijay-hermes/profile/USER.md mwijay-hermes/profile/MEMORY.md ~/.hermes/
 cp mwijay-hermes/config/config.yaml ~/.hermes/config.yaml
-cp -r mwijay-hermes/skills/* ~/.hermes/skills/
+mkdir -p ~/.hermes/skills && cp -r skills/mwijay-ai/* ~/.hermes/skills/
 ```
 
 ### Hatua 4 — Anza kuzungumza

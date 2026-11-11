@@ -20,7 +20,7 @@ Write-Host "   Copy-Item .\mwijay-hermes\profile\SOUL.md   `$env:LOCALAPPDATA\he
 Write-Host "   Copy-Item .\mwijay-hermes\profile\USER.md   `$env:LOCALAPPDATA\hermes\USER.md -Force"
 Write-Host "   Copy-Item .\mwijay-hermes\profile\MEMORY.md `$env:LOCALAPPDATA\hermes\MEMORY.md -Force"
 Write-Host "   Copy-Item .\mwijay-hermes\config\config.yaml `$env:LOCALAPPDATA\hermes\config.yaml -Force"
-Write-Host "   Copy-Item .\mwijay-hermes\skills\* `$env:LOCALAPPDATA\hermes\skills\ -Recurse -Force"
+Write-Host "   Copy-Item .\skills\mwijay-ai\* `$env:LOCALAPPDATA\hermes\skills\ -Recurse -Force"
 Write-Host ""
 Write-Host "3. Anza:  hermes   kisha  /personality mwijay" -ForegroundColor Green
 Write-Host "Sawa Mwijay! Karibu Mwijay AI! 🚀" -ForegroundColor Cyan
