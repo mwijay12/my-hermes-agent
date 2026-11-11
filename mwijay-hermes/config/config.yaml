@@ -11,13 +11,19 @@ model:
   default: "google/gemini-2.5-flash"
   base_url: "https://openrouter.ai/api/v1"
 
-# --- Groq kama custom provider (OpenAI-compatible) ---
-# Ili kutumia Groq kama model kuu, badili sehemu ya model hapo juu kuwa:
+# --- Groq ni provider RASMI sasa (imeongezwa kwenye repo hii) ---
+# Badili sehemu ya "model" hapo juu iwe:
+# model:
+#   provider: "groq"
+#   default: "openai/gpt-oss-120b"     # au "openai/gpt-oss-20b" / "qwen/qwen3.8-27b"
+# Kisha weka GROQ_API_KEY kwenye .env. Inatumia https://api.groq.com/openai/v1
+# na inasaidia credential-pool rotation (funguo nyingi zinazunguka moja baada ya nyingine).
+#
+# Njia ya zamani (OpenAI-compatible custom endpoint) bado inafanya kazi:
 # model:
 #   provider: "custom"
 #   base_url: "https://api.groq.com/openai/v1"
 #   default: "llama-3.3-70b-versatile"
-# Na uweke GROQ_API_KEY kwenye .env
 
 # --- Personalities za Mwijay AI ---
 # Tumia: /personality mwijay  (kwenye chat)
