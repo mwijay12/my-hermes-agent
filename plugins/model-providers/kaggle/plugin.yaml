@@ -1,0 +1,5 @@
+name: kaggle-provider
+kind: model-provider
+version: 1.0.0
+description: Kaggle GPU Inference (Cloudflare Tunnel)
+author: Mwijay Tech

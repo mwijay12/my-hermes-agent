@@ -240,6 +240,14 @@ PROVIDER_REGISTRY: Dict[str, ProviderConfig] = {
         api_key_env_vars=("GOOGLE_API_KEY", "GEMINI_API_KEY"),
         base_url_env_var="GEMINI_BASE_URL",
     ),
+    "groq": ProviderConfig(
+        id="groq",
+        name="Groq Cloud (LPU High-Speed)",
+        auth_type="api_key",
+        inference_base_url="https://api.groq.com/openai/v1",
+        api_key_env_vars=("GROQ_API_KEY",),
+        base_url_env_var="GROQ_BASE_URL",
+    ),
     "zai": ProviderConfig(
         id="zai",
         name="Z.AI / GLM",
@@ -602,6 +610,24 @@ def _resolve_api_key_provider_secret(
             pass
         return "", ""
 
+    # 1. If a multi-key credential pool is configured for this provider (e.g.,
+    #    15 Gemini keys, 16 Groq keys, 14 OpenCode keys), select from the pool
+    #    first using its configured strategy (round_robin) so keys rotate across
+    #    accounts instead of getting pinned to a single static .env variable.
+    try:
+        from agent.credential_pool import load_pool
+        pool = load_pool(provider_id)
+        if pool and pool.has_credentials() and len(pool.entries()) > 1:
+            entry = pool.select() or pool.peek()
+            if entry:
+                key = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
+                key = str(key).strip()
+                if has_usable_secret(key):
+                    label = getattr(entry, "label", "") or getattr(entry, "id", "")
+                    return key, f"credential_pool:{provider_id}:{label}"
+    except Exception:
+        pass
+
     from hermes_cli.config import get_env_value_prefer_dotenv
     for env_var in pconfig.api_key_env_vars:
         # Prefer ~/.hermes/.env over os.environ so a deliberate key rotation
@@ -611,12 +637,12 @@ def _resolve_api_key_provider_secret(
         if has_usable_secret(val):
             return val, env_var
 
-    # Fallback: try credential pool (e.g. zai key stored via auth.json)
+    # Fallback: try single-entry credential pool (e.g. zai key stored via auth.json)
     try:
         from agent.credential_pool import load_pool
         pool = load_pool(provider_id)
         if pool and pool.has_credentials():
-            entry = pool.peek()
+            entry = pool.select() or pool.peek()
             if entry:
                 key = getattr(entry, "access_token", "") or getattr(entry, "runtime_api_key", "")
                 key = str(key).strip()

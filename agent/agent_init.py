@@ -1159,6 +1159,12 @@ def init_agent(
                 from tools.xai_http import hermes_xai_default_headers
 
                 client_kwargs["default_headers"] = hermes_xai_default_headers()
+            elif base_url_host_matches(effective_base, "opencode.ai"):
+                client_kwargs["default_headers"] = {
+                    "User-Agent": "opencode/1.19.0",
+                    "x-opencode-client": "cli",
+                    "x-opencode-project": "global",
+                }
             elif "default_headers" not in client_kwargs:
                 # Fall back to profile.default_headers for providers that
                 # declare custom headers (e.g. Vercel AI Gateway attribution,

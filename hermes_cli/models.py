@@ -311,10 +311,18 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         "gemini-2.5-pro",
     ],
     "gemini": [
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
+        "gemini-3.8-flash",
+        "gemini-4-argon",
         "gemini-3.1-pro-preview",
         "gemini-3-pro-preview",
-        "gemini-3.6-flash",
         "gemini-3.1-flash-lite-preview",
+    ],
+    "groq": [
+        "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b",
+        "qwen/qwen3.8-27b",
     ],
     "zai": [
         "glm-5.2",
@@ -433,79 +441,22 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         "openai/gpt-5.4",
     ],
     "opencode-zen": [
-        "kimi-k2.5",
-        "kimi-k2.6",
-        "gpt-5.5",
-        "gpt-5.5-pro",
-        "gpt-5.4-pro",
-        "gpt-5.4",
-        "gpt-5.4-mini",
-        "gpt-5.4-nano",
-        "gpt-5.3-codex",
-        "gpt-5.3-codex-spark",
-        "gpt-5.2",
-        "gpt-5.2-codex",
-        "gpt-5.1",
-        "gpt-5.1-codex",
-        "gpt-5.1-codex-max",
-        "gpt-5.1-codex-mini",
-        "gpt-5",
-        "gpt-5-codex",
-        "gpt-5-nano",
-        "claude-fable-5",
-        "claude-sonnet-5",
-        "claude-opus-4-8",
-        "claude-opus-4-7",
-        "claude-opus-4-6",
-        "claude-opus-4-5",
-        "claude-opus-4-1",
-        "claude-sonnet-4-6",
-        "claude-sonnet-4-5",
-        "claude-sonnet-4",
-        "claude-haiku-4-5",
-        "gemini-3.5-flash",
-        "gemini-3.1-pro",
-        "gemini-3-flash",
-        "minimax-m3",
-        "minimax-m2.7",
-        "minimax-m2.5",
-        "glm-5.2",
-        "glm-5.1",
-        "glm-5",
-        "kimi-k2.7-code",
-        "deepseek-v4-pro",
-        "deepseek-v4-flash",
-        "deepseek-v4-flash-free",
-        "qwen3.7-plus",
-        "qwen3.6-plus",
-        "qwen3.5-plus",
-        "grok-build-0.1",
+        "mimo-v2.6-flash-free",
+        "deepseek-v4.1-flash-free",
+        "glm-5.3-flash-free",
+        "beam-free",
+        "flint-40b-free",
+        "nemotron-3.5-lightning-free",
+        "nemotron-3.5-super-vl-free",
+        "crouton-alpha-free",
+        "iceman-free",
+        "inkling-2-small-free",
         "big-pickle",
-        "mimo-v2.5-free",
-        "north-mini-code-free",
-        "nemotron-3-ultra-free",
     ],
     "opencode-go": [
-        "kimi-k3",
-        "kimi-k2.7-code",
-        "kimi-k2.6",
-        "kimi-k2.5",
-        "glm-5.2",
-        "glm-5.1",
-        "glm-5",
-        "mimo-v2.5-pro",
-        "mimo-v2.5",
-        "mimo-v2-pro",
-        "mimo-v2-omni",
-        "minimax-m3",
-        "minimax-m2.7",
-        "minimax-m2.5",
-        "deepseek-v4-pro",
-        "deepseek-v4-flash",
-        "qwen3.7-max",
-        "qwen3.7-plus",
-        "qwen3.6-plus",
-        "qwen3.5-plus",
+        "beam-free",
+        "crouton-alpha-free",
+        "iceman-contributor-free",
     ],
     "kilocode": [
         "anthropic/claude-opus-4.6",
@@ -2972,6 +2923,11 @@ def provider_model_ids(provider: Optional[str], *, force_refresh: bool = False) 
                 base_url = _p.base_url
             if api_key:
                 live = _p.fetch_models(api_key=api_key, base_url=base_url or None)
+                if live and normalized in {"opencode-zen", "opencode-go", "openrouter"}:
+                    live = [
+                        m for m in live
+                        if "free" in str(m).lower() or str(m).lower() == "big-pickle"
+                    ]
                 if live:
                     # Merge static curated list with live API results so
                     # models that the live endpoint omits (stale cache,
@@ -3012,7 +2968,7 @@ def provider_model_ids(provider: Optional[str], *, force_refresh: bool = False) 
         pass
 
     curated_static = list(_PROVIDER_MODELS.get(normalized, []))
-    if normalized in _MODELS_DEV_PREFERRED:
+    if normalized in _MODELS_DEV_PREFERRED and normalized not in {"opencode-zen", "opencode-go"}:
         return _merge_with_models_dev(normalized, curated_static)
     return curated_static
 

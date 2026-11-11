@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GatewayClient, type ConnectionState, type GatewayEvent } from "@/lib/gatewayClient";
+import { useTabAttention } from "@/hooks/useTabAttention";
 
 export interface ChatMessage {
   id: string;
@@ -46,6 +47,7 @@ interface UseJarvisGatewayOptions {
 }
 
 export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGatewayOptions = {}) {
+  const { triggerAttention, clearAttention, requestPermission } = useTabAttention("Hermes • Jarvis");
   const [connectionState, setConnectionState] = useState<ConnectionState>("idle");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -160,6 +162,10 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
           if (onAssistantResponse && last.content) {
             onAssistantResponse(last.content);
           }
+          triggerAttention("Task Completed", {
+            title: "Hermes • Jarvis",
+            body: last.content ? last.content.slice(0, 100) : "Noellyne finished generating response.",
+          });
           return [...prev.slice(0, -1), { ...last, isStreaming: false }];
         }
         return prev;
@@ -169,7 +175,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
     return () => {
       gw.close();
     };
-  }, [initialWelcome, onAssistantResponse, profile]);
+  }, [initialWelcome, onAssistantResponse, profile, triggerAttention]);
 
   // Send a user prompt (with optional images)
   const submitPrompt = useCallback(
@@ -237,15 +243,23 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
             if (onAssistantResponse) {
               onAssistantResponse(reply);
             }
+            triggerAttention("Task Completed", {
+              title: "Hermes • Jarvis",
+              body: reply.slice(0, 100),
+            });
           }, 800);
         }
       } catch (err: any) {
         console.error("Failed to submit prompt:", err);
         setError(`Failed to submit prompt: ${err.message || err}`);
         setIsGenerating(false);
+        triggerAttention("Action Required", {
+          title: "Hermes • Jarvis",
+          body: `Error: ${err.message || err}`,
+        });
       }
     },
-    [onAssistantResponse, sessionId]
+    [onAssistantResponse, sessionId, triggerAttention]
   );
 
   // Clear or reset conversation
@@ -264,5 +278,7 @@ export function useJarvisGateway({ profile, onAssistantResponse }: UseJarvisGate
     setPersona,
     submitPrompt,
     clearChat,
+    requestPermission,
+    clearAttention,
   };
 }

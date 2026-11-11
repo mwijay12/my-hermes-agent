@@ -1688,6 +1688,7 @@ async def _status_active_sessions() -> int:
 # Image MIME types this endpoint will serve. Extension-allowlisted so an
 # authenticated caller can't pull non-image files through it.
 _MEDIA_CONTENT_TYPES = {
+    # Images
     ".png": "image/png",
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
@@ -1696,10 +1697,20 @@ _MEDIA_CONTENT_TYPES = {
     ".svg": "image/svg+xml",
     ".bmp": "image/bmp",
     ".ico": "image/x-icon",
+    # Audio
+    ".mp3": "audio/mpeg",
+    ".wav": "audio/wav",
+    ".ogg": "audio/ogg",
+    ".m4a": "audio/mp4",
+    # Video (supports videofactory outputs & recordings)
+    ".mp4": "video/mp4",
+    ".webm": "video/webm",
+    ".mov": "video/quicktime",
+    ".mkv": "video/x-matroska",
 }
-_MEDIA_MAX_BYTES = 25 * 1024 * 1024
+_MEDIA_MAX_BYTES = 500 * 1024 * 1024
 _MANAGED_FILES_ROOT_ENV = "HERMES_DASHBOARD_FILES_ROOT"
-_MANAGED_FILE_MAX_BYTES = 100 * 1024 * 1024
+_MANAGED_FILE_MAX_BYTES = 1024 * 1024 * 1024
 _HOSTED_MANAGED_FILES_ROOT = Path("/opt/data")
 
 
@@ -1997,15 +2008,15 @@ def _media_serve_roots() -> list[Path]:
 
 
 @app.get("/api/media")
-async def get_media(path: str):
-    """Return a gateway-local image file as a base64 data URL.
+async def get_media(path: str, raw: bool = False):
+    """Return a gateway-local image/media file as a base64 data URL or streamed FileResponse.
 
     Lets remote clients (the desktop app over the network, or the web dashboard
-    in a browser) display images the agent wrote to *this* machine's filesystem
+    in a browser) display images and media the agent wrote to *this* machine's filesystem
     — they can't read the gateway's local disk directly.
 
     Auth-gated by the session token like every other /api route. Restricted to
-    an image-extension allowlist, a size cap, AND the gateway's own media roots
+    a media-extension allowlist, a size cap, AND the gateway's own media roots
     (resolved, symlink-safe) so it can't be used to read arbitrary files.
     """
     try:
@@ -2025,8 +2036,12 @@ async def get_media(path: str):
     if target.stat().st_size > _MEDIA_MAX_BYTES:
         raise HTTPException(status_code=413, detail="File too large")
 
+    media_type = _MEDIA_CONTENT_TYPES[target.suffix.lower()]
+    if raw:
+        return FileResponse(path=str(target), media_type=media_type, filename=target.name)
+
     encoded = base64.b64encode(target.read_bytes()).decode("ascii")
-    return {"data_url": f"data:{_MEDIA_CONTENT_TYPES[target.suffix.lower()]};base64,{encoded}"}
+    return {"data_url": f"data:{media_type};base64,{encoded}"}
 
 
 def _canonical_path(path: Path, *, require_exists: bool = False) -> Path:
