@@ -4,6 +4,9 @@
 > skills za **All-Rounder** (Coding + Biashara + Research + Automation),
 > na Cloud APIs: **Groq, Gemini, OpenRouter na zaidi** — kwa PC ya Windows.
 
+> 📖 **Hupendi kusoma faili za `.md`?** Fungua **`easy-guide.html`** — ni mwongozo ule ule
+> kwa Kiswahili rahisi, umeundwa kama ukurasa wa kitabu (hakuna alama za markdown).
+
 ---
 
 ## 1. Maana ya `kimi-k3-in-c` (uliyouliza)
@@ -15,13 +18,15 @@ Repo: https://github.com/FareedKhan-dev/kimi-k3-in-c
 | **Kimi K3** | Model kubwa ya AI kutoka Moonshot AI (China). Ina **2.78 trillion parameters** (MoE — Mixture of Experts). |
 | **`in-c`** | Imeandikwa upya kwa lugha ya **C99** — bila Python, bila framework, bila GPU, bila BLAS. Engine nzima ni **176 KB** tu. |
 | **Inaendeshwa vipi kwenye PC ndogo?** | Hainaingiza model yote RAM-ini. Inasoma **experts (sehemu za model) kutoka disk moja kwa moja** kila token, kwa sababu kwa kila token inatumia **16 tu kati ya 896 experts**. Ndiyo maana inafanya kazi na RAM ya 8 GB. |
-| **Inahitaji disk ngapi?** | **1.56 TB** kwa checkpoint kamili (96 shards). Hii ndiyo sababu ulivyosema *"inataka karibu 2TB???"* — **ndiyo, ni kweli.** |
-| **Ni polepole kiasi gani?** | Laptop ya 8 GB: **~26.5 sekunde/token**. Desktop 64 GB: **~19.8 s/token**. Workstation 128 GB+: **~5.6 s/token**. Token ≈ neno fupi, kwa hiyo jibu la sentensi 20 linaweza kuchukua dakika 2–9. |
+| **Inahitaji disk ngapi?** | **1.56 TB** kwa checkpoint kamili (96 shards) + 109 GB trunk = **~1.7 TB**. Hii ndiyo sababu ulivyosema *"inataka karibu 2TB???"* — **ndiyo, ni kweli.** |
+| **Ni polepole kiasi gani?** | Laptop ya 8 GB: **~26.5 sekunde/token**. Desktop 64 GB: **~19.8 s/token**. Workstation 128 GB+: **~5.3–5.6 s/token**. Token ≈ neno fupi, kwa hiyo jibu la sentensi 20 linaweza kuchukua dakika 2–9. |
+| **Inaweza kujaribiwa bila model?** | Ndiyo! `make -j && make test` — chini ya dakika moja, hakuna download. |
+| **Na diski ndogo?** | Kuna `--layers N` inayopakua baadhi tu ya shards (majario, sio Kimi K3 kamili). |
 | **Inafaa kwa nini?** | Research, kujifunza jinsi LLM kubwa zinavyofanya kazi, kuendesha model kubwa bila GPU. **Sio kwa kazi za kila siku.** |
 
 ### Kwa nini hatutumii Kimi K3 kila siku kwenye PC yako?
 
-1. PC yako: **Windows, RAM 8–16 GB, disk < 1 TB** → checkpoint ya 1.56 TB **haingii kabisa**.
+1. PC yako: **Windows, RAM 8–16 GB, disk < 1 TB** → inahitaji **~1.7 TB**, **haingii kabisa**.
 2. Hata kama ingeingia, majibu yangekuwa **polepole sana** kwa agent anayefanya kazi nyingi (coding, research, automation).
 3. Kimi K3 in C ni **CLI binary** (`./bin/k3 --prompt "..."`), sio API — Hermes haiwezi kuizungumza moja kwa moja bila bridge (tumekuwekea bridge ya majaribio kwenye `kimi-k3/kimi_bridge.py`).
 
@@ -54,6 +59,7 @@ Hiyo ndiyo tumefanya hapa kwa **Mwijay**.
 ```
 mwijay-hermes/
 ├── README.md                  ← Mwongozo huu (Swahili)
+├── easy-guide.html            ← Mwongozo rahisi wa kusoma (hakuna markdown) ← ANZIA HAPA
 ├── profile/
 │   ├── SOUL.md                ← Personality: Mwijay AI anavyozungumza
 │   ├── USER.md                ← Kumbukumbu: Mwijay ni nani, anapenda nini
