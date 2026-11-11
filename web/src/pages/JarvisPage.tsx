@@ -56,6 +56,7 @@ export default function JarvisPage() {
     setPersona,
     submitPrompt,
     clearChat,
+    requestPermission,
   } = useJarvisGateway();
 
   // Vision Engine
@@ -64,6 +65,7 @@ export default function JarvisPage() {
   // Voice Engine
   const voice = useJarvisVoice({
     onPromptSubmit: (spokenText) => {
+      requestPermission?.();
       if (spokenText.trim()) {
         submitPrompt(spokenText.trim());
       }
