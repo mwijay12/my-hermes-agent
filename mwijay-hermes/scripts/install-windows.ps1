@@ -1,6 +1,10 @@
 # Mwijay AI — Install Hermes kwenye Windows (PowerShell)
 # Endesha: powershell -ExecutionPolicy Bypass -File .\mwijay-hermes\scripts\install-windows.ps1
 # Hii inaitisha installer rasmi ya Hermes, kisha inakumbusha hatua zinazofuata.
+#
+# Kwa PC ya chuo/maabara (hakuna admin, hakuna Git, mtandao umezuiwa) tumia badala yake:
+#   .\mwijay-hermes\scripts\install-chuo.ps1        (inafanya kila kitu yenyewe)
+#   .\mwijay-hermes\scripts\install-chuo.ps1 -Wipe  (futa funguo kabla ya kuondoka)
 
 Write-Host "=== Mwijay AI — Hermes Installer (Windows) ===" -ForegroundColor Cyan
 Write-Host "Hatua 1: Inaendesha installer rasmi ya Hermes..." -ForegroundColor Green

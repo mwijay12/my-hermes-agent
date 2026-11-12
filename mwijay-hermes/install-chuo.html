@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mwijay AI — Sakinisha kwenye PC ya Chuo</title>
+<style>
+  :root { --ink:#12161c; --muted:#5b6472; --line:#dfe3e8; --good:#0f7b3f; --warn:#a15c00; --bad:#a3121b; --bg:#fbfcfe; --card:#ffffff; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:32px 20px 90px; background:var(--bg); color:var(--ink);
+         font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; }
+  h1 { font-size:31px; line-height:1.24; margin:0 0 8px; }
+  h2 { font-size:24px; margin:44px 0 12px; padding-top:20px; border-top:2px solid var(--line); }
+  h3 { font-size:19px; margin:28px 0 8px; }
+  h4 { font-size:16.5px; margin:20px 0 6px; color:#2c3542; }
+  p, li { margin:10px 0; }
+  .lede { font-size:19px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin:18px 0; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:15.5px; }
+  th, td { border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  th { background:#f2f5f9; font-weight:650; }
+  tbody tr:nth-child(even) { background:#fafbfd; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:14px; }
+  code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  pre { background:#0f1420; color:#e8edf5; padding:16px 18px; border-radius:10px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; color:inherit; padding:0; }
+  pre.ps { background:#012456; }
+  a { color:#1257c9; }
+  .tag { display:inline-block; font-size:12.5px; font-weight:650; padding:2px 8px; border-radius:999px; border:1px solid; }
+  .t-a { color:var(--good); border-color:#8fd0a8; background:#eafaf0; }
+  .t-b { color:#1257c9; border-color:#a9c4ee; background:#eef4fe; }
+  .callout { border-left:5px solid var(--bad); background:#fff5f6; padding:14px 18px; border-radius:8px; margin:18px 0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff9ef; }
+  .callout.ok { border-left-color:var(--good); background:#f0fbf4; }
+  .small { font-size:14.5px; color:var(--muted); }
+  ul, ol { margin:10px 0 10px 22px; padding:0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .num { display:inline-block; width:26px; height:26px; line-height:26px; text-align:center; border-radius:50%;
+         background:#0f1420; color:#fff; font-size:14px; font-weight:700; margin-right:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Sakinisha Mwijay AI kwenye PC ya Chuo</h1>
+<p class="lede">Mwongozo huu umeandikwa kwa hali halisi ya maabara: <strong>huna ruhusa za msimamizi (admin)</strong>, <strong>hakuna Git</strong>, na mtandao unaweza kuwa umezuiwa. Njia zote hapa zinafanya kazi ndani ya folda yako ya mtumiaji pekee.</p>
+
+<div class="callout ok">
+<strong>Ujumbe muhimu kwanza:</strong> kusakinisha <em>Hermes</em> na kusakinisha <em>utambulisho wa Mwijay AI</em> ni vitu viwili. Hermes ndiyo injini (inatoka kwa mradi mkuu); Mwijay AI ni rangi, jina, sauti, na misemo yako (folda ya <code>mwijay-hermes/</code> iliyo kwenye repo yako). Kwa kuwa mabadiliko yako yamekwishaunganishwa kwenye <code>main</code>, <strong>njia zote mbili zinakupa toleo lako lilelile</strong>.
+</div>
+
+<h2>1) Kabla huanza — orodha ya ukaguzi</h2>
+<table>
+<thead><tr><th>Unachohitaji</th><th>Jinsi ya kukagua</th><th>Kama hamna</th></tr></thead>
+<tbody>
+<tr><td><strong>Windows 10/11</strong></td><td><code>Win + R</code> → <code>winver</code></td><td>Tumia njia ya Linux/WSL hapa chini</td></tr>
+<tr><td><strong>Mtandao unaofika GitHub + PyPI</strong></td><td>Fungua <code>github.com</code> kwenye kivinjari</td><td>Washa hotspot ya simu; au muulize msimamizi wa mtandao</td></tr>
+<tr><td><strong>Python 3.11 – 3.13</strong> (hiari)</td><td><code>python --version</code> au <code>py -3 --version</code></td><td>Tumia <strong>Njia A</strong> — installer inajileta Python yenyewe</td></tr>
+<tr><td><strong>Git</strong> (hiari)</td><td><code>git --version</code></td><td>Script inapakua ZIP badala yake</td></tr>
+<tr><td><strong>Ruhusa za admin</strong></td><td>—</td><td><strong>Hauzihitaji.</strong> Kila kitu kinawekwa chini ya folda yako</td></tr>
+</tbody>
+</table>
+
+<h2>2) Chagua njia</h2>
+<table>
+<thead><tr><th>Njia</th><th>Inafaa wakati gani</th><th>Faida</th><th>Hasara</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>A. Installer rasmi</strong> <span class="tag t-a">anza hapa</span></td>
+  <td>Huna Python sahihi, au unataka iwe rahisi</td>
+  <td>Inajileta Python 3.11, uv, na ripgrep yenyewe. Amri moja tu.</td>
+  <td>Inasakinisha toleo lililotolewa (sio tawi lako), na inachukua muda zaidi kupakua</td>
+</tr>
+<tr>
+  <td><strong>B. Kutoka repo yako</strong> <span class="tag t-b">kwa wanaojua</span></td>
+  <td>Una Python 3.11–3.13 tayari</td>
+  <td>Unatumia hasa code ya repo yako; unaweza kubadili chochote</td>
+  <td>Unahitaji Python sahihi; <code>pip</code> lazima ifike PyPI</td>
+</tr>
+</tbody>
+</table>
+
+<h2>3) Njia ya haraka (Windows) — amri moja</h2>
+<p>Fungua <strong>PowerShell</strong> (si Command Prompt) na endesha:</p>
+<pre class="ps"><code>powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1"</code></pre>
+<p>Hilo linafanya kila kitu: kukagua mazingira, kupata repo (clone au ZIP), kusakinisha, na kuweka utambulisho wako. <strong>Lakini</strong> script bado haipo kwenye PC yako mara ya kwanza — kwa hivyo chagua moja kati ya hizi:</p>
+
+<h3>3.1 Kama una Git</h3>
+<pre class="ps"><code>git clone https://github.com/mwijay12/my-hermes-agent "$HOME\my-hermes-agent"
+powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1"</code></pre>
+
+<h3>3.2 Kama huna Git (pakua ZIP kwanza)</h3>
+<ol>
+  <li>Fungua <a href="https://github.com/mwijay12/my-hermes-agent/archive/refs/heads/main.zip">kiungo hiki</a> kwenye kivinjari → ZIP itapakuliwa.</li>
+  <li>Ifungue (right-click → <em>Extract All</em>) → hamishia folda inayoitwa <code>my-hermes-agent</code> ndani ya <code>C:\Users\&lt;jina lako&gt;\</code>.</li>
+  <li>Kisha endesha kwenye PowerShell:</li>
+</ol>
+<pre class="ps"><code>powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1"</code></pre>
+
+<div class="callout warn">
+<strong>Kama PowerShell inasema "running scripts is disabled":</strong> hiyo ndiyo sababu ya <code>-ExecutionPolicy Bypass</code> kwenye amri zilizo hapo juu — inalazwa tu kwa script hii, na haihitaji admin. Usibadili ExecutionPolicy ya kompyuta nzima (na usiwahi kuendesha <code>Set-ExecutionPolicy Unrestricted</code> kwenye PC ya chuo).
+</div>
+
+<h3>3.3 Script inakuuliza maswali</h3>
+<ul>
+  <li><strong>"Njia: SOURCE au OFFICIAL?"</strong> — inachagua yenyewe kulingana na Python uliyo nayo. Unaweza kulazimisha: <code>-Method official</code> au <code>-Method source</code>.</li>
+  <li><strong>"Endelea na --apply? (Y/N)"</strong> — kwanza inakuonyesha kausa kavu (hakibadilishi chochote), kisha inakuuliza. Jibu <code>Y</code>.</li>
+</ul>
+
+<h2>4) Kama upo kwenye Linux/WSL ya maabara</h2>
+<pre><code>bash ~/my-hermes-agent/mwijay-hermes/scripts/install-chuo.sh
+# au bila Python sahihi:
+bash ~/my-hermes-agent/mwijay-hermes/scripts/install-chuo.sh --official</code></pre>
+<p class="small">Script hii inatumia <code>curl</code> na (hiari) <code>unzip</code>. Kama huna Git wala unzip, pakua ZIP kwa kivinjari kwanza.</p>
+
+<h2>5) Weka funguo zako (API keys)</h2>
+<p>Hii ndiyo hatua ya mwisho — na ndiyo pekee inayohitaji uamuzi wako. Hermes haitafanya kazi bila angalau key moja.</p>
+<ol>
+  <li>Fungua <code>mwijay-hermes/config/.env.free.example</code> kwenye repo — ina majina yote ya funguo za bure.</li>
+  <li>Chagua providers 2–3 (Groq na Gemini ni rahisi zaidi; zote hazihitaji kadi).</li>
+  <li>Tengeneza faili <code>C:\Users\&lt;jina lako&gt;\.hermes\.env</code> na uweke funguo zako hivi:</li>
+</ol>
+<pre><code>GROQ_API_KEY=gsk_...
+GEMINI_API_KEY=AIza...
+OPENROUTER_API_KEY=sk-or-v1...</code></pre>
+<p>Kisha pima:</p>
+<pre><code>python mwijay-hermes\scripts\check_free_keys.py</code></pre>
+<p class="small">Viungo vya kupata kila key vipo kwenye <code>free-providers.html</code>. Usinakili funguo za watu wengine — zinafutwa haraka, na si halali.</p>
+
+<h2>6) Thibitisha kwamba imekaa sawa</h2>
+<pre><code>hermes doctor              # inakuambia nini hakipo
+hermes skin                # lazima uone "mwijay" na "mwijay-mwanga"
+hermes bundles list        # lazima uone /mwijay
+hermes model               # chagua provider/model
+python mwijay-hermes\scripts\preview_skin.py mwijay    # ona mwonekano
+hermes chat                # anza!</code></pre>
+<div class="callout ok">
+<strong>Ukiona "hermes: command not found":</strong> njia ya <em>source</em> inaweka Hermes ndani ya <code>.venv</code> ya repo. Tumia <code>.venv\Scripts\hermes.exe</code>, au ongeza kwenye PATH ya mtumiaji wako:
+<pre style="margin:10px 0 0"><code>[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$HOME\my-hermes-agent\.venv\Scripts", "User")</code></pre>
+Funga na ufungue upya PowerShell baada ya hapo.
+</div>
+
+<h2>7) Matatizo ya kawaida kwenye PC za chuo</h2>
+<table>
+<thead><tr><th>Tatizo</th><th>Sababu</th><th>Suluhisho</th></tr></thead>
+<tbody>
+<tr><td><code>pip</code> inashindwa (SSL / timeout)</td><td>Mtandao wa shule unazuia PyPI au unatumia proxy</td><td>Jaribu hotspot ya simu; au <code>pip --proxy http://proxy:port ...</code> (uliza msimamizi wa IT anwani ya proxy)</td></tr>
+<tr><td><code>git</code> haipo</td><td>Haijasakinishwa</td><td>Tumia ZIP (script inafanya hivi kiotomatiki)</td></tr>
+<tr><td>Python ni 3.9 / 3.10</td><td>Chuo kimeweka toleo la zamani</td><td>Tumia <code>-Method official</code> — inaleta Python 3.11 yake ndani ya folda yako</td></tr>
+<tr><td>"running scripts is disabled"</td><td>ExecutionPolicy</td><td>Tumia <code>powershell -ExecutionPolicy Bypass -File ...</code></td></tr>
+<tr><td>Haiwezi kuandika kwenye <code>C:\Program Files</code></td><td>Huna admin</td><td>Sawa — script haiandiki hapo. Weka repo ndani ya <code>C:\Users\&lt;jina lako&gt;\</code></td></tr>
+<tr><td>PC inafuta folda zako kila unapotoka (deep freeze)</td><td>Mashine za maabara mara nyingi zina programu ya kurejesha mfumo</td><td>Hifadhi <code>.env</code> yako kwenye USB/ng’amizi (cloud) na urudishe kila mara; au tumia Telegram kutoka simu badala yake</td></tr>
+<tr><td><code>hermes update</code> inashindwa</td><td>Hakuna haki za kuandika</td><td>Ruka masasisho kwenye PC ya chuo; sasisha kwenye PC yako ya nyumbani</td></tr>
+</tbody>
+</table>
+
+<h2>8) Kabla hujaondoka kwenye PC ya chuo ⚠️</h2>
+<p>PC za chuo ni za watu wengi. Funguo zako ni kama manenosiri — mtu akizipata anatumia akaunti yako ya Groq/Gemini/OpenRouter (na kama umeweka kadi popote, zinaweza kugharimu pesa).</p>
+<pre class="ps"><code>powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1" -Wipe</code></pre>
+<p>Hii inafuta <code>.hermes\.env</code> na <code>.env.free.example</code>. Pia:</p>
+<ul>
+  <li><strong>Usihifadhi funguo kwenye kivinjari</strong> (password manager ya shule, notepad kwenye desktop, n.k.).</li>
+  <li><strong>Usiziweke kwenye picha/screenshot.</strong></li>
+  <li><strong>Fungua <code>free-providers.html</code></strong> — kuna viungo vya kufuta funguo kabisa kwenye akaunti za providers kama hutaki zitumike tena.</li>
+  <li>Ukitaka kuondoa Hermes kabisa: futa folda <code>%LOCALAPPDATA%\hermes</code> na <code>%USERPROFILE%\my-hermes-agent</code>.</li>
+</ul>
+
+<h2>9) Muhtasari wa amri</h2>
+<pre class="ps"><code># Sakinisha
+git clone https://github.com/mwijay12/my-hermes-agent "$HOME\my-hermes-agent"
+powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1"
+
+# Thibitisha
+hermes doctor
+python mwijay-hermes\scripts\check_free_keys.py
+python mwijay-hermes\scripts\preview_skin.py mwijay
+
+# Tumia
+hermes chat
+hermes --tui
+/mwijay
+
+# Ondoka salama
+powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1" -Wipe</code></pre>
+
+<p class="small" style="margin-top:40px">Imeandaliwa kwa Mwijay AI · Novemba 2026 · Mahitaji: Python 3.11–3.13, mtandao unaofika GitHub na PyPI, hakuna haki za admin.</p>
+
+</div>
+</body>
+</html>
