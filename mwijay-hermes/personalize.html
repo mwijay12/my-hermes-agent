@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mwijay AI — Kuipendezesha Terminal (na Telegram)</title>
+<style>
+  :root { --ink:#12161c; --muted:#5b6472; --line:#dfe3e8; --good:#0f7b3f; --warn:#a15c00; --bad:#a3121b; --bg:#fbfcfe; --card:#ffffff; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:32px 20px 90px; background:var(--bg); color:var(--ink);
+         font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:1040px; margin:0 auto; }
+  h1 { font-size:31px; line-height:1.24; margin:0 0 8px; }
+  h2 { font-size:24px; margin:44px 0 12px; padding-top:20px; border-top:2px solid var(--line); }
+  h3 { font-size:19px; margin:28px 0 8px; }
+  h4 { font-size:16.5px; margin:20px 0 6px; color:#2c3542; }
+  p, li { margin:10px 0; }
+  .lede { font-size:19px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin:18px 0; }
+  .card.step { border-left:5px solid var(--good); }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:15.5px; }
+  th, td { border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  th { background:#f2f5f9; font-weight:650; }
+  tbody tr:nth-child(even) { background:#fafbfd; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:14px; }
+  code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  pre { background:#0f1420; color:#e8edf5; padding:16px 18px; border-radius:10px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; color:inherit; padding:0; }
+  pre.sw { background:#0b1a12; }
+  a { color:#1257c9; }
+  .tag { display:inline-block; font-size:12.5px; font-weight:650; padding:2px 8px; border-radius:999px; border:1px solid; }
+  .t-now  { color:var(--good); border-color:#8fd0a8; background:#eafaf0; }
+  .t-mid  { color:#1257c9; border-color:#a9c4ee; background:#eef4fe; }
+  .t-skip { color:#7a7a7a; border-color:#cfcfcf; background:#f3f3f3; }
+  .callout { border-left:5px solid var(--bad); background:#fff5f6; padding:14px 18px; border-radius:8px; margin:18px 0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff9ef; }
+  .callout.ok { border-left-color:var(--good); background:#f0fbf4; }
+  .small { font-size:14.5px; color:var(--muted); }
+  ul, ol { margin:10px 0 10px 22px; padding:0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .num { display:inline-block; width:26px; height:26px; line-height:26px; text-align:center; border-radius:50%;
+         background:#0f1420; color:#fff; font-size:14px; font-weight:700; margin-right:8px; }
+  .swatch { display:inline-block; width:14px; height:14px; border-radius:3px; vertical-align:-2px; margin-right:6px; border:1px solid #0002; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Kuipendezesha Mwijay AI kwenye Terminal</h1>
+<p class="lede">Uamuzi wako: <strong>Telegram ipo</strong> (kwa hivyo mobile imemalizika), na <strong>hatujengi app binafsi</strong>. Sasa tunabaki na kitu kimoja: <strong>kufanya terminal iwe yako kweli</strong> — rangi zako, jina lako, sauti yako, na maneno yake ya Kiswahili.</p>
+
+<h2>Unachopata (na muda wake)</h2>
+<table>
+<thead><tr><th>Kipengele</th><th>Kinachobadilika</th><th>Muda</th><th>Hali</th></tr></thead>
+<tbody>
+<tr><td><strong>Skin ya Tanzania</strong></td><td>Rangi za bendera, nembo ya Kilimanjaro, spinner za Kiswahili, jina "Mwijay AI"</td><td>Dakika 2</td><td><span class="tag t-now">tayari</span></td></tr>
+<tr><td><strong>Kionjo (preview)</strong></td><td>Unaona mwonekano kamili kabla ya kuitumia, na unarekebisha rangi ukitaka</td><td>Dakika 1</td><td><span class="tag t-now">tayari</span></td></tr>
+<tr><td><strong>Misemo ya Kiswahili</strong></td><td>Telegram inasema "bado nipo, naendelea" badala ya "still working"</td><td>Dakika 2</td><td><span class="tag t-now">tayari</span></td></tr>
+<tr><td><strong>Mwonekano wa jumla</strong></td><td>Streaming, saa, markdown, muhtasari wa mwisho, mlio unapomaliza</td><td>Dakika 5</td><td><span class="tag t-now">tayari</span></td></tr>
+<tr><td><strong>Pet / Mascot</strong></td><td>Kiumbe kinachocheza kwenye terminal; unaweza kukizalisha kwa maelezo</td><td>Dakika 5</td><td><span class="tag t-mid">hiari</span></td></tr>
+<tr><td><strong>Amri yako</strong></td><td><code>/mwijay</code> na (hiari) amri ya shell inayoitwa <code>mwijay</code></td><td>Dakika 5</td><td><span class="tag t-mid">hiari</span></td></tr>
+<tr><td>Computer Use</td><td>Agent anadhibiti Windows yako</td><td>—</td><td><span class="tag t-skip">baadaye</span></td></tr>
+<tr><td>App binafsi</td><td>—</td><td>—</td><td><span class="tag t-skip">tumeahirisha</span></td></tr>
+</tbody>
+</table>
+
+<h2>1) Anza kwa kuona (kabla ya kubadilisha chochote)</h2>
+<p>Hiki ndicho chombo kipya: kinaonyesha <em>kamili</em> jinsi terminal itakavyoonekana — nembo, paneli ya majibu, spinner, mistari ya tools, na rangi zote — bila kugusa <code>config.yaml</code> wala <code>~/.hermes</code>.</p>
+<pre><code>python3 mwijay-hermes/scripts/preview_skin.py mwijay            # terminal nyeusi
+python3 mwijay-hermes/scripts/preview_skin.py mwijay-mwanga     # terminal nyeupe
+python3 mwijay-hermes/scripts/preview_skin.py --list            # orodha ya skins
+python3 mwijay-hermes/scripts/preview_skin.py mwijay --width 80 # jaribu upana mwingine</code></pre>
+<p class="small">Nembo kuu (<strong>MWIJAY AI</strong> kwa herufi kubwa) inaonekana tu kama terminal yako ina upana wa angalau kolamu 95 — vinginevyo Hermes inaonyesha nembo ya mlima peke yake.</p>
+
+<h3>Mfano wa mwonekano (upana 100)</h3>
+<pre class="sw"><code>███╗   ███╗██╗    ██╗██╗     ██╗ █████╗ ██╗   ██╗     █████╗ ██╗
+████╗ ████║██║    ██║██║     ██║██╔══██╗╚██╗ ██╔╝    ██╔══██╗██║
+██╔████╔██║██║ █╗ ██║██║     ██║███████║ ╚████╔╝     ███████║██║
+██║╚██╔╝██║██║███╗██║██║██   ██║██╔══██║  ╚██╔╝      ██╔══██║██║
+██║ ╚═╝ ██║╚███╔███╔╝██║╚█████╔╝██║  ██║   ██║       ██║  ██║██║
+╚═╝     ╚═╝ ╚══╝╚══╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝
+
+╭────────────────────── Hermes v0.17.0 — Mwijay AI ──────────────────────╮
+│                     Available Tools                                     │
+│              ▄▄▄▄▄▄           terminal, process, web_search              │
+│            ████████           read_file, write_file, memory              │
+│              ▀▀▀▀▀▀           cron, skills, computer_use                 │
+│         ✦      ✦      ✦                                                 │
+│              █████                                                       │
+│             ███████                                                      │
+│            █████████                                                     │
+│          █████████████                                                   │
+│       █████████████████                                                  │
+│    ███████████████████████                                               │
+│  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  ⚕ Kilimanjaro · Tanzania                │
+│   groq/gpt-oss-120b · 131K context · Session: demo-1a2b                  │
+╰─────────────────────────────────────────────────────────────────────────╯
+
+Karibu Mwijay AI ⚕ — andika ujumbe wako (Kiswahili au English), au /help kwa amri.
+
+⟪⚕ (⚕) inafikiria… ⚕⟫  ( 2.3s · ↓ 1.2k tok)
+
+┊ Inasoma mwijay-hermes/skins/mwijay.yaml
+┊ ✓ Skin imepakiwa
+
+╭──────────────────────────  ⚕ Mwijay AI  ──────────────────────────╮
+│  Sawa Mwijay! Nimekuwekea mambo matatu:                              │
+│    1. Skin ya rangi za bendera yako                                  │
+│    2. Amri /mwijay inayopakia skills zote                            │
+│    3. Mnyororo wa providers wa bure                                  │
+│  Endesha hermes chat kuanza.                                         │
+╰────────────────────────────────────────────────────────────────────╯
+
+⚕ andika ujumbe wako hapa…</code></pre>
+
+<h2>2) Sakinisha (amri moja)</h2>
+<pre><code># Kwanza onyesha tu (hakibadilishi chochote):
+python3 mwijay-hermes/scripts/setup_personal.py
+
+# Kisha tekeleza:
+python3 mwijay-hermes/scripts/setup_personal.py --apply
+
+# Kwa terminal yenye background nyeupe:
+python3 mwijay-hermes/scripts/setup_personal.py --apply --skin mwijay-mwanga</code></pre>
+<p>Inafanya mambo matano, na kila moja ni salama kurudia:</p>
+<ol>
+  <li><strong>Skins</strong> → <code>~/.hermes/skins/mwijay.yaml</code> (+ <code>mwijay-mwanga.yaml</code>)</li>
+  <li><strong>Bundle</strong> → <code>~/.hermes/skill-bundles/mwijay.yaml</code> (amri <code>/mwijay</code>)</li>
+  <li><strong>Profile</strong> → <code>SOUL.md</code>, <code>USER.md</code>, <code>MEMORY.md</code> (haziguswi kama zipo tayari)</li>
+  <li><strong>Misemo ya Kiswahili</strong> → <code>~/.hermes/status_phrases/mwijay.yaml</code></li>
+  <li><strong>config.yaml</strong> → inaongeza <code>display.skin</code>, <code>display.personality</code>, <code>display.status_phrases</code>, na <code>skills.external_dirs</code>. <strong>Haifuti chochote</strong> — inaweka nakala <code>config.yaml.bak</code> kwanza, na hairudii thamani ulizoweka mwenyewe.</li>
+</ol>
+<p class="small">Kwenye Windows tumia python ileile inayoendesha hermes (inahitaji <code>pyyaml</code>, ambayo hermes tayari inayo): <code>python mwijay-hermes\scripts\setup_personal.py --apply</code></p>
+
+<div class="callout ok">
+<strong>Ikiwa tayari una <code>config.yaml</code> nzuri</strong> na hutaki script iiguse: nakili tu faili kwa mkono — <code>skins/</code>, <code>skill-bundles/</code>, <code>status_phrases/</code> — na uongeze mstari mmoja kwenye config: <code>display: {skin: mwijay}</code>. Hiyo inatosha kubadilisha rangi.
+</div>
+
+<h2>3) Rangi — na jinsi ya kuzibadilisha</h2>
+<p>Rangi zote ziko kwenye faili la skin. Ukitaka tofauti, hariri hapa na uendeshe tena kionjo. Huna haja ya kuanzisha upya chochote.</p>
+<table>
+<thead><tr><th>Ufunguo</th><th>Rangi</th><th>Inaonekana wapi</th></tr></thead>
+<tbody>
+<tr><td><code>banner_border</code> / <code>banner_title</code></td><td><span class="swatch" style="background:#FCD116"></span><span class="swatch" style="background:#FFD700"></span> dhahabu</td><td>Mpaka na kichwa cha paneli ya kuanza</td></tr>
+<tr><td><code>banner_accent</code> / <code>ui_ok</code></td><td><span class="swatch" style="background:#1EB53A"></span> kijani</td><td>Jina la modeli, alama za kufanikiwa</td></tr>
+<tr><td><code>banner_dim</code> / <code>session_border</code></td><td><span class="swatch" style="background:#00A3DD"></span> buluu</td><td>Maelezo madogo, nambari ya session</td></tr>
+<tr><td><code>banner_text</code> / <code>prompt</code></td><td><span class="swatch" style="background:#FFF8DC"></span> cornsilk</td><td>Maandishi ya mwili na ujumbe wako</td></tr>
+<tr><td><code>response_border</code></td><td><span class="swatch" style="background:#FFD700"></span> dhahabu</td><td>Mpaka wa sanduku la jibu</td></tr>
+<tr><td><code>status_bar_bg</code></td><td><span class="swatch" style="background:#0b1a12"></span> kijani kingiwa</td><td>Mstari wa chini (TUI)</td></tr>
+</tbody>
+</table>
+<pre><code># Badilisha rangi → hifadhi → ona mara moja:
+python3 mwijay-hermes/scripts/preview_skin.py mwijay</code></pre>
+<p class="small">Rangi yoyote usiyotaja inarithiwa kutoka skin ya <code>default</code> ya Hermes — kwa hivyo skin yako inaweza kuwa na mistari mitatu tu ukipenda.</p>
+
+<h2>4) Mwonekano wa jumla (si rangi tu)</h2>
+<p>Haya yamewekwa tayari kwenye <code>mwijay-hermes/config/config.yaml</code> chini ya <code>display:</code>. Nimechagua yale yanayofanya terminal ihisi hai bila kupoteza utulivu:</p>
+<table>
+<thead><tr><th>Knob</th><th>Thamani</th><th>Kwa nini</th></tr></thead>
+<tbody>
+<tr><td><code>streaming</code></td><td><code>true</code></td><td>Maandishi yanatoka taratibu — inahisi kama anaandika, si kama anatoa ripoti</td></tr>
+<tr><td><code>timestamps</code></td><td><code>true</code> (<code>%H:%M</code>)</td><td>Unajua ulimuuliza lini — muhimu kwa sessions ndefu</td></tr>
+<tr><td><code>final_response_markdown</code></td><td><code>render</code></td><td>Jedwali na vichwa vinaonekana vizuri, si alama ghafi za <code>#</code> na <code>**</code></td></tr>
+<tr><td><code>friendly_tool_labels</code></td><td><code>true</code></td><td>"Inasoma faili…" badala ya <code>read_file</code></td></tr>
+<tr><td><code>spinner_token_flow</code></td><td><code>true</code></td><td>Unaona tokeni zikitiririka — unajua kama anakwama</td></tr>
+<tr><td><code>turn_summary</code></td><td><code>true</code></td><td>Mstari wa mwisho: <code>⋯ 12.4s · edited 2 files +18 -3 · ran 3 commands</code></td></tr>
+<tr><td><code>bell_on_complete</code></td><td><code>true</code></td><td>Mlio mfupi anapomaliza — unaweza kwenda dirisha lingine</td></tr>
+<tr><td><code>show_cost</code></td><td><code>true</code></td><td>Ukiwa kwenye free tiers inaonyesha $0.00 — na inakuonya mara moja kama provider fulani ameanza kutoza</td></tr>
+<tr><td><code>inline_diffs</code></td><td><code>true</code></td><td>Unakagua mabadiliko ya faili moja kwa moja</td></tr>
+<tr><td><code>interface</code></td><td><code>cli</code> (imewekwa maoni)</td><td>Badilisha kuwa <code>tui</code> kama unataka paneli la kisasa lenye uteuzi wa puku</td></tr>
+</tbody>
+</table>
+<p class="small">Ukitaka mbadala wa haraka bila kuhariri config: <code>hermes config</code> → chagua <code>display</code>.</p>
+
+<h2>5) Telegram inasema Kiswahili sasa</h2>
+<p>Hermes inatuma maneno mafupi kama "still working…" wakati kazi ni ndefu. Nimekuwekea <strong>misemo 44 ya Kiswahili</strong> (<code>mwijay-hermes/status_phrases.yaml</code>):</p>
+<pre><code>bado nipo, naendelea
+inachukua muda kidogo, bado inaendelea
+sijakwama, bado inaendesha
+hakuna jibu bado, bado nasubiri
+nipe sekunde
+karibu tumemaliza</code></pre>
+<p>Setup inaiweka kwenye <code>~/.hermes/status_phrases/mwijay.yaml</code> na kusanidi <code>display.status_phrases.mode: replace</code> (Kiswahili pekee). Ukitaka zichanganywe na zile za Kiingereza, badilisha kuwa <code>append</code>.</p>
+
+<h2>6) Ziada ndogo zinazoleta ladha</h2>
+<div class="grid">
+  <div class="card step">
+    <h4 style="margin-top:0">Pet / Mascot</h4>
+    <p>Kiumbe kinachoitikia kile agent anachofanya — na unaweza <strong>kukizalisha kwa maelezo</strong>:</p>
+    <pre><code>/hatch kaduka ndogo ya dhahabu yenye mbawa, imevaa skafu ya bendera ya Tanzania</code></pre>
+    <p class="small">Au: <code>hermes pets list</code> → <code>hermes pets install &lt;jina&gt; --select</code>. Mapambo tu, hayaathiri tokeni.</p>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Amri yako</h4>
+    <p><code>/mwijay</code> inapakia skills zako zote tano mara moja. Na ukitaka Hermes <em>tofu</em> kabisa yenye jina lako:</p>
+    <pre><code>hermes profile create mwijay
+mwijay setup &amp;&amp; mwijay chat</code></pre>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Sauti yake</h4>
+    <p><code>/personality mwijay</code>. Una saba tayari kwenye config: <code>mwijay</code>, <code>mwijay_teacher</code>, <code>mwijay_coder</code>, <code>mwijay_business</code>, <code>helpful</code>, <code>concise</code>, <code>technical</code>.</p>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Kumbukumbu</h4>
+    <p><code>SOUL.md</code> (yeye ni nani), <code>USER.md</code> (wewe ni nani), <code>MEMORY.md</code> (anachokumbuka). Mwambie tu: <em>"kumbuka kwamba…"</em> — au yazihariri mwenyewe.</p>
+  </div>
+</div>
+
+<h2>7) Kilichobaki (tulichoahirisha)</h2>
+<ul>
+  <li><strong>Computer use</strong> — ipo tayari kwenye repo na inafanya kazi kwenye Windows (<code>hermes computer-use install</code>). Tunaweza kuifanya baadaye; inakula tokeni nyingi, kwa hivyo ni vizuri kwanza uwe na rotation ya providers ikifanya kazi.</li>
+  <li><strong>App binafsi</strong> — hatujengi. Ukurasa huu ndio "app" yako sasa: terminal inayoitwa Mwijay AI, Telegram kwa mobile. Ukibadili mawazo baadaye, njia fupi ni kupamba PWA ya <code>hermes dashboard</code> (saa 1–3, hakuna kupakia).</li>
+</ul>
+
+<h2>8) Muhtasari wa amri</h2>
+<pre><code># Ona na usakinishe
+python3 mwijay-hermes/scripts/preview_skin.py mwijay
+python3 mwijay-hermes/scripts/setup_personal.py --apply
+
+# Badilisha wakati wowote
+hermes skin mwijay | mwijay-mwanga | default | ares | poseidon
+hermes config                 # rekebisha display kwa UI ya maandishi
+/personality mwijay           # ndani ya chat
+/mwijay                       # pakia skills zote
+/hatch &lt;maelezo&gt;              # zalisha pet yako
+
+# Thibitisha
+hermes skin                   # orodha ya skins
+hermes bundles list           # lazima uone /mwijay
+hermes pets doctor            # hali ya pet
+python3 mwijay-hermes/scripts/check_free_keys.py</code></pre>
+
+<div class="callout warn">
+<strong>Kumbusho moja tu la usalama:</strong> funguo zibaki kwenye <code>.env</code> (<code>~/.hermes/.env</code> au <code>%LOCALAPPDATA%\hermes\.env</code>), kamwe kwenye Git. <code>setup_personal.py</code> hailazimishwi kugusa <code>.env</code> wala funguo zako — inanakili faili za muundo pekee.
+</div>
+
+<p class="small" style="margin-top:40px">Imeandaliwa kwa Mwijay AI · Novemba 2026 · Kila amri na kila ufunguo wa config katika ukurasa huu umethibitishwa dhidi ya repo hii (Hermes 0.17.x).</p>
+
+</div>
+</body>
+</html>

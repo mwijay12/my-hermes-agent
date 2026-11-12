@@ -214,4 +214,58 @@ A: Ndiyo — nakili folda yoyote kutoka `skills/` kwenda `~/.hermes/skills/` (au
 
 ---
 
+## 8. Free LLM Providers — "akili inayozunguka" (rotation)
+
+Hapa ndipo unapopata **API keys nyingi za bure** na kuziunganisha kwa Hermes ili isiwahi
+kukwama kwa sababu ya rate limit ya provider mmoja.
+
+| Faili | Kazi yake |
+|---|---|
+| **`free-providers.html`** | Mwongozo kamili (Kiswahili, kama ukurasa wa kitabu) — orodha ya providers ~25, viwango vyao vya bure, base URL, na viungo vya kupata key. Fungua kwenye browser. |
+| **`config/.env.free.example`** | Majina yote ya env variables za free tiers (Groq, NVIDIA, Inception/Mercury, Agnes, Cerebras, SambaNova, GitHub Models, LLM7…). Nakili unayohitaji kwenye `~/.hermes/.env`. |
+| **`config/config.yaml`** | Tayari ina sehemu ya `providers:` (custom endpoints) na `fallback_providers:` (mnyororo wa rotation wa hatua 9). |
+| **`scripts/check_free_keys.py`** | Pima ni keys zipi zinaishi: `python3 mwijay-hermes/scripts/check_free_keys.py` — au chagua: `... check_free_keys.py groq gemini`. |
+
+**Hatua tatu za haraka:**
+1. Fungua `free-providers.html` → chukua keys za providers unazotaka (zote hazihitaji kadi).
+2. Ziweke kwenye `~/.hermes/.env` (muundo uko `config/.env.free.example`).
+3. Jaribu: `python3 mwijay-hermes/scripts/check_free_keys.py` → kisha anza Hermes; itazunguka
+   yenyewe kwenye mnyororo wa `fallback_providers` inapokwama.
+
+> ⚠️ **Usitumie API keys za watu wengine** (zilizovuja kwenye GitHub na kwingineko). Si bure —
+> ni kuvunja sheria, mara nyingi kosa la kisheria, na keys hizo hufutwa ghafla. Mwongozo huu
+> unakuonyesha jinsi ya kupata **keys zako mwenyewe za bure** na kuzizungusha.
+
+---
+
+## 9. Kuipendezesha Terminal (na Telegram)
+
+Mwongozo kamili: **`personalize.html`** (fungua kwenye browser).
+Uamuzi: **Telegram ipo** → mobile imemalizika. **Hatujengi app binafsi.**
+Tunachofanya: kufanya terminal iwe ya Mwijay AI kweli.
+
+**Anza hapa (dakika 3):**
+```bash
+python3 mwijay-hermes/scripts/preview_skin.py mwijay     # 1. ona mwonekano
+python3 mwijay-hermes/scripts/setup_personal.py --apply   # 2. sakinisha
+```
+
+| Faili | Kazi yake |
+|---|---|
+| `skins/mwijay.yaml` | Rangi za bendera ya Tanzania (dhahabu/kijani/buluu), nembo ya **MWIJAY AI** ya herufi kubwa, mlima Kilimanjaro, spinner za Kiswahili ("inafikiria", "inatafiti"), jina "Mwijay AI" |
+| `skins/mwijay-mwanga.yaml` | Toleo la terminal yenye background nyeupe/angavu |
+| `status_phrases.yaml` | Misemo 44 ya Kiswahili anazotuma Telegram wakati anafanya kazi ("bado nipo, naendelea") |
+| `skill-bundles/mwijay.yaml` | Amri `/mwijay` — inapakia skills zote tano zako mara moja |
+| `scripts/preview_skin.py` | Kionjo: ona jinsi terminal itakavyoonekana kabla ya kuitumia — badilisha rangi, endesha tena |
+| `scripts/setup_personal.py` | Inasanidi yote kwa amri moja (kausa kavu kwa default, `--apply` kutekeleza) |
+| `config/config.yaml` | Sehemu ya `display:` yenye streaming, saa, markdown, muhtasari wa mwisho, mlio, na misemo |
+
+**Ziada za hiari:** `/hatch <maelezo>` (zalisha pet/mascot yako), `hermes pets list`,
+`hermes profile create mwijay` (amri ya shell inayoitwa `mwijay`), `/personality mwijay`.
+
+> ⚠️ **Usalama:** funguo zibaki kwenye `.env` (`~/.hermes/.env` au `%LOCALAPPDATA%\hermes\.env`),
+> kamwe kwenye Git. `setup_personal.py` hailazimishwi kugusa `.env` — inanakili faili za muundo pekee.
+
+---
+
 *Imetengenezwa kwa Mwijay — All-Rounder Hermes Agent. Karibu kwenye timu, Mwijay AI! 🚀*

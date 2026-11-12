@@ -1,0 +1,110 @@
+# Skin ya Mwijay AI — rangi za bendera ya Tanzania (dhahabu / kijani / buluu)
+# Terminal yenye background NYEUSI (ndiyo default kwa Windows Terminal, PowerShell, WSL).
+#
+# Sakinisha:
+#   nakili faili hii -> %LOCALAPPDATA%\hermes\skins\mwijay.yaml   (Windows)
+#                    -> ~/.hermes/skins/mwijay.yaml                (Linux/WSL2/Termux)
+#   kisha:  hermes skin mwijay
+#   au weka kwenye config.yaml:  display: { skin: mwijay }
+#
+# Ona mwonekano kabla ya kuitumia:
+#   python3 mwijay-hermes/scripts/preview_skin.py mwijay
+#
+# Thamani yoyote usiyobainisha hapa inarithiwa kutoka skin ya "default".
+
+name: mwijay
+description: Mwijay AI — dhahabu, kijani na buluu ya Tanzania (kwa terminal nyeusi)
+
+colors:
+  banner_border:  "#FCD116"   # dhahabu ya bendera
+  banner_title:   "#FFD700"   # dhahabu inayong'aa
+  banner_accent:  "#1EB53A"   # kijani cha Tanzania
+  banner_dim:     "#00A3DD"   # buluu ya bendera
+  banner_text:    "#FFF8DC"   # cornsilk — rahisi kusoma
+
+  ui_accent:      "#FCD116"
+  ui_label:       "#1EB53A"
+  ui_ok:          "#1EB53A"
+  ui_error:       "#ef5350"
+  ui_warn:        "#ffa726"
+
+  prompt:         "#FFF8DC"
+  input_rule:     "#FCD116"
+  response_border: "#FFD700"
+  session_label:  "#1EB53A"
+  session_border: "#00A3DD"
+
+  status_bar_bg:  "#0b1a12"   # kijani kingiwa (karibu nyeusi)
+  voice_status_bg: "#0b1a12"
+  selection_bg:   "#1f3a2a"
+  completion_menu_bg: "#0b1a12"
+  completion_menu_current_bg: "#1f3a2a"
+  completion_menu_meta_bg: "#0b1a12"
+  completion_menu_meta_current_bg: "#1f3a2a"
+
+spinner:
+  waiting_faces:
+    - "(⚕)"
+    - "(☀)"
+    - "(✦)"
+  thinking_faces:
+    - "(⚕)"
+    - "(⌁)"
+    - "(◇)"
+  thinking_verbs:
+    - "inafikiria"
+    - "inapitia"
+    - "inatafiti"
+    - "inatengeneza"
+    - "inakagua"
+  wings:
+    - ["⟪⚕", "⚕⟫"]
+    - ["⟪☀", "☀⟫"]
+
+branding:
+  agent_name: "Mwijay AI"
+  welcome: "Karibu Mwijay AI ⚕ — andika ujumbe wako (Kiswahili au English), au /help kwa amri."
+  goodbye: "Baadaye, Mwijay! ⚕"
+  response_label: " ⚕ Mwijay AI "
+  prompt_symbol: "⚕"
+  help_header: "(⚕)? Amri Zinazopatikana"
+
+tool_prefix: "┊"
+
+tool_emojis:
+  terminal: "⚡"
+  web_search: "🔎"
+  web_extract: "📄"
+  read_file: "📖"
+  write_file: "✍"
+  image_generation: "🎨"
+  computer_use: "🖱"
+  memory: "🧠"
+  cron: "⏰"
+
+# Nembo kuu (inaonyeshwa terminal ikiwa na upana >= 95)
+banner_logo: |
+  [#FCD116]███╗   ███╗██╗    ██╗██╗     ██╗ █████╗ ██╗   ██╗     █████╗ ██╗[/]
+  [#FFD700]████╗ ████║██║    ██║██║     ██║██╔══██╗╚██╗ ██╔╝    ██╔══██╗██║[/]
+  [#F5C518]██╔████╔██║██║ █╗ ██║██║     ██║███████║ ╚████╔╝     ███████║██║[/]
+  [#1EB53A]██║╚██╔╝██║██║███╗██║██║██   ██║██╔══██║  ╚██╔╝      ██╔══██║██║[/]
+  [#17A032]██║ ╚═╝ ██║╚███╔███╔╝██║╚█████╔╝██║  ██║   ██║       ██║  ██║██║[/]
+  [#0E7A2B]╚═╝     ╚═╝ ╚══╝╚══╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝[/]
+
+# Mlima Kilimanjaro — inakaa upande wa kushoto wa paneli ya kuanza
+banner_hero: |
+  [#FCD116]                   ▄▄▄▄▄▄[/]
+  [#FCD116]                  ████████[/]
+  [#FCD116]                   ▀▀▀▀▀▀[/]
+  [#FFD700]              ✦      ✦      ✦[/]
+  [#FFF8DC]                    █████[/]
+  [#FFF8DC]                   ███████[/]
+  [#2ECC71]                  █████████[/]
+  [#27AE60]                █████████████[/]
+  [#1EB53A]              █████████████████[/]
+  [#179130]           ███████████████████████[/]
+  [#0E7A2B]        █████████████████████████████[/]
+  [#0B5F22]    ██████████████████████████████████████[/]
+  [#0B5F22] ██████████████████████████████████████████[/]
+  [#00A3DD]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/]
+  [#1EB53A]          ⚕ Kilimanjaro · Tanzania[/]
