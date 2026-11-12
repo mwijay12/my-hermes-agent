@@ -238,4 +238,30 @@ kukwama kwa sababu ya rate limit ya provider mmoja.
 
 ---
 
+## 9. Kuibinafsisha — Terminal → Computer Use → Mobile → App yako
+
+Mwongozo kamili: **`personalize.html`** (fungua kwenye browser).
+
+| Ngazi | Faili / Amri | Unapata |
+|---|---|---|
+| **1. Terminal** | `personalize.html` §1 | Skin ya rangi za Tanzania, jina "Mwijay AI", pet/mascot, amri `/mwijay`, profile yako |
+| **2. Computer Use** | `hermes computer-use install` | Agent anadhibiti PC (background — haibi puku) kwenye Windows/macOS/Linux |
+| **3. Mobile** | `hermes gateway setup` · `hermes dashboard` + Tailscale · Termux | Mwijay AI mfukoni kupitia Telegram, PWA, au terminal halisi ya simu |
+| **4. App binafsi** | Rebrand `apps/desktop/` | Dirisha + ikoni yako — "Mwijay AI", siyo "Hermes Agent" |
+
+**Vitu vilivyotengenezwa tayari kwa ajili yako:**
+
+| Faili | Kazi yake |
+|---|---|
+| `skins/mwijay.yaml` | Skin ya dhahabu/kijani/buluu (bendera ya Tanzania) kwa terminal nyeusi — spinner za Kiswahili, nembo, jina "Mwijay AI" |
+| `skins/mwijay-mwanga.yaml` | Toleo la terminal yenye background nyeupe/angavu |
+| `skill-bundles/mwijay.yaml` | Amri `/mwijay` — inapakia skills zote tano zako mara moja |
+| `scripts/setup_personal.py` | Inasanidi yote kwa amri moja: `python3 mwijay-hermes/scripts/setup_personal.py --apply` |
+
+> ⚠️ **Tahadhari za msingi:** usiweke funguo kwenye Git; usifungue dashboard (bandari 9119)
+> kwenye intaneti ya wazi (tumia Tailscale/VPN); na computer use ni kumpa mtu funguo za nyumba —
+> anza na kazi ndogo zinazoweza kurudishwa nyuma, usimpe benki wala akaunti nyeti.
+
+---
+
 *Imetengenezwa kwa Mwijay — All-Rounder Hermes Agent. Karibu kwenye timu, Mwijay AI! 🚀*

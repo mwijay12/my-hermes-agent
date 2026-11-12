@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mwijay AI — Kuibinafsisha: Terminal → Computer Use → Mobile → App yako</title>
+<style>
+  :root { --ink:#12161c; --muted:#5b6472; --line:#dfe3e8; --good:#0f7b3f; --warn:#a15c00; --bad:#a3121b; --bg:#fbfcfe; --card:#ffffff; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:32px 20px 90px; background:var(--bg); color:var(--ink);
+         font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:31px; line-height:1.24; margin:0 0 8px; }
+  h2 { font-size:24px; margin:46px 0 12px; padding-top:20px; border-top:2px solid var(--line); }
+  h3 { font-size:19px; margin:28px 0 8px; }
+  h4 { font-size:16.5px; margin:20px 0 6px; color:#2c3542; }
+  p, li { margin:10px 0; }
+  .lede { font-size:19px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin:18px 0; }
+  .card.step { border-left:5px solid var(--good); }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:15.5px; }
+  th, td { border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  th { background:#f2f5f9; font-weight:650; }
+  tbody tr:nth-child(even) { background:#fafbfd; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:14px; }
+  code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  pre { background:#0f1420; color:#e8edf5; padding:16px 18px; border-radius:10px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; color:inherit; padding:0; }
+  a { color:#1257c9; }
+  .tag { display:inline-block; font-size:12.5px; font-weight:650; padding:2px 8px; border-radius:999px; border:1px solid; }
+  .t-now  { color:var(--good); border-color:#8fd0a8; background:#eafaf0; }
+  .t-mid  { color:#1257c9; border-color:#a9c4ee; background:#eef4fe; }
+  .t-big  { color:#7a2fb5; border-color:#cfaeea; background:#f7f0fd; }
+  .t-care { color:var(--warn); border-color:#e6c48a; background:#fff7e8; }
+  .callout { border-left:5px solid var(--bad); background:#fff5f6; padding:14px 18px; border-radius:8px; margin:18px 0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff9ef; }
+  .callout.ok { border-left-color:var(--good); background:#f0fbf4; }
+  .small { font-size:14.5px; color:var(--muted); }
+  ul, ol { margin:10px 0 10px 22px; padding:0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .num { display:inline-block; width:26px; height:26px; line-height:26px; text-align:center; border-radius:50%;
+         background:#0f1420; color:#fff; font-size:14px; font-weight:700; margin-right:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Kuibinafsisha Mwijay AI</h1>
+<p class="lede">Kutoka <strong>Hermes kwenye terminal</strong> → <strong>Computer Use</strong> (anadhibiti PC yako) → <strong>Mobile</strong> → na mwisho <strong>app yako binafsi kabisa</strong>. Kila ngazi imeandikwa na amri halisi, gharama, na tahadhari. Vyote unavyoviona hapa vipo ndani ya repo hii tayari — hakuna cha kubuni.</p>
+
+<h2>Ramani kwa muhtasari</h2>
+<table>
+<thead><tr><th>Ngazi</th><th>Unapata nini</th><th>Muda</th><th>Gharama</th><th>Hali</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Terminal</strong></td><td>Skin ya rangi zako, jina lako, pet/mascot, amri yako mwenyewe, kumbukumbu yako</td><td>Dakika 10–30</td><td>Bure</td><td><span class="tag t-now">fanya leo</span></td></tr>
+<tr><td><strong>2. Computer Use</strong></td><td>Agent anabonyeza, anaandika, anasoma skrini — bila kugusa puku yako</td><td>Saa 1–2 + majaribio</td><td>Bure (lakini inatumia tokeni nyingi)</td><td><span class="tag t-mid">wiki hii</span></td></tr>
+<tr><td><strong>3. Mobile</strong></td><td>Mwijay AI mfukoni: Telegram, WhatsApp, au terminal halisi (Termux)</td><td>Saa 1–3</td><td>Bure (au ~$5/mwezi kwa server)</td><td><span class="tag t-mid">wiki hii</span></td></tr>
+<tr><td><strong>4. App binafsi</strong></td><td>Dirisha/ikoni lako — "Mwijay AI", siyo "Hermes Agent"</td><td>Siku 2–10</td><td>Bure (ishara ya kujenga)</td><td><span class="tag t-big">mradi</span></td></tr>
+</tbody>
+</table>
+
+<div class="callout ok">
+<strong>Tayari nimekutengenezea vitu vya Ngazi ya 1.</strong> Tazama <code>mwijay-hermes/skins/</code> (skins mbili), <code>mwijay-hermes/skill-bundles/mwijay.yaml</code> (amri <code>/mwijay</code>), na <code>mwijay-hermes/scripts/setup_personal.py</code> (inasanidi yote kwa amri moja). Ruka moja kwa moja kwenye sehemu ya 1.6.
+</div>
+
+<!-- ============================= NGAZI 1 ============================= -->
+<h2>1) Ngazi ya Terminal — ifanye iwe <em>yako</em> (bila kugusa code)</h2>
+
+<p>Hii ndiyo "Hermes thing on Terminal" uliyosema. Haibadili tabia ya agent — inabadili <strong>jinsi inavyoonekana na kukuita</strong>. Hermes inatenganisha mambo haya vizuri sana:</p>
+<ul>
+  <li><strong>Personality</strong> — jinsi anavyoongea (tayari una <code>mwijay</code>).</li>
+  <li><strong>Skin</strong> — rangi, spinner, nembo, jina linaloonekana.</li>
+  <li><strong>SOUL / USER / MEMORY</strong> — yeye ni nani, wewe ni nani, na anakumbuka nini.</li>
+  <li><strong>Skills + Bundles</strong> — ujuzi wake, na amri moja ya kuwapakia wote.</li>
+  <li><strong>Profile</strong> — Hermes <em>tofu</em> kabisa, na amri yake yenyewe.</li>
+</ul>
+
+<h3>1.1 Skin ya Mwijay (rangi za bendera ya Tanzania)</h3>
+<p>Nimekuwekea skins mbili kwenye <code>mwijay-hermes/skins/</code>:</p>
+<table>
+<thead><tr><th>Faili</th><th>Kwa ajili ya</th><th>Rangi</th></tr></thead>
+<tbody>
+<tr><td><code>mwijay.yaml</code></td><td>Terminal yenye background <strong>nyeusi</strong> (default ya Windows Terminal / PowerShell / WSL)</td><td>Dhahabu <code>#FCD116</code> · Kijani <code>#1EB53A</code> · Buluu <code>#00A3DD</code></td></tr>
+<tr><td><code>mwijay-mwanga.yaml</code></td><td>Terminal yenye background <strong>nyeupe/angavu</strong></td><td>Vilevile, lakini vimekoza ili visomeke kwenye nyeupe</td></tr>
+</tbody>
+</table>
+<pre><code>hermes skin mwijay            # badili mara moja
+hermes skin                   # ona orodha ya skins zote
+# au weka kwenye config.yaml:
+display:
+  skin: mwijay</code></pre>
+<p class="small">Kila skin inabadilisha: rangi 20, nyuso za spinner (<code>(⚕) (☀) (✦)</code>), vitenzi vya Kiswahili ("inafikiria", "inatafiti"…), jina <strong>Mwijay AI</strong>, ujumbe wa kukaribisha, nembo ya maandishi, na emoji za kila tool.</p>
+
+<h3>1.2 Pet / Mascot yako</h3>
+<p>Hermes ina <em>pets</em> — kiumbe kidogo kinachocheza kwenye terminal, TUI na desktop app; kinaitikia kile agent anachofanya (anafikiria, anatumia tool, amemaliza, ameshindwa). Na cha kushangaza: <strong>unaweza kumzalisha mwenyewe kwa maelezo ya maandishi</strong>:</p>
+<pre><code>/hatch kaduka ndogo ya dhahabu yenye mbawa, imevaa skafu ya rangi ya bendera ya Tanzania
+# au:
+hermes pets list              # orodha ya gallery
+hermes pets install boba --select
+hermes pets show              # onyesha uhuishaji (Ctrl+C kuacha)
+hermes pets scale 0.7         # ipunguze ukubwa
+hermes pets off               # izime</code></pre>
+<p class="small">Ni mapambo tu — hayaathiri tokeni wala tabia ya agent, na imezimwa kwa default.</p>
+
+<h3>1.3 Sauti na utu (personality)</h3>
+<pre><code>/personality mwijay           # au tayari imewekwa kwenye config.yaml
+hermes config                 # rekebisha kwa UI ya maandishi</code></pre>
+<p>Una personalities 7 kwenye config yako: <code>mwijay</code>, <code>mwijay_teacher</code>, <code>mwijay_coder</code>, <code>mwijay_business</code>, <code>helpful</code>, <code>concise</code>, <code>technical</code>. Ongeza nyingine kama <code>mwijay_biashara_ng</code> au <code>mwijay_haraka</code> kwa mtindo wowote unaotaka.</p>
+
+<h3>1.4 Kumbukumbu yake (SOUL / USER / MEMORY)</h3>
+<p>Faili hizi tatu ndizo zinazomfanya awe <em>wako</em>, si wa mtu mwingine. Zipo tayari kwenye <code>mwijay-hermes/profile/</code>. Mwambie moja kwa moja: <em>"kumbuka kwamba mimi ni…", "usisahau kwamba…"</em> — au yaandike mwenyewe.</p>
+<table>
+<thead><tr><th>Faili</th><th>Inasema nini</th><th>Mfano wa kuongeza</th></tr></thead>
+<tbody>
+<tr><td><code>SOUL.md</code></td><td>Yeye ni nani, anavyoongea, mipaka yake</td><td>"Usitumie lugha ya shule; ongea kama rafiki wa tech."</td></tr>
+<tr><td><code>USER.md</code></td><td>Wewe ni nani</td><td>"Nina duka la…, nafanya kazi na…, napenda majibu mafupi saa za asubuhi."</td></tr>
+<tr><td><code>MEMORY.md</code></td><td>Anachokumbuka kuhusu kazi zako</td><td>"Mradi wa X ulianza 2026-11; kikomo cha Groq kilinikwaa mara 3."</td></tr>
+</tbody>
+</table>
+
+<h3>1.5 Amri yako mwenyewe: <code>/mwijay</code></h3>
+<p>Bundle ni amri moja inayopakia skills kadhaa kwa pamoja. Nimekuwekea <code>mwijay-hermes/skill-bundles/mwijay.yaml</code> inayopakia skills zote tano zako (allrounder, swahili-english, coding-assistant, business-content, research-learning) pamoja na maelekezo mafupi kuhusu PC yako.</p>
+<pre><code>hermes bundles list           # thibitisha /mwijay upo
+/mwijay                       # ndani ya chat — inapakia zote mara moja
+hermes bundles create ...     # tengeneza bundle lako jingine</code></pre>
+
+<h3>1.6 Sanidi yote kwa amri moja <span class="tag t-now">tayari</span></h3>
+<pre><code># Kwanza onyesha tu (hakibadilishi chochote):
+python3 mwijay-hermes/scripts/setup_personal.py
+
+# Ukiona ni sawa, tekeleza:
+python3 mwijay-hermes/scripts/setup_personal.py --apply
+
+# Kwa terminal angavu:
+python3 mwijay-hermes/scripts/setup_personal.py --apply --skin mwijay-mwanga</code></pre>
+<p>Inafanya: kunakili skins + bundle + SOUL/USER/MEMORY kwenda <code>HERMES_HOME</code>, na kuongeza <code>display.skin</code> na <code>skills.external_dirs</code> kwenye <code>config.yaml</code> (ikiweka nakala ya akiba <code>config.yaml.bak</code> kwanza). Ni salama kurudia mara mbili — haitarudia kazi iliyofanyika.</p>
+<p class="small">Kwenye Windows tumia python ileile inayoendesha hermes (inahitaji <code>pyyaml</code>, ambayo hermes tayari inayo):<br>
+<code>python mwijay-hermes\scripts\setup_personal.py --apply</code></p>
+
+<h3>1.7 Profile — Hermes ya pili, na amri yake yenyewe</h3>
+<p>Hii ndiyo hatua kubwa zaidi ya "ubinafsishaji wa kweli": profile ni nyumba tofauti kabisa — config yake, keys zake, skills zake, kumbukumbu yake, sessions zake.</p>
+<pre><code>hermes profile create mwijay
+mwijay setup                  # weka keys na model kwa profile hii
+mwijay chat                   # sasa una amri inayoitwa "mwijay"
+mwijay gateway start          # na gateway yake yenyewe</code></pre>
+<p class="small">Unaweza kuwa na <code>mwijay</code> (yako binafsi), <code>kazi</code> (ya ofisi), <code>research</code> (ya kusoma tu). Hazichanganyikani.</p>
+
+<h3>1.8 Mambo mengine madogo yenye ladha</h3>
+<ul>
+  <li><code>hermes --tui</code> — badala ya CLI ya kawaida, tumia TUI (React+Ink) yenye paneli na uteuzi wa puku. Weka <code>display.interface: tui</code> kwenye config iwe default.</li>
+  <li><code>hermes hooks</code> — endesha script yako kabla/baada ya kila zana (mfano: chelezo, arifa, kusafisha).</li>
+  <li><code>hermes cron</code> — ratiba: "kila asubuhi saa 2 niletee muhtasari wa habari za tech + mawazo ya biashara".</li>
+  <li><code>hermes insights</code>, <code>hermes journey</code>, <code>hermes memory-graph</code> — ona jinsi muda na kumbukumbu yako zinavyotumika.</li>
+</ul>
+
+<!-- ============================= NGAZI 2 ============================= -->
+<h2>2) Ngazi ya Computer Use — aachiye mikono (bila kukunyang'anya puku)</h2>
+
+<p>Hermes ina <strong>computer use</strong> iliyojengwa ndani: anabonyeza, anaandika, anasogeza, anasoma skrini. Tofauti na zana nyingi kama hizi, inafanya kazi <strong>nyuma ya pazia</strong> (background): puku yako haisogei, keyboard haichukuliwi, na madirisha hayaruki juu. Na haitegemei mfano maalum wa Anthropic — <strong>model yoyote yenye uwezo wa tools inaweza kuiendesha</strong>, hata ya bure.</p>
+
+<h3>2.1 Washa</h3>
+<pre><code>hermes computer-use install      # inapakua cua-driver (Windows: install.ps1)
+hermes computer-use status       # thibitisha
+hermes computer-use doctor       # inakuambia ruhusa gani inakosekana
+hermes tools                     # au wezesha kwa menyu: "🖱️ Computer Use"</code></pre>
+<table>
+<thead><tr><th>Mfumo</th><th>Jinsi inavyosoma skrini</th><th>Jinsi inavyobonyeza</th><th>Ruhusa unazohitaji</th></tr></thead>
+<tbody>
+<tr><td><strong>Windows</strong> (yako)</td><td>UIAutomation</td><td><code>SendInput</code> + <code>PostMessage</code> — bila kuiba focus</td><td>Hakuna wakati wa kusakinisha</td></tr>
+<tr><td>macOS</td><td>AX (SkyLight)</td><td><code>SLPSPostEventRecordTo</code> (pid-scoped)</td><td>Accessibility + Screen Recording</td></tr>
+<tr><td>Linux</td><td>AT-SPI</td><td>XTest / virtual-keyboard</td><td><code>DISPLAY</code> au Wayland + AT-SPI</td></tr>
+</tbody>
+</table>
+
+<h3>2.2 Kwa nini "background mode" ni muhimu kwako</h3>
+<p>Una PC moja yenye RAM 8–16 GB. Njia nyingine za computer-use hunyang'anya puku na keyboard — huwezi hata kuandika wakati agent anafanya kazi. Hii hairuhusu hilo: <strong>unaweza kuendelea na kazi yako huku Mwijay AI akifanya yake kwenye dirisha lingine</strong>.</p>
+
+<h3>2.3 Mawazo ya kuifanyia kazi (yaliyochaguliwa kwa mazingira yako)</h3>
+<div class="grid">
+  <div class="card step">
+    <h4 style="margin-top:0">Asubuhi — "Briefing ya Mwijay"</h4>
+    <p>Cron saa 6:30 → anafungua browser, anasoma vyanzo vyako, anatengeneza muhtasari wa Kiswahili (tech + biashara + Tanzania), anakuletea kwenye Telegram.</p>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Kazi za kurudia rudia</h4>
+    <p>Kujaza fomu za mtandaoni, kupakua statements, kupanga faili za folda, kuhamisha data kutoka tovuti kwenda Excel — kazi zinazokuchosha.</p>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Utafiti wa soko</h4>
+    <p>"Nenda kwenye tovuti hizi 10, linganisha bei za X, njoo na jedwali." Anafanya mwenyewe, anakuletea jedwali.</p>
+  </div>
+  <div class="card step">
+    <h4 style="margin-top:0">Msaada wa mbali kwa familia</h4>
+    <p>Hii ni hatari — <strong>usifanye</strong> isipokuwa kwenye mashine tofauti. Tazama tahadhari hapa chini.</p>
+  </div>
+</div>
+
+<div class="callout warn">
+<strong>Computer use inakula tokeni nyingi sana.</strong> Kila hatua inatuma picha ya skrini (au mti wa vipengele). Kwa maana hiyo, <strong>mnyororo wa free-LLM tulioujenga kwenye <code>free-providers.html</code> ni muhimu sana hapa</strong> — utakwama mara moja ukitumia provider mmoja. Pia inahitaji modeli yenye <em>vision</em> (kuona picha) kwa matokeo bora zaidi: <strong>Gemini Flash</strong> (bure, 1M context) au <strong>NVIDIA NIM</strong> (bure) ni chaguo zuri la kuanzia.
+</div>
+
+<h3>2.4 Tahadhari (soma hii kabla ya kumpa mikono)</h3>
+<ul>
+  <li><strong>Tumia Windows account ya pili</strong> kwa majaribio makubwa — siyo ile unayotumia kila siku.</li>
+  <li><strong>Benki, malipo, na akaunti nyeti — usimpe.</strong> Hata kama inawezekana, hatari yake ni kubwa kuliko faida.</li>
+  <li><strong>Weka approval mode</strong> (<code>hermes approvals</code>) — iombe ruhusa kabla ya hatua hatarishi.</li>
+  <li><strong>Picha za skrini huondoka kwenye PC yako</strong> kwenda kwa provider wa LLM. Kama skrini yako ina taarifa za mtu mwingine, hiyo ni faragha yake pia.</li>
+  <li><strong>Anza na kazi ndogo</strong> zinazoweza kurudishwa nyuma (kufungua ukurasa, kunakili maandishi), kabla ya zile zisizoweza (kutuma ujumbe, kufuta faili).</li>
+</ul>
+
+<!-- ============================= NGAZI 3 ============================= -->
+<h2>3) Ngazi ya Mobile — Mwijay AI mfukoni</h2>
+
+<p>Hakuna "app ya Hermes" ya simu rasmi, lakini kuna <strong>njia tano halisi</strong> za kumfikisha kwenye simu yako. Chagua kulingana na unachotaka.</p>
+
+<table>
+<thead><tr><th>Njia</th><th>Unapata nini</th><th>Ugumu</th><th>Inafaa kwa</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Telegram bot</strong> <span class="tag t-now">rahisi</span></td><td>Unamtumia ujumbe Telegram kutoka popote; anajibu. Inasaidia picha, sauti, faili.</td><td>Dakika 20</td><td>Matumizi ya kila siku, popote ulipo</td></tr>
+<tr><td><strong>2. Dashboard (PWA)</strong></td><td>Fungua kivinjari cha simu → <code>hermes dashboard</code> kupitia Tailscale → "Ongeza kwenye Skrini ya Nyumbani". Inaonekana kama app.</td><td>Saa 1</td><td>Kuendesha sessions ndefu, kuona terminal</td></tr>
+<tr><td><strong>3. Termux (Android)</strong> <span class="tag t-care">Tier 2</span></td><td>Hermes <em>kamili</em> ndani ya simu yako — sio mtumwa wa PC.</td><td>Saa 1–3</td><td>Kazi za kweli ukiwa safarini, hakuna PC karibu</td></tr>
+<tr><td><strong>4. WhatsApp / Signal / Matrix / SMS</strong></td><td>Njia unazotumia tayari na watu wengine</td><td>Saa 1–2 kila moja</td><td>Kama huwezi kumshawishi mtu atumie Telegram</td></tr>
+<tr><td><strong>5. Arifa tu (ntfy)</strong></td><td>Hakuna mazungumzo — Mwijay anakupigia kelewekwe tu (kazi imekwisha, cron imefanya kitu)</td><td>Dakika 15</td><td>Kuunganishwa na cron + computer use</td></tr>
+</tbody>
+</table>
+
+<h3>3.1 Njia ya haraka zaidi: Telegram</h3>
+<pre><code>hermes gateway setup           # chagua Telegram
+# (utaulizwa bot token kutoka @BotFather)
+hermes gateway start</code></pre>
+<p class="small">Kidokezo: <code>platform_toolsets</code> kwenye config.yaml inakuwezesha kuamua ni zana zipi zinaruhusiwa kwenye Telegram (mfano: usimpe <code>terminal</code> kwenye simu ikiwa PC yako haipo karibu).</p>
+
+<h3>3.2 Dashboard kama app (PWA) — hatua kwa hatua</h3>
+<ol>
+  <li>Kwenye PC: <code>hermes dashboard</code> → inafungua bandari <strong>9119</strong>.</li>
+  <li>Sakinisha <a href="https://tailscale.com">Tailscale</a> kwenye PC na simu (bure kwa matumizi binafsi) — inakupa njia salama bila kufungua bandari kwenye router.</li>
+  <li>Kwenye simu: fungua <code>http://&lt;pc-tailscale-ip&gt;:9119</code> → menyu ya kivinjari → <strong>"Ongeza kwenye Skrini ya Nyumbani"</strong>.</li>
+  <li>Sasa una ikoni ya Mwijay AI kwenye simu, inayofunguka bila mipaka ya kivinjari.</li>
+</ol>
+<div class="callout warn">
+<strong>Usiwahi kufungua bandari 9119 kwenye intaneti ya wazi.</strong> Dashboard ina ruhusa ya kuendesha terminal kwenye PC yako — mtu yeyote anayeifikia anamiliki mashine yako. Tumia Tailscale (au VPN yako) pekee. Pia weka nenosiri la dashboard ikiwa imewezeshwa.
+</div>
+
+<h3>3.3 Termux (Android) — Hermes halisi mfukoni</h3>
+<pre><code>pkg update &amp;&amp; pkg install -y git python clang rust make pkg-config libffi openssl nodejs ripgrep ffmpeg
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+# kisha: hermes setup  &amp;&amp;  hermes chat</code></pre>
+<p>Inafanya kazi: CLI kamili, cron, terminal/PTY, MCP, Telegram gateway, Honcho memory, ACP.<br>
+<strong>Haifanyi kazi vizuri bado:</strong> voice (ctranslate2 haina Android wheels), Playwright/browser, Docker. Na Android inaweza kusimamisha kazi za nyuma — kwa hivyo gateway inaweza kukatika (Tier 2, "best effort").</p>
+<p class="small">Ujanja: sakinisha <strong>Termux:Widget</strong> → unaweka njia za mkato kwenye skrini ya nyumbani ya simu, kama vile "Muhtasari wa asubuhi" au "Nakili kilichoko kwenye clipboard". Hiyo ni app yako ya kwanza, bila kuandika code.</p>
+
+<h3>3.4 Arifa (ntfy) — Mwijay akuite</h3>
+<p>Unganisha na <code>hermes cron</code>: kila kazi inapokwisha, piga notisi kwenye simu. Hii ndiyo inayofanya mambo yawe hai — huna haja ya kumsubiri.</p>
+
+<!-- ============================= NGAZI 4 ============================= -->
+<h2>4) Ngazi ya App — je, tujenge app yako binafsi?</h2>
+
+<p><strong>Ndiyo, inawezekana — na kuna njia tatu, kutoka rahisi hadi kubwa.</strong> Kabla ya kuchagua, ukweli mmoja muhimu: Hermes inakuja na app ya desktop iliyojengwa kwa Electron (React + TypeScript), iko kwenye <code>apps/desktop/</code> ndani ya repo hii. Kwa hivyo huanzii sifuri.</p>
+
+<table>
+<thead><tr><th>Chaguo</th><th>Unachofanya</th><th>Muda</th><th>Faida</th><th>Hasara</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>A. PWA (inayopendekezwa kuanza)</strong> <span class="tag t-now">anza hapa</span></td>
+  <td>Tumia <code>hermes dashboard</code> na uipambe: jina, ikoni, rangi, na "ongeza kwenye skrini ya nyumbani".</td>
+  <td>Saa 1–3</td>
+  <td>Inafanya kazi mara moja kwenye simu <em>na</em> PC; hakuna kupakia (packaging); inabaki ikisawazishwa na repo juu.</td>
+  <td>Sio ".exe" halisi; inahitaji PC iwe imewashwa.</td>
+</tr>
+<tr>
+  <td><strong>B. Rebrand app ya desktop</strong></td>
+  <td>Nakili <code>apps/desktop</code> → badilisha jina (<em>Mwijay AI</em>), ikoni, rangi, maandishi ya kwanza, na default config yako (skin, provider, profile).</td>
+  <td>Siku 2–5</td>
+  <td>Dirisha halisi, ikoni kwenye taskbar, tray, masasisho — "app yangu" kwa maana kamili.</td>
+  <td>Unabeba mzigo wa kufuatilia mabadiliko ya repo juu kila update.</td>
+</tr>
+<tr>
+  <td><strong>C. App ndogo ya simu (mpya kabisa)</strong></td>
+  <td>React Native / Expo inayozungumza na API ya gateway (<code>/api</code>), siyo na Python moja kwa moja.</td>
+  <td>Wiki 2–4</td>
+  <td>App ya kweli kwenye Play Store / sideload; inafanya kazi simu ikiwa peke yake.</td>
+  <td>Kazi kubwa zaidi; lazima usimamishe server (au PC) yenye Hermes.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>4.1 Njia B — unachobadilisha hasa (rebrand)</h3>
+<pre><code>apps/desktop/
+  package.json          # name / productName / version / appId
+  assets/icon.png       # ikoni ya programu (tengeneza 512x512)
+  assets/icon.ico       # Windows
+  assets/icon.icns      # macOS
+  electron-builder.*    # jina la .exe, mchapishaji (publisher), appId
+  src/...               # maandishi ya onboarding, majina kwenye UI</code></pre>
+<p>Halafu, ili iwe <em>yako</em> kweli, badilisha pia mambo haya ya ndani:</p>
+<ul>
+  <li><strong>Default profile/config:</strong> ielekeze kwenye profile ya <code>mwijay</code>, iwasha skin ya <code>mwijay</code>, na itumie mnyororo wako wa <code>fallback_providers</code> tulioujenga.</li>
+  <li><strong>Onboarding:</strong> badala ya "chagua provider", iwe "Karibu Mwijay AI — weka funguo zako za bure" na viungo vya <code>free-providers.html</code>.</li>
+  <li><strong>Auondoe chapa ya Nous</strong> kutoka kwenye maandishi yanayoonekana (banner, About, links) — ila usiiondoe kwenye LICENSE/credits: bado ni kazi yao, na leseni ni MIT, hivyo kuibinafsisha ni halali.</li>
+</ul>
+
+<div class="callout">
+<strong>Tahadhari kubwa kabla ya kuchagua njia B:</strong> app ya desktop ina <strong>kisakinishi chake cha masasisho (auto-update)</strong> kinachovuta toleo jipya kutoka kwa mradi mkuu. Ukibadilisha jina na ikoni, masasisho yanaweza kurudisha chapa ya juu au kuvunja mabadiliko yako. <strong>Zima auto-update kabla ya kusambaza</strong>, au shikilia masasisho kwa mikono kupitia git.
+</div>
+
+<h3>4.2 Pendekezo langu kwako</h3>
+<ol>
+  <li><span class="num">1</span><strong>Wiki 1 — Ngazi ya 1 leo:</strong> endesha <code>setup_personal.py --apply</code>, chagua skin, tengeneza pet kwa <code>/hatch</code>, tengeneza profile <code>mwijay</code>. Hii inakupa hisia ya "yangu" mara moja.</li>
+  <li><span class="num">2</span><strong>Wiki 2 — Mobile:</strong> Telegram gateway (au PWA + Tailscale). Ndio utakaoleta mabadiliko makubwa zaidi kwenye matumizi ya kila siku.</li>
+  <li><span class="num">3</span><strong>Wiki 3 — Computer use:</strong> anza na kazi moja ndogo inayorudiwa kila siku. Ikiache iendeshe kwa wiki moja kabla ya kumpa zaidi.</li>
+  <li><span class="num">4</span><strong>Wiki 4 — App:</strong> kama bado unaitaka, fanya <strong>njia B</strong> (rebrand desktop) — lakini weka repo lako kama <em>fork</em> na usawazishe na juu mara kwa mara, ili usipoteze marekebisho ya usalama.</li>
+</ol>
+
+<h2>5) Muhtasari wa amri muhimu</h2>
+<pre><code># Ubinafsishaji
+hermes skin mwijay            /personality mwijay      /hatch &lt;maelezo&gt;
+hermes pets list              hermes pets install &lt;slug&gt; --select
+hermes bundles list           /mwijay
+hermes profile create mwijay  hermes config
+
+# Akili
+hermes model                  hermes fallback          hermes auth list
+python3 mwijay-hermes/scripts/check_free_keys.py
+
+# Nguvu
+hermes tools                  hermes computer-use install
+hermes cron                   hermes hooks             hermes gateway setup
+
+# Nyuso
+hermes chat                   hermes --tui             hermes dashboard
+hermes desktop                hermes status</code></pre>
+
+<h2>6) Tahadhari za mwisho</h2>
+<ul>
+  <li><strong>Funguo (keys) zibaki kwenye <code>.env</code></strong>, kamwe kwenye Git. Repo hii ina <code>.gitignore</code> inayozuia <code>.env</code> — usiiondoe.</li>
+  <li><strong>Computer use ni kumpa mtu funguo za nyumba.</strong> Anza kidogo, weka mipaka, usimpe benki.</li>
+  <li><strong>Usifungue dashboard kwenye intaneti ya wazi.</strong> Tumia Tailscale au VPN.</li>
+  <li><strong>Token ya bot ya Telegram ni kama nenosiri</strong> — usiiweke kwenye picha wala kwenye chat.</li>
+  <li><strong>Chelezo:</strong> <code>hermes backup</code> kabla ya majaribio makubwa, hasa kabla ya kusanidi profile mpya au kuhariri config kwa mikono.</li>
+</ul>
+
+<p class="small" style="margin-top:40px">Imeandaliwa kwa Mwijay AI · Novemba 2026 · Kila amri katika ukurasa huu imethibitishwa dhidi ya repo hii (Hermes 0.17.x). Viwango vya bure vya providers hubadilika — hakikisha kwenye tovuti rasmi.</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+# Skin ya Mwijay AI — toleo la terminal yenye background NYEUPE / ANGAVU.
+# (Tumia hii ukiona rangi za mwijay.yaml hazisomeki vizuri kwenye terminal yako.)
+#
+# Sakinisha:
+#   nakili faili hii -> %LOCALAPPDATA%\hermes\skins\mwijay-mwanga.yaml   (Windows)
+#                    -> ~/.hermes/skins/mwijay-mwanga.yaml                (Linux/WSL2/Termux)
+#   kisha:  hermes skin mwijay-mwanga
+
+name: mwijay-mwanga
+description: Mwijay AI — toleo angavu kwa terminal yenye background nyeupe
+
+colors:
+  banner_border:  "#B8860B"   # dhahabu nyeusi — inasomeka kwenye nyeupe
+  banner_title:   "#8B6508"
+  banner_accent:  "#0E7A2B"   # kijani kilichokoza
+  banner_dim:     "#00668C"   # buluu iliyokoza
+  banner_text:    "#1A1A1A"   # karibu nyeusi
+
+  ui_accent:      "#B8860B"
+  ui_label:       "#0E7A2B"
+  ui_ok:          "#0E7A2B"
+  ui_error:       "#B3261E"
+  ui_warn:        "#8A4B00"
+
+  prompt:         "#1A1A1A"
+  input_rule:     "#B8860B"
+  response_border: "#B8860B"
+  session_label:  "#0E7A2B"
+  session_border: "#7A7A7A"
+
+  status_bar_bg:  "#EFEFE0"
+  voice_status_bg: "#EFEFE0"
+  selection_bg:   "#D9E8C8"
+  completion_menu_bg: "#F7F7F0"
+  completion_menu_current_bg: "#E3EFD3"
+  completion_menu_meta_bg: "#F7F7F0"
+  completion_menu_meta_current_bg: "#E3EFD3"
+
+spinner:
+  waiting_faces:
+    - "(⚕)"
+    - "(☀)"
+    - "(✦)"
+  thinking_faces:
+    - "(⚕)"
+    - "(⌁)"
+    - "(◇)"
+  thinking_verbs:
+    - "inafikiria"
+    - "inapitia"
+    - "inatafiti"
+    - "inatengeneza"
+  wings:
+    - ["⟪⚕", "⚕⟫"]
+    - ["⟪☀", "☀⟫"]
+
+branding:
+  agent_name: "Mwijay AI"
+  welcome: "Karibu Mwijay AI ⚕ — andika ujumbe wako, au /help kwa amri."
+  goodbye: "Baadaye, Mwijay! ⚕"
+  response_label: " ⚕ Mwijay AI "
+  prompt_symbol: "⚕"
+  help_header: "(⚕)? Amri Zinazopatikana"
+
+tool_prefix: "┊"
+
+tool_emojis:
+  terminal: "⚡"
+  web_search: "🔎"
+  web_extract: "📄"
+  read_file: "📖"
+  write_file: "✍"
+  memory: "🧠"
+  cron: "⏰"
