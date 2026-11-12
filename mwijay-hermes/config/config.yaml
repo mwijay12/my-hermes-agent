@@ -56,5 +56,113 @@ platform_toolsets:
   slack: [hermes-slack]
   signal: [hermes-signal]
 
+# =====================================================================
+# ROTATION YA FREE LLM — "akili inayozunguka"
+# =====================================================================
+# Orodha kamili ya providers wa bure + jinsi ya kupata keys:
+#   angalia mwijay-hermes/free-providers.html (fungua kwenye browser)
+#   na mwijay-hermes/config/.env.free.example (majina ya env variables)
+#
+# JARIBU KEYS ZAKO KWANZA:
+#   python3 mwijay-hermes/scripts/check_free_keys.py
+
+# --- Providers wa custom (OpenAI-compatible, hawapo "native" kwenye Hermes) ---
+# Hawa huongezwa kama custom endpoints. Hakikisha umeweka key kwenye .env
+# (env variable imetajwa kwenye key_env). Ondoa au weka "enabled: false"
+# kwa yeyote usiyemtaka.
+providers:
+  inception:
+    name: "Inception Mercury"
+    api: "https://api.inceptionlabs.ai/v1"
+    key_env: INCEPTION_API_KEY
+    default_model: "mercury-2"
+    models: ["mercury-2", "mercury-coder-small"]
+    transport: chat_completions
+
+  agnes:
+    name: "Agnes AI"
+    api: "https://apihub.agnes-ai.com/v1"
+    key_env: AGNES_API_KEY
+    default_model: "agnes-2.0-flash"
+    transport: chat_completions
+
+  cerebras:
+    name: "Cerebras"
+    api: "https://api.cerebras.ai/v1"
+    key_env: CEREBRAS_API_KEY
+    default_model: "gpt-oss-120b"
+    transport: chat_completions
+
+  sambanova:
+    name: "SambaNova"
+    api: "https://api.sambanova.ai/v1"
+    key_env: SAMBANOVA_API_KEY
+    default_model: "Meta-Llama-3.3-70B-Instruct"
+    transport: chat_completions
+
+  github-models:
+    name: "GitHub Models"
+    api: "https://models.github.ai/inference"
+    key_env: GITHUB_TOKEN
+    default_model: "openai/gpt-4o-mini"
+    transport: chat_completions
+
+  llm7:
+    name: "LLM7.io"
+    api: "https://api.llm7.io/v1"
+    key_env: LLM7_API_KEY
+    default_model: "gpt-oss-20b"
+    transport: chat_completions
+
+  siliconflow:
+    name: "SiliconFlow"
+    api: "https://api.siliconflow.cn/v1"
+    key_env: SILICONFLOW_API_KEY
+    default_model: "Qwen/Qwen3-8B"
+    transport: chat_completions
+
+  chutes:
+    name: "Chutes.ai"
+    api: "https://api.chutes.ai/v1"
+    key_env: CHUTES_API_KEY
+    default_model: "chutesai/Llama-3.3-70B-Instruct"
+    transport: chat_completions
+    enabled: false
+
+# --- Mnyororo wa fallback: Hermes inazunguka yenyewe ---
+# Inapopata rate limit (429), hitilafu ya 5xx, au key isiyofanya kazi,
+# inaendelea na provider anayefuata bila kupoteza mazungumzo.
+# Panga kuanzia yule mwenye kikomo kikubwa kwenda mdogo.
+# Unaweza pia kusanidi hiki kwa: hermes fallback
+# (fallback_providers ndiyo muundo mpya/kanuni; fallback_model bado inakubaliwa)
+fallback_providers:
+  - provider: "groq"
+    model: "openai/gpt-oss-120b"
+  - provider: "cerebras"
+    model: "gpt-oss-120b"
+  - provider: "nvidia"
+    model: "z-ai/glm-5.2"
+  - provider: "inception"
+    model: "mercury-2"
+  - provider: "opencode-zen"
+    model: "deepseek-v4-flash-free"
+  - provider: "gemini"
+    model: "gemini-3.8-flash"
+  - provider: "openrouter"
+    model: "nvidia/nemotron-3-ultra-550b-a55b:free"
+  - provider: "github-models"
+    model: "openai/gpt-4o-mini"
+  - provider: "llm7"
+    model: "gpt-oss-20b"
+
 # --- Memory ---
 # MEMORY.md na USER.md zinadhibitiwa kutoka profile/ — nakili kwenye HERMES_HOME
+
+# --- Mikakati ya credential pool (funguo nyingi kwa provider mmoja) ---
+# Kwanza ongeza funguo:  hermes auth add groq --api-key gsk_...
+# Kisha:  hermes auth list
+# Chaguo: fill_first (default) | round_robin | least_used | random
+credential_pool_strategies:
+  groq: round_robin
+  openrouter: least_used
+  cerebras: round_robin

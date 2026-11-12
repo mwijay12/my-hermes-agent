@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mwijay AI — Free LLM API Providers (Novemba 2026)</title>
+<style>
+  :root { --ink:#12161c; --muted:#5b6472; --line:#dfe3e8; --good:#0f7b3f; --warn:#a15c00; --bad:#a3121b; --bg:#fbfcfe; --card:#ffffff; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:32px 20px 80px; background:var(--bg); color:var(--ink);
+         font:17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  h1 { font-size:30px; line-height:1.25; margin:0 0 8px; }
+  h2 { font-size:23px; margin:42px 0 12px; padding-top:18px; border-top:2px solid var(--line); }
+  h3 { font-size:19px; margin:26px 0 8px; }
+  p, li { margin:10px 0; }
+  .lede { font-size:19px; color:var(--muted); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; margin:18px 0; }
+  table { border-collapse:collapse; width:100%; margin:14px 0; font-size:15.5px; }
+  th, td { border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  th { background:#f2f5f9; font-weight:650; }
+  tbody tr:nth-child(even) { background:#fafbfd; }
+  code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:14px; }
+  code { background:#eef1f5; padding:1px 5px; border-radius:4px; }
+  pre { background:#0f1420; color:#e8edf5; padding:16px 18px; border-radius:10px; overflow-x:auto; line-height:1.5; }
+  pre code { background:none; color:inherit; padding:0; }
+  a { color:#1257c9; }
+  .tag { display:inline-block; font-size:12.5px; font-weight:650; padding:2px 8px; border-radius:999px; border:1px solid; }
+  .t-native { color:var(--good); border-color:#8fd0a8; background:#eafaf0; }
+  .t-custom { color:#1257c9; border-color:#a9c4ee; background:#eef4fe; }
+  .t-card   { color:var(--warn); border-color:#e6c48a; background:#fff7e8; }
+  .callout { border-left:5px solid var(--bad); background:#fff5f6; padding:14px 18px; border-radius:8px; margin:18px 0; }
+  .callout.warn { border-left-color:var(--warn); background:#fff9ef; }
+  .callout.ok { border-left-color:var(--good); background:#f0fbf4; }
+  .small { font-size:14.5px; color:var(--muted); }
+  ul { margin:10px 0 10px 22px; padding:0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Free LLM API Providers — Orodha ya Mwijay AI</h1>
+<p class="lede">Orodha ya providers wanaotoa API keys <strong>bila malipo</strong>, ili uweze kuzungusha (“rotation”) akili ya Hermes bila kulipa. Imekusanywa Novemba 2026 — viwango vya bure hubadilika, kwa hivyo fuata kiungo cha “Pata Key” kupata namba za sasa.</p>
+
+<div class="callout">
+<strong>Kabla ya yote (muhimu): usitumie API keys za watu wengine.</strong>
+<p style="margin:6px 0 0">Kutafuta keys zilizovuja kwenye GitHub na kuzitumia si “bure” — ni kuvunja sheria za matumizi ya provider, mara nyingi ni kosa la kisheria (kutumia kompyuta bila ruhusa), na keys hizo hufutwa haraka au huambatana na akaunti ya mtu mwingine (unaweza kuona data zake). Zaidi ya hayo: ukifanya hivyo akaunti yako ya GitHub na IP yako zinaweza kufungwa. Hivyo <strong>mwongozo huu hauhusishi kuvuna keys za watu</strong> — unakuonyesha jinsi ya kupata <em>keys zako mwenyewe za bure</em>, halali, na kuzizungusha.</p>
+</div>
+
+<h2>1) Providers waliopo ndani ya Hermes (“native”) — weka key tu kwenye <code>.env</code></h2>
+<p>Hizi hazihitaji config yoyote maalum. Hermes tayari inazijua; unachotakiwa ni kuweka env variable kwenye <code>~/.hermes/.env</code> (Linux/WSL2) au <code>%LOCALAPPDATA%\hermes\.env</code> (Windows).</p>
+
+<table>
+<thead><tr><th>Provider</th><th>Unapata bure</th><th>Kadi?</th><th>Env variable</th><th>Pata key</th></tr></thead>
+<tbody>
+<tr><td><strong>Groq</strong> <span class="tag t-native">native</span></td><td>~15 models, 30 RPM / 14,400 RPD, haraka sana</td><td>Hapana</td><td><code>GROQ_API_KEY</code></td><td><a href="https://console.groq.com/keys">console.groq.com/keys</a></td></tr>
+<tr><td><strong>NVIDIA NIM</strong> <span class="tag t-native">native</span></td><td>~139 models (GLM, Nemotron, Qwen…), hadi 40 RPM, 1M context</td><td>Uthibitisho wa simu</td><td><code>NVIDIA_API_KEY</code></td><td><a href="https://build.nvidia.com/settings/api-keys">build.nvidia.com</a></td></tr>
+<tr><td><strong>OpenCode Zen</strong> <span class="tag t-native">native</span></td><td>34 free models (big-pickle, deepseek-v4-flash-free, mimo-v2.5-free…)</td><td>Usajili</td><td><code>OPENCODE_API_KEY</code></td><td><a href="https://opencode.ai/auth">opencode.ai/auth</a></td></tr>
+<tr><td><strong>OpenCode Go</strong> <span class="tag t-native">native</span></td><td>Kama hapo juu, models za “go”</td><td>Usajili</td><td><code>OPENCODE_API_KEY</code></td><td><a href="https://opencode.ai/auth">opencode.ai/auth</a></td></tr>
+<tr><td><strong>Kilo Code</strong> <span class="tag t-native">native</span></td><td>29 free models, 200 req/saa</td><td>Hapana</td><td><code>KILO_API_KEY</code></td><td><a href="https://app.kilo.ai/profile">app.kilo.ai/profile</a></td></tr>
+<tr><td><strong>Google Gemini</strong> <span class="tag t-native">native</span></td><td>Gemini Flash (1M context), bila kadi</td><td>Hapana</td><td><code>GEMINI_API_KEY</code></td><td><a href="https://aistudio.google.com/app/apikey">aistudio.google.com</a></td></tr>
+<tr><td><strong>OpenRouter</strong> <span class="tag t-native">native</span></td><td>37 models <code>:free</code>; +$10 topup → 1,000 req/siku</td><td>Usajili</td><td><code>OPENROUTER_API_KEY</code></td><td><a href="https://openrouter.ai/keys">openrouter.ai/keys</a></td></tr>
+<tr><td><strong>Z AI / Zhipu (GLM)</strong> <span class="tag t-native">native</span></td><td>8 free models, 200K context</td><td>Hapana</td><td><code>ZAI_API_KEY</code></td><td><a href="https://open.bigmodel.cn/usercenter/apikeys">open.bigmodel.cn</a></td></tr>
+<tr><td><strong>Hugging Face</strong> <span class="tag t-native">native</span></td><td>~$0.10/mwezi mikopo kupitia router</td><td>Hapana</td><td><code>HF_TOKEN</code></td><td><a href="https://huggingface.co/settings/tokens">huggingface.co/settings/tokens</a></td></tr>
+<tr><td><strong>MiniMax / DeepSeek / xAI / Alibaba (Qwen) / Moonshot / StepFun / Arcee / Novita / GMI</strong> <span class="tag t-native">native</span></td><td>Kila mmoja ana free tier au mikopo ya kujaribu — angalia tovuti yake</td><td>Mchanganyiko</td><td><code>MINIMAX_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>, <code>XAI_API_KEY</code>, <code>DASHSCOPE_API_KEY</code>…</td><td>—</td></tr>
+</tbody>
+</table>
+<p class="small">Kuangalia orodha kamili ya providers wanaotambuliwa na Hermes yako: <code>hermes model</code> → chagua provider, au <code>hermes providers</code> kama ipo kwenye toleo lako.</p>
+
+<h2>2) Providers unaowaongeza wewe mwenyewe (“custom”, OpenAI-compatible)</h2>
+<p>Hizi hazipo ndani ya Hermes kwa jina, lakini zote zinaongezeka kwa sababu zinazungumza “OpenAI-style”. Unaongeza kwenye sehemu ya <code>providers:</code> ya <code>config.yaml</code>.</p>
+
+<table>
+<thead><tr><th>Provider</th><th>Unapata bure</th><th>Kadi?</th><th>Base URL</th><th>Pata key</th></tr></thead>
+<tbody>
+<tr><td><strong>Inception (Mercury)</strong> <span class="tag t-custom">custom</span></td><td><strong>Tokeni 100,000,000 bure</strong> (mara moja), 1,000 req/dak, model <code>mercury-3</code>, >1,000 tok/sekunde</td><td>Hapana</td><td><code>https://api.inceptionlabs.ai/v1</code></td><td><a href="https://platform.inceptionlabs.ai">platform.inceptionlabs.ai</a></td></tr>
+<tr><td><strong>Agnes AI</strong> <span class="tag t-custom">custom</span></td><td>Mikopo ya bure; models Agnes 2.0 Flash, Echo, Pavo (text + image + video)</td><td>Usajili</td><td><code>https://apihub.agnes-ai.com/v1</code></td><td><a href="https://platform.agnes-ai.com/settings/apiKeys">platform.agnes-ai.com</a></td></tr>
+<tr><td><strong>Cerebras</strong> <span class="tag t-custom">custom</span></td><td><strong>Tokeni 1,000,000 kwa siku</strong>, 30 RPM (context 8K kwenye free)</td><td>Hapana</td><td><code>https://api.cerebras.ai/v1</code></td><td><a href="https://cloud.cerebras.ai">cloud.cerebras.ai</a></td></tr>
+<tr><td><strong>SambaNova</strong> <span class="tag t-custom">custom</span></td><td>20 RPM / 20 req-siku / 200K tok-siku + $5 mikopo</td><td>Hapana</td><td><code>https://api.sambanova.ai/v1</code></td><td><a href="https://cloud.sambanova.ai/apis">cloud.sambanova.ai/apis</a></td></tr>
+<tr><td><strong>GitHub Models</strong> <span class="tag t-custom">custom</span></td><td>Tumia <strong>GitHub PAT yako mwenyewe</strong>: 15 RPM / 150 req-siku (tier ya chini), 10 RPM / 50 req-siku (tier ya juu)</td><td>Hapana (akaunti ya GitHub)</td><td><code>https://models.github.ai/inference</code></td><td><a href="https://github.com/settings/tokens">github.com/settings/tokens</a></td></tr>
+<tr><td><strong>Cloudflare Workers AI</strong> <span class="tag t-custom">custom</span></td><td>Neurons 10,000 kwa siku, ~47 open models (Llama, Mistral, Qwen)</td><td>Hapana</td><td><code>https://api.cloudflare.com/client/v4/accounts/&lt;ACCOUNT_ID&gt;/ai/run</code></td><td><a href="https://dash.cloudflare.com/profile/api-tokens">dash.cloudflare.com</a></td></tr>
+<tr><td><strong>Cohere</strong> <span class="tag t-custom">custom</span></td><td>~1,000 req/mwezi (trial), 20 req/dak</td><td>Hapana</td><td><code>https://api.cohere.com/v2</code></td><td><a href="https://dashboard.cohere.com/api-keys">dashboard.cohere.com</a></td></tr>
+<tr><td><strong>Mistral (La Plateforme)</strong> <span class="tag t-custom">custom</span></td><td>Free tier, 15 models (uthibitisho wa simu)</td><td>Hapana</td><td><code>https://api.mistral.ai/v1</code></td><td><a href="https://console.mistral.ai/api-keys">console.mistral.ai</a></td></tr>
+<tr><td><strong>ModelScope</strong> <span class="tag t-custom">custom</span></td><td>61 free models, 2,000 req/siku</td><td>Usajili</td><td><code>https://api-inference.modelscope.cn/v1</code></td><td><a href="https://modelscope.cn/my/myaccesstoken">modelscope.cn</a></td></tr>
+<tr><td><strong>SiliconFlow</strong> <span class="tag t-custom">custom</span></td><td>Models kadhaa bure (Qwen, DeepSeek…)</td><td>Usajili</td><td><code>https://api.siliconflow.cn/v1</code></td><td><a href="https://cloud.siliconflow.cn/account/ak">cloud.siliconflow.cn</a></td></tr>
+<tr><td><strong>Chutes.ai</strong> <span class="tag t-custom">custom</span></td><td>2 free models</td><td>Usajili</td><td><code>https://api.chutes.ai/v1</code></td><td><a href="https://chutes.ai">chutes.ai</a></td></tr>
+<tr><td><strong>LLM7.io</strong> <span class="tag t-custom">custom</span></td><td>60 RPM / 250 req-saa, <strong>hata bila usajili</strong></td><td>Hapana</td><td><code>https://api.llm7.io/v1</code></td><td><a href="https://token.llm7.io">token.llm7.io</a></td></tr>
+<tr><td><strong>OVHcloud AI Endpoints</strong> <span class="tag t-custom">custom</span></td><td>16 free models (2 RPM bila key)</td><td>Usajili</td><td><code>https://oai.endpoints.kepler.ai.cloud.ovh.net/v1</code></td><td><a href="https://www.ovhcloud.com/en/public-cloud/ai-endpoints/">ovhcloud.com</a></td></tr>
+<tr><td><strong>Nebius / Nscale / Gonka / glhf.chat</strong> <span class="tag t-custom">custom</span></td><td>Model 1–4 bure / mikopo ya kujaribu</td><td>Usajili</td><td><code>https://api.studio.nebius.com/v1</code>, <code>https://inference.api.nscale.com/v1</code>, <code>https://proxy.gonkabroker.com/v1</code>, <code>https://glhf.chat/api/openai/v1</code></td><td>—</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+<strong>Tahadhari kuhusu orodha zinazotembea mtandaoni:</strong> baadhi ya “awesome lists” (hata zile maarufu GitHub) zina makosa ya kunakili — mfano zimeandika base URL ya <em>Aion Labs</em> kwa ajili ya Google Gemini na Cohere. Daima hakikisha base URL kwenye docs rasmi za provider kabla ya kuiweka.
+</div>
+
+<h2>3) Config tayari — nakili na ubandike</h2>
+
+<h3>3.1 Funguo (weka kwenye <code>.env</code>, si <code>config.yaml</code>)</h3>
+<p>Tumia faili <code>mwijay-hermes/config/.env.free.example</code> iliyo kwenye repo hii — ina majina yote ya env variables.</p>
+
+<h3>3.2 <code>config.yaml</code> — providers wa custom + mnyororo wa fallback (rotation)</h3>
+<p>Hii ndiyo inayoipa Hermes “ubongo unaozunguka”: ikikwama kwa provider mmoja (rate limit / hitilafu), inaendelea na mwingine moja kwa moja bila kupoteza mazungumzo.</p>
+
+<pre><code># --- Providers wa "custom" (OpenAI-compatible) ---
+providers:
+  inception:
+    name: "Inception Mercury"
+    api: "https://api.inceptionlabs.ai/v1"
+    key_env: INCEPTION_API_KEY
+    default_model: "mercury-3"
+    models: ["mercury-3", "mercury-2", "mercury-coder-small"]
+    transport: chat_completions
+
+  agnes:
+    name: "Agnes AI"
+    api: "https://apihub.agnes-ai.com/v1"
+    key_env: AGNES_API_KEY
+    default_model: "agnes-2.0-flash"
+    transport: chat_completions
+
+  cerebras:
+    name: "Cerebras"
+    api: "https://api.cerebras.ai/v1"
+    key_env: CEREBRAS_API_KEY
+    default_model: "gpt-oss-120b"
+    transport: chat_completions
+
+  sambanova:
+    name: "SambaNova"
+    api: "https://api.sambanova.ai/v1"
+    key_env: SAMBANOVA_API_KEY
+    default_model: "Meta-Llama-3.3-70B-Instruct"
+    transport: chat_completions
+
+  github-models:
+    name: "GitHub Models"
+    api: "https://models.github.ai/inference"
+    key_env: GITHUB_TOKEN
+    default_model: "openai/gpt-4o-mini"
+    transport: chat_completions
+
+  llm7:
+    name: "LLM7.io"
+    api: "https://api.llm7.io/v1"
+    key_env: LLM7_API_KEY
+    default_model: "gpt-oss-20b"
+    transport: chat_completions
+
+# --- Mnyororo wa fallback: akili inayozunguka ---
+# Jaribu kwa mpangilio; inapokwama (rate limit/4xx/5xx) inaendelea na ifuatayo.
+model:
+  provider: "groq"
+  default: "openai/gpt-oss-120b"
+
+fallback_providers:
+  - provider: "cerebras"
+    model: "gpt-oss-120b"
+  - provider: "opencode-zen"
+    model: "deepseek-v4-flash-free"
+  - provider: "nvidia"
+    model: "z-ai/glm-5.2"
+  - provider: "inception"
+    model: "mercury-3"
+  - provider: "github-models"
+    model: "openai/gpt-4o-mini"
+  - provider: "gemini"
+    model: "gemini-3.8-flash"
+  - provider: "openrouter"
+    model: "nvidia/nemotron-3-ultra-550b-a55b:free"
+  - provider: "llm7"
+    model: "gpt-oss-20b"
+</code></pre>
+
+<div class="callout ok">
+<strong>Kidokezo:</strong> unaweza pia kuweka mnyororo huu kwa njia ya mazungumzo — andika <code>hermes fallback</code> kwenye terminal na uchague kutoka kwenye menyu. Na kuona ni provider gani anayeishi kwa sasa: <code>hermes model</code>.
+</div>
+
+<h2>4) GitHub — njia mbili halali za kuitumia</h2>
+<div class="grid">
+  <div class="card">
+    <h3 style="margin-top:0">A. GitHub Models (bure, key yako mwenyewe)</h3>
+    <p>Endpoint <code>https://models.github.ai/inference</code> — unatumia <strong>Personal Access Token</strong> yako ya GitHub (permission <code>models:read</code>). Hakuna kadi, hakuna usajili mpya.</p>
+    <p class="small">Kikomo: tier ya chini 15 RPM / 150 req-siku, tier ya juu 10 RPM / 50 req-siku, 8,000 tokeni kuingia / 4,000 kutoka kwa kila ombi. Inafaa kwa majaribio, si kwa mzigo mkubwa.</p>
+    <p><a href="https://github.com/settings/tokens">Tengeneza PAT →</a></p>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">B. Orodha inayosasishwa kila siku kwenye GitHub</h3>
+    <p><a href="https://github.com/open-free-llm-api/awesome-freellm-apis">open-free-llm-api/awesome-freellm-apis</a> — zaidi ya API 134 za bure kutoka providers 40+, ikiwa na base URL, viwango vya bure na viungo vya keys. Inasasishwa kila siku.</p>
+    <p class="small">Ukitaka kutafuta mwenyewe kwenye GitHub, tumia maneno kama: <code>free llm api awesome list</code>, <code>openai compatible free inference</code>, <code>free tier api keys 2026</code> — na chuja kwa “Recently updated”.</p>
+  </div>
+</div>
+
+<h2>5) Zidisha uwezo: funguo nyingi kwa provider mmoja (“credential pool”)</h2>
+<p>Huu ndio ujanja mkubwa zaidi. Kuna aina mbili za “kuzungusha”:</p>
+<ul>
+  <li><strong>Cross-provider failover</strong> (<code>fallback_providers</code>) — provider mmoja akikwama, nenda kwa mwingine. Hii ndiyo tuliyosanidi sehemu ya 3.2.</li>
+  <li><strong>Same-provider rotation</strong> (<em>credential pool</em>) — ndani ya provider mmoja, Hermes inazungusha <em>funguo</em> zako. Hii inajaribiwa <strong>kwanza</strong>, kabla ya kwenda kwa provider mwingine.</li>
+</ul>
+<p>Kwa hiyo: ukifungua akaunti mbili au tatu za Groq (barua pepe tofauti), unapata mara mbili/mara tatu ya kikomo cha bure — na Hermes inazungusha yenyewe:</p>
+<pre><code># Ongeza key ya pili / ya tatu kwa provider yuleyule
+hermes auth add groq      --api-key gsk_ya_akaunti_ya_pili
+hermes auth add openrouter --api-key sk-or-v1_ya_akaunti_ya_pili
+hermes auth add gemini    --api-key AIza_ya_akaunti_ya_pili
+
+# Angalia hali ya pools
+hermes auth list
+
+# Mkakati wa kuchagua key (hiari, kwenye config.yaml)
+credential_pool_strategies:
+  groq: round_robin      # zunguka sawasawa
+  openrouter: least_used # chagua isiyotumika sana</code></pre>
+<p class="small">Mikakati: <code>fill_first</code> (default), <code>round_robin</code>, <code>least_used</code>, <code>random</code>. Kumbuka: kila key mpya ina <em>prompt cache</em> yake, kwa hivyo kuzungusha katikati ya mazungumzo marefu kunasoma historia nzima kwa bei kamili mara moja.</p>
+
+<h2>6) Angalia kama keys zako zinaishi</h2>
+<p>Nimekuwekea script: <code>mwijay-hermes/scripts/check_free_keys.py</code>. Inasoma <code>.env</code> yako na kupima kila provider (model moja, ombi fupi), kisha inachapa jedwali:</p>
+<pre><code>python3 mwijay-hermes/scripts/check_free_keys.py            # zote
+python3 mwijay-hermes/scripts/check_free_keys.py groq gemini  # baadhi tu</code></pre>
+<p class="small">Haisomi wala kuchapisha thamani ya key — inaonyesha tu <code>SAWASAWAA</code> / <code>IMEKWAMA</code> na sababu (401, 429 = rate limit, n.k.).</p>
+
+<h2>7) Mambo ya kukumbuka (usije ukaungua)</h2>
+<ul>
+  <li><strong>Usiweke keys kwenye Git.</strong> <code>.env</code> iwe kwenye <code>~/.hermes/</code>, na hakikisha haiwi kwenye repo (angalia <code>.gitignore</code>).</li>
+  <li><strong>Free tiers hubadilika bila taarifa.</strong> Leo model fulani ni bure, kesho inaweza kuwa haipo. Ndiyo maana mnyororo wa fallback ni muhimu kuliko kutegemea provider mmoja.</li>
+  <li><strong>Rate limits ndio adui, si bei.</strong> Groq 30 RPM, Cerebras 30 RPM (na 8K context kwenye free), SambaNova 20 req/siku. Kwa agent inayofanya kazi nyingi mfululizo, unahitaji providers wengi kwenye mnyororo.</li>
+  <li><strong>Usitumie keys za watu wengine</strong> (tazama onyo juu). Zaidi ya sheria: hizi keys hufutwa mara moja, na hivyo “akili yako” itakuwa ikiisha ghafla bila sababu.</li>
+  <li><strong>Fuatilia matumizi.</strong> Inception inakupa tokeni milioni 100 mara moja (si kila mwezi); NVIDIA na Hugging Face hutoa mikopo isiyorudi.</li>
+  <li><strong>Usizidishe akaunti nyingi kupita kiasi.</strong> Kufungua akaunti chache za bure ni kawaida; kufungua mamia ili kukwepa viwango kunakiuka sheria za providers wengi na kunaweza kufunga akaunti zako zote.</li>
+</ul>
+
+<p class="small" style="margin-top:40px">Imeandaliwa kwa Mwijay AI · Novemba 2026 · Viwango vya bure vilithibitishwa kutoka vyanzo mbalimbali; hakikisha kwenye tovuti rasmi kabla ya kutegemea namba yoyote.</p>
+
+</div>
+</body>
+</html>

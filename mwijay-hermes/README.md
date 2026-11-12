@@ -214,4 +214,28 @@ A: Ndiyo — nakili folda yoyote kutoka `skills/` kwenda `~/.hermes/skills/` (au
 
 ---
 
+## 8. Free LLM Providers — "akili inayozunguka" (rotation)
+
+Hapa ndipo unapopata **API keys nyingi za bure** na kuziunganisha kwa Hermes ili isiwahi
+kukwama kwa sababu ya rate limit ya provider mmoja.
+
+| Faili | Kazi yake |
+|---|---|
+| **`free-providers.html`** | Mwongozo kamili (Kiswahili, kama ukurasa wa kitabu) — orodha ya providers ~25, viwango vyao vya bure, base URL, na viungo vya kupata key. Fungua kwenye browser. |
+| **`config/.env.free.example`** | Majina yote ya env variables za free tiers (Groq, NVIDIA, Inception/Mercury, Agnes, Cerebras, SambaNova, GitHub Models, LLM7…). Nakili unayohitaji kwenye `~/.hermes/.env`. |
+| **`config/config.yaml`** | Tayari ina sehemu ya `providers:` (custom endpoints) na `fallback_providers:` (mnyororo wa rotation wa hatua 9). |
+| **`scripts/check_free_keys.py`** | Pima ni keys zipi zinaishi: `python3 mwijay-hermes/scripts/check_free_keys.py` — au chagua: `... check_free_keys.py groq gemini`. |
+
+**Hatua tatu za haraka:**
+1. Fungua `free-providers.html` → chukua keys za providers unazotaka (zote hazihitaji kadi).
+2. Ziweke kwenye `~/.hermes/.env` (muundo uko `config/.env.free.example`).
+3. Jaribu: `python3 mwijay-hermes/scripts/check_free_keys.py` → kisha anza Hermes; itazunguka
+   yenyewe kwenye mnyororo wa `fallback_providers` inapokwama.
+
+> ⚠️ **Usitumie API keys za watu wengine** (zilizovuja kwenye GitHub na kwingineko). Si bure —
+> ni kuvunja sheria, mara nyingi kosa la kisheria, na keys hizo hufutwa ghafla. Mwongozo huu
+> unakuonyesha jinsi ya kupata **keys zako mwenyewe za bure** na kuzizungusha.
+
+---
+
 *Imetengenezwa kwa Mwijay — All-Rounder Hermes Agent. Karibu kwenye timu, Mwijay AI! 🚀*
