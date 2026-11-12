@@ -25,7 +25,7 @@ except ImportError:
 from pathlib import Path
 from typing import Callable
 
-from hermes_constants import get_hermes_home
+from hermes_constants import get_hermes_home, safe_tar_extractall
 from tools.environments.base import _file_mtime_key
 
 logger = logging.getLogger(__name__)
@@ -368,7 +368,7 @@ class FileSyncManager:
 
             with tempfile.TemporaryDirectory(prefix="hermes-sync-back-") as staging:
                 with tarfile.open(tf.name) as tar:
-                    tar.extractall(staging, filter="data")
+                    safe_tar_extractall(tar, staging)
 
                 applied = 0
                 upload_only_host_paths = (

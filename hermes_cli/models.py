@@ -441,6 +441,7 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         "openai/gpt-5.4",
     ],
     "opencode-zen": [
+        # Free tier (surfaced first so zero-cost models lead the picker)
         "mimo-v2.6-flash-free",
         "deepseek-v4.1-flash-free",
         "glm-5.3-flash-free",
@@ -452,11 +453,85 @@ _PROVIDER_MODELS: dict[str, list[str]] = {
         "iceman-free",
         "inkling-2-small-free",
         "big-pickle",
+        "mimo-v2.5-free",
+        "north-mini-code-free",
+        "nemotron-3-ultra-free",
+        "deepseek-v4-flash-free",
+        # Curated floor — the static catalog must stay complete even when the
+        # live /v1/models endpoint lags (contract test: nothing is dropped).
+        "kimi-k2.5",
+        "kimi-k2.6",
+        "kimi-k2.7-code",
+        "gpt-5.5",
+        "gpt-5.5-pro",
+        "gpt-5.4-pro",
+        "gpt-5.4",
+        "gpt-5.4-mini",
+        "gpt-5.4-nano",
+        "gpt-5.3-codex",
+        "gpt-5.3-codex-spark",
+        "gpt-5.2",
+        "gpt-5.2-codex",
+        "gpt-5.1",
+        "gpt-5.1-codex",
+        "gpt-5.1-codex-max",
+        "gpt-5.1-codex-mini",
+        "gpt-5",
+        "gpt-5-codex",
+        "gpt-5-nano",
+        "claude-fable-5",
+        "claude-sonnet-5",
+        "claude-opus-4-8",
+        "claude-opus-4-7",
+        "claude-opus-4-6",
+        "claude-opus-4-5",
+        "claude-opus-4-1",
+        "claude-sonnet-4-6",
+        "claude-sonnet-4-5",
+        "claude-sonnet-4",
+        "claude-haiku-4-5",
+        "gemini-3.5-flash",
+        "gemini-3.1-pro",
+        "gemini-3-flash",
+        "minimax-m3",
+        "minimax-m2.7",
+        "minimax-m2.5",
+        "glm-5.2",
+        "glm-5.1",
+        "glm-5",
+        "deepseek-v4-pro",
+        "deepseek-v4-flash",
+        "qwen3.7-plus",
+        "qwen3.6-plus",
+        "qwen3.5-plus",
+        "grok-build-0.1",
     ],
     "opencode-go": [
+        # Free tier
         "beam-free",
         "crouton-alpha-free",
         "iceman-contributor-free",
+        # Curated floor (contract test: the picker must still surface these)
+        "kimi-k3",
+        "kimi-k2.7-code",
+        "kimi-k2.6",
+        "kimi-k2.5",
+        "glm-5.2",
+        "glm-5.1",
+        "glm-5",
+        "mimo-v2.5-pro",
+        "mimo-v2.5",
+        "mimo-v2-pro",
+        "mimo-v2-omni",
+        "minimax-m3",
+        "minimax-m2.7",
+        "minimax-m2.5",
+        "deepseek-v4-pro",
+        "deepseek-v4-flash",
+        "qwen3.7-max",
+        "qwen3.7-plus",
+        "qwen3.6-plus",
+        "qwen3.5-plus",
     ],
     "kilocode": [
         "anthropic/claude-opus-4.6",
@@ -2717,6 +2792,58 @@ def _merge_with_models_dev(provider: str, curated: list[str]) -> list[str]:
     return merged
 
 
+def _free_models_only_enabled(provider_id: str) -> bool:
+    """Whether a provider's live catalog should be filtered to free models.
+
+    Opt-in, default **off**: the picker must show the whole catalog a provider
+    serves, and dropping paid models silently hides models the user's key can
+    actually call (it also breaks the live+curated merge contract, where every
+    live model must survive the merge).
+
+    Turn it on to keep only ``*free*`` / ``big-pickle`` entries from the live
+    endpoint (handy on free-tier-only OpenCode Zen / Go keys):
+
+    * env: ``HERMES_FREE_MODELS_ONLY=1`` (all providers), or
+           ``HERMES_FREE_MODELS_ONLY=opencode-zen,opencode-go`` (only those)
+    * config:
+        .. code-block:: yaml
+
+           model:
+             free_models_only: true            # all providers
+             # free_models_only: [opencode-zen, opencode-go]   # or just these
+    """
+    raw = os.environ.get("HERMES_FREE_MODELS_ONLY", "").strip().lower()
+    if raw:
+        if raw in {"0", "false", "no", "off", "none"}:
+            return False
+        if raw in {"1", "true", "yes", "on", "all", "*"}:
+            return True
+        return provider_id.lower() in {p for p in raw.replace(",", " ").split() if p}
+    try:
+        from hermes_cli.config import read_raw_config_readonly
+
+        value = (read_raw_config_readonly().get("model") or {}).get("free_models_only")
+    except Exception:
+        return False
+    if value is None:
+        return False
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        text = value.strip().lower()
+        if not text:
+            return False
+        if text in {"1", "true", "yes", "on", "all", "*"}:
+            return True
+        if text in {"0", "false", "no", "off", "none"}:
+            return False
+        return provider_id.lower() in {p for p in text.replace(",", " ").split() if p}
+    if isinstance(value, (list, tuple, set)):
+        ids = {str(v).strip().lower() for v in value if str(v).strip()}
+        return "*" in ids or "all" in ids or provider_id.lower() in ids
+    return False
+
+
 def provider_model_ids(provider: Optional[str], *, force_refresh: bool = False) -> list[str]:
     """Return the best known model catalog for a provider.
 
@@ -2923,7 +3050,7 @@ def provider_model_ids(provider: Optional[str], *, force_refresh: bool = False) 
                 base_url = _p.base_url
             if api_key:
                 live = _p.fetch_models(api_key=api_key, base_url=base_url or None)
-                if live and normalized in {"opencode-zen", "opencode-go", "openrouter"}:
+                if live and _free_models_only_enabled(normalized):
                     live = [
                         m for m in live
                         if "free" in str(m).lower() or str(m).lower() == "big-pickle"

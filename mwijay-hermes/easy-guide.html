@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mwijay AI — Mwongozo Rahisi (Hermes + Kimi K3)</title>
+<style>
+  :root{
+    --ink:#1b1f24; --muted:#5b6672; --bg:#f7f9fb; --card:#ffffff;
+    --gold:#e0a800; --blue:#2563eb; --green:#0f9960; --red:#d1495b; --line:#e3e8ee;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size:19px; line-height:1.75;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:32px 22px 80px}
+  header{
+    background:linear-gradient(135deg,#111827 0%, #1f2937 60%, #374151 100%);
+    color:#fff; border-radius:18px; padding:34px 28px; margin-bottom:30px;
+  }
+  header h1{margin:0 0 6px; font-size:34px; letter-spacing:.3px}
+  header p{margin:6px 0 0; color:#d6dde6; font-size:18px}
+  .pill{
+    display:inline-block; background:var(--gold); color:#1b1f24; font-weight:700;
+    padding:5px 14px; border-radius:999px; font-size:14px; margin-bottom:14px;
+  }
+  h2{
+    font-size:27px; margin:38px 0 14px; padding-bottom:8px;
+    border-bottom:3px solid var(--gold);
+  }
+  h3{font-size:21px; margin:24px 0 8px; color:#0f172a}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:20px 22px; margin:16px 0; box-shadow:0 1px 3px rgba(16,24,40,.05);
+  }
+  .analogy{background:#fff8e6; border-left:6px solid var(--gold)}
+  .good{background:#eefaf4; border-left:6px solid var(--green)}
+  .bad{background:#fdeef0; border-left:6px solid var(--red)}
+  .info{background:#eef4ff; border-left:6px solid var(--blue)}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:17px}
+  th,td{border:1px solid var(--line); padding:11px 13px; text-align:left; vertical-align:top}
+  th{background:#f0f4f8; font-weight:700; width:38%}
+  code, .cmd{
+    font-family:"Cascadia Mono", Consolas, Menlo, monospace;
+    background:#0f172a; color:#7dd3fc; padding:3px 8px; border-radius:6px; font-size:16px;
+  }
+  .cmdline{
+    background:#0f172a; color:#e6edf3; padding:14px 16px; border-radius:10px;
+    font-family:"Cascadia Mono", Consolas, Menlo, monospace; font-size:16px;
+    overflow-x:auto; margin:10px 0; line-height:1.9;
+  }
+  .cmdline .c{color:#8b98a5}
+  .steps{counter-reset:s; list-style:none; padding:0; margin:14px 0}
+  .steps li{
+    counter-increment:s; position:relative; padding:14px 16px 14px 58px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px; margin-bottom:12px;
+  }
+  .steps li::before{
+    content:counter(s); position:absolute; left:14px; top:12px;
+    background:var(--gold); color:#1b1f24; font-weight:800; font-size:17px;
+    width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+  }
+  .big{font-size:22px; font-weight:700}
+  .small{font-size:16px; color:var(--muted)}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  @media(max-width:700px){ .grid{grid-template-columns:1fr} body{font-size:18px} }
+  footer{margin-top:44px; text-align:center; color:var(--muted); font-size:16px}
+  .tag{display:inline-block; background:#eef2f7; border:1px solid var(--line);
+    padding:3px 10px; border-radius:8px; font-size:15px; margin:2px 4px 2px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="pill">MWIJAY AI</span>
+  <h1>Mwongozo Rahisi: Hermes Agent na Kimi K3</h1>
+  <p>Ukurasa huu umeandikwa kwa Kiswahili rahisi — hakuna alama za markdown. Soma moja kwa moja.</p>
+  <p class="small">Imetengenezwa kwa ajili ya Mwijay · PC ya Windows · 11 Novemba 2026</p>
+</header>
+
+<!-- ================= SEHEMU 1 ================= -->
+<h2>Sehemu ya 1 — Hermes Agent ni nini?</h2>
+
+<div class="card analogy">
+  <h3>Fikiria hivi</h3>
+  <p>ChatGPT ni kama <b>mshauri wa simu</b>: unauliza, anajibu, hakumbuki kesho.</p>
+  <p><b>Hermes</b> ni kama <b>mfanyakazi unayemleta nyumbani kwako</b>: anakaa kwenye PC yako, anatumia folda zako na terminal yako, <b>anakumbuka</b> ulichomwambia jana, na baada ya kazi ngumu <b>anaandika daftari lake la maelekezo</b> (skills) ili asifanye makosa yaleyale kesho. Tena unaweza kuongea naye kutoka <b>Telegram au WhatsApp</b> ukiwa safarini.</p>
+</div>
+
+<div class="card">
+  <h3>Tofauti na chatbot ya kawaida</h3>
+  <table>
+    <tr><th>Chatbot ya kawaida</th><td>Anajibu tu. Hakumbuki. Hafanyi kitu kwenye PC yako.</td></tr>
+    <tr><th>Hermes Agent</th><td>Anaendesha command, anafungua na kuandika faili, anatafuta mtandaoni, anapanga ratiba (cron), anakumbuka, na anajifunza mwenyewe.</td></tr>
+    <tr><th>Model gani?</th><td>Unachagua wewe: Groq, Gemini, OpenRouter, Nous Portal, au hata model ya local. Unaibadilisha kwa <span class="cmd">hermes model</span> bila kugusa code.</td></tr>
+  </table>
+</div>
+
+<div class="card info">
+  <h3>Amri muhimu (copy-paste tu)</h3>
+  <div class="cmdline">
+<span class="c"># Anza kuongea (terminal)</span>
+hermes
+
+<span class="c"># Chagua model / provider (Groq, Gemini, OpenRouter)</span>
+hermes model
+
+<span class="c"># Sanidi kila kitu kwa mara moja (wizard)</span>
+hermes setup
+
+<span class="c"># Unganisha Telegram / WhatsApp / Discord</span>
+hermes gateway setup
+hermes gateway start
+
+<span class="c"># Angalia kama kila kitu kiko sawa</span>
+hermes doctor
+  </div>
+  <p><b>Ndani ya mazungumzo:</b>
+    <span class="tag">/new</span> anza upya
+    <span class="tag">/model jina</span> badilisha model
+    <span class="tag">/personality mwijay</span> weka tabia ya Mwijay AI
+    <span class="tag">/skills</span> ona skills
+    <span class="tag">/retry</span> rudia jibu
+    <span class="tag">/undo</span> futa hatua ya mwisho
+    <span class="tag">/compress</span> punguza mazungumzo
+  </p>
+</div>
+
+<div class="card good">
+  <h3>Bonus: Nous Portal (hiari)</h3>
+  <p>Badala ya kukusanya API key tano tofauti (model, utafutaji, picha, sauti, browser), <b>Nous Portal</b> inakupa zote kwa usajili mmoja: model 300+, web search, image generation, TTS, cloud browser. <span class="cmd">hermes setup --portal</span>. Bado unaweza kutumia Groq/Gemini zako bure ukitaka.</p>
+</div>
+
+<!-- ================= SEHEMU 2 ================= -->
+<h2>Sehemu ya 2 — Kimi K3 "in C" maana yake nini?</h2>
+
+<div class="card analogy">
+  <h3>Fikiria hivi</h3>
+  <p>Kimi K3 ni kama <b>injini ya ndege kubwa</b> yenye vipande <b>trilioni 2.78</b>. Kawaida injini kama hiyo inahitaji kiwanda kizima — server kubwa na GPU nyingi (kadi za maelfu ya dola).</p>
+  <p>Mradi huu umeandika injini hiyo kwa <b>lugha ya C</b> (lugha ya zamani, ya chini kabisa, yenye nguvu) — bila Python, bila GPU, bila framework. Ujanja wake: <b>haisomi injini nzima mara moja.</b> Kila inapotaka kutoa neno moja, inatumia vipande <b>16 tu kati ya 896</b> (vinaitwa "experts"), na inavisoma moja kwa moja kutoka <b>diski</b>.</p>
+  <p>Ndiyo maana inafanya kazi na RAM ndogo kama <b>GB 8</b> — lakini inahitaji diski kubwa sana, na ni <b>polepole</b> kwa sababu diski ni polepole kuliko RAM.</p>
+</div>
+
+<div class="card">
+  <h3>Namba halisi (kutoka repo)</h3>
+  <table>
+    <tr><th>Idadi ya vipande (parameters)</th><td>2.78 trilioni</td></tr>
+    <tr><th>Ukubwa kwenye diski</th><td class="big">1.56 TB</td></tr>
+    <tr><th>Jumla ya nafasi inayohitajika</th><td>Karibu <b>1.7 TB</b> (1.56 TB model + 109 GB trunk)</td></tr>
+    <tr><th>RAM inayohitajika</th><td>GB 8 na kuendelea (kumbukumbu zaidi = kasi zaidi, sio tofauti ya majibu)</td></tr>
+    <tr><th>GPU</th><td>Hakuna — CPU peke yake</td></tr>
+    <tr><th>Ukubwa wa programu yenyewe</th><td>Kama KB 176 tu (ndogo sana!)</td></tr>
+    <tr><th>Vipande vya model (shards)</th><td>96 faili, jumla ya byte 1,560,936,091,448</td></tr>
+    <tr><th>Kasi kwenye laptop ya GB 8</th><td>Takriban <b>sekunde 26 kwa kila neno</b></td></tr>
+    <tr><th>Kasi kwenye mashine kubwa (GB 128+)</th><td>Takriban <b>sekunde 5 kwa kila neno</b></td></tr>
+    <tr><th>Mfumo unaotumika</th><td>Linux, macOS, <b>na Windows</b> — zote zinapita majaribio</td></tr>
+  </table>
+  <p class="small">Kumbuka: “neno” hapa ni "token" (kipande cha neno). Sentensi ya maneno 20 inaweza kuchukua dakika 2 hadi 9.</p>
+</div>
+
+<div class="card bad">
+  <h3>Kwa nini sio kwa PC yako ya kila siku?</h3>
+  <div class="steps">
+    <li><b>Diski haitoshi.</b> PC yako ni chini ya TB 1, lakini model peke yake ni TB 1.56 — na unahitaji TB 1.7 za nafasi wazi. Haiingii kabisa.</li>
+    <li><b>Ni polepole sana.</b> Hata kama ingeingia, ungesubiri sekunde 5–26 kwa kila neno. Hermes anahitaji majibu ya haraka ili afanye kazi nyingi (coding, utafiti, automation).</li>
+    <li><b>Ni programu ya command-line, sio API.</b> Hermes hawezi kuizungumza moja kwa moja — ingehitaji "bridge" (na bado polepole).</li>
+  </div>
+  <p><b>Hitimisho:</b> Kimi K3 ni <b>funzo zuri la uhandisi</b> na mradi wa kujivunia — sio msaidizi wako wa kila siku.</p>
+</div>
+
+<div class="card info">
+  <h3>Lakini unaweza kuijaribia (njia mpya kwenye repo)</h3>
+  <p>Watu wengi waliuliza: “vipi kama nina diski ya TB 1 tu?” Sasa kuna <b>download-model.sh --layers N</b> — inapakua vipande vya baadhi tu ya "layers" badala ya model nzima, na inakuambia wazi wazi matokeo <b>sio Kimi K3 kamili</b>. Ni majaribio tu ya kuona injini inavyofanya kazi.</p>
+  <div class="cmdline">
+<span class="c"># 1. Jaribu bila kupakua chochote (chini ya dakika moja)</span>
+git clone https://github.com/FareedKhan-dev/kimi-k3-in-c.git
+cd kimi-k3-in-c
+make -j
+make test
+
+<span class="c"># 2. Angalia kama PC yako inaweza (inapima RAM na diski)</span>
+./scripts/k3-doctor.sh
+
+<span class="c"># 3. Pakua sehemu tu (badala ya 1.56 TB) — MAJARIBIO</span>
+export HF_TOKEN=hf_xxxxx
+./scripts/download-model.sh ~/k3model --layers 2
+
+<span class="c"># 4. Endesha</span>
+./bin/k3 ~/k3model --trunk ~/k3trunk --preset laptop \
+  --tok ~/k3model --prompt "The capital of France is" --gen 8 --incremental
+  </div>
+  <p class="small">Kwenye Windows inafanya kazi kwa kutumia MSYS2 / MinGW-w64 (Git Bash). Hatua ya 1 peke yake haina haja ya model wala mtandao.</p>
+</div>
+
+<!-- ================= SEHEMU 3 ================= -->
+<h2>Sehemu ya 3 — Ulinganisho wa haraka</h2>
+<div class="card">
+  <table>
+    <tr><th></th><th>Kimi K3 (local, C)</th><th>Groq / Gemini / OpenRouter</th></tr>
+    <tr><th>Nafasi ya diski</th><td>TB 1.7</td><td>GB 0 — hakuna cha kupakua</td></tr>
+    <tr><th>RAM</th><td>GB 8+</td><td>Hakuna (inatumika kupitia mtandao)</td></tr>
+    <tr><th>Kasi</th><td>Sekunde 5–26 kwa neno</td><td>Maneno mengi kwa sekunde — papo hapo</td></tr>
+    <tr><th>Gharama</th><td>Bure (lakini diski kubwa inahitajika)</td><td>Bure kwa kiwango cha kawaida (free tier)</td></tr>
+    <tr><th>Inafaa kwa</th><td>Kujifunza, utafiti, kujaribu</td><td><b>Kazi za kila siku</b> — coding, biashara, utafiti</td></tr>
+  </table>
+</div>
+
+<!-- ================= SEHEMU 4 ================= -->
+<h2>Sehemu ya 4 — Kuanzisha Mwijay AI kwenye PC yako</h2>
+
+<ol class="steps">
+  <li>
+    <b>Sakinisha Hermes (PowerShell)</b>
+    <div class="cmdline">iex (irm https://hermes-agent.nousresearch.com/install.ps1)</div>
+    <p class="small">Inasakinisha Python 3.11, Node, Git Bash, ripgrep, ffmpeg — hauitaji haki za Admin kwa mengi. Ikiwa antivirus (Bitdefender/Defender) itazuia uv.exe, ni <b>false positive</b> — iongezee exception kwenye folda ya bin.</p>
+  </li>
+  <li>
+    <b>Pata API keys BURE</b>
+    <table>
+      <tr><th>Gemini</th><td>aistudio.google.com/apikey — free tier kubwa, inaelewa Kiswahili vizuri</td></tr>
+      <tr><th>Groq</th><td>console.groq.com/keys — kasi ya ajabu, nzuri kwa coding. <b>Sasa ni provider rasmi kwenye repo yako</b> (iliongezwa kwenye commit ya leo)</td></tr>
+      <tr><th>OpenRouter</th><td>openrouter.ai/keys — model 300+, free models pia</td></tr>
+    </table>
+    <p class="small">Ziweke kwenye faili la <span class="cmd">%LOCALAPPDATA%\hermes\.env</span> — kamwe usiziweke GitHub.</p>
+  </li>
+  <li>
+    <b>Nakili utambulisho wa Mwijay AI</b>
+    <div class="cmdline">
+Copy-Item .\mwijay-hermes\profile\SOUL.md   "$env:LOCALAPPDATA\hermes\SOUL.md" -Force
+Copy-Item .\mwijay-hermes\profile\USER.md   "$env:LOCALAPPDATA\hermes\USER.md" -Force
+Copy-Item .\mwijay-hermes\profile\MEMORY.md "$env:LOCALAPPDATA\hermes\MEMORY.md" -Force
+Copy-Item .\mwijay-hermes\config\config.yaml "$env:LOCALAPPDATA\hermes\config.yaml" -Force
+Copy-Item .\skills\mwijay-ai\* "$env:LOCALAPPDATA\hermes\skills\" -Recurse -Force
+    </div>
+    <p class="small">Hizi ndizo zinamfanya aitwe <b>Mwijay AI</b>, aongee Kiswahili chako, na akukumbuke.</p>
+  </li>
+  <li>
+    <b>Anza kuongea</b>
+    <div class="cmdline">hermes
+<span class="c"># kisha ndani ya mazungumzo:</span>
+/personality mwijay
+    </div>
+  </li>
+  <li>
+    <b>(Hiari) Unganisha Telegram</b>
+    <div class="cmdline">hermes gateway setup
+hermes gateway start</div>
+    <p class="small">Baada ya hapo unamzungumza Mwijay AI kutoka simu yako, hata ukiwa mbali na PC.</p>
+  </li>
+</ol>
+
+<div class="card good">
+  <h3>Vitu vya ziada unavyoweza kumwambia Mwijay AI</h3>
+  <p>
+    <span class="tag">Tayari kwenye repo yako</span> provider ya <b>Groq</b> (pamoja na credential-pool rotation), plugin ya <b>Kaggle tunnel</b>, na <b>Jarvis UI</b> ya sauti/picha<br><br>
+    <span class="tag">Ratiba</span> “kila siku saa 12 asubuhi nitumie muhtasari wa habari za AI”
+    <span class="tag">Voice</span> tuma voice memo — anaitafsiri na kujibu
+    <span class="tag">Skills</span> “jifunze skill ya …” — anajitengenezea mwenyewe
+    <span class="tag">Subagents</span> anagawanya kazi kubwa na kufanya kazi sambamba
+    <span class="tag">Kumbukumbu</span> anakumbuka unachomfundisha kwenye MEMORY.md
+  </p>
+</div>
+
+<footer>
+  Ukurasa huu ni wako, Mwijay. Badala ya kusoma faili za .md — fungua hapa. 🚀<br>
+  <span class="small">Mwijay AI · Hermes Agent iliyobinafsishwa · Imesasishwa 11 Novemba 2026</span>
+</footer>
+
+</div>
+</body>
+</html>

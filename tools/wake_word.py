@@ -527,7 +527,7 @@ _SHERPA_KWS_MODEL_DIR = "sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01"
 
 
 def _sherpa_model_root() -> Path:
-    from hermes_constants import get_hermes_home
+    from hermes_constants import get_hermes_home, safe_tar_extractall
 
     return get_hermes_home() / "cache" / "wakewords"
 
@@ -546,7 +546,7 @@ def _ensure_sherpa_model(root: Optional[Path] = None) -> Path:
     logger.info("wake word: downloading sherpa KWS model (one-time, ~13 MB)")
     urllib.request.urlretrieve(_SHERPA_KWS_MODEL_URL, archive)  # noqa: S310
     with tarfile.open(archive, "r:bz2") as tf:
-        tf.extractall(root, filter="data")
+        safe_tar_extractall(tf, root)
     archive.unlink(missing_ok=True)
     if not (target / "tokens.txt").exists():
         raise RuntimeError(f"sherpa KWS model unpack failed: {target}")

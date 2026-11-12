@@ -104,7 +104,7 @@ OPEN_DASHBOARD_SCHEMA = {
 
 registry.register(
     name="open_dashboard",
-    toolset="terminal",
+    toolset="hermes-cli",
     schema=OPEN_DASHBOARD_SCHEMA,
     handler=lambda args, **kw: open_dashboard_tool(section=args.get("section", "")),
     check_fn=check_open_dashboard_requirements,

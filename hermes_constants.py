@@ -4,10 +4,12 @@ Import-safe module with no dependencies — can be imported from anywhere
 without risk of circular imports.
 """
 
+import inspect
 import os
 import shutil
 import stat
 import sys
+import tarfile
 from contextvars import ContextVar, Token
 from pathlib import Path
 
@@ -218,6 +220,36 @@ def get_optional_mcps_dir(default: Path | None = None) -> Path:
     if default is not None:
         return default
     return get_hermes_home() / "optional-mcps"
+
+
+# PEP 706's ``TarFile.extractall(filter=...)`` landed in Python 3.12 and was
+# backported to 3.11.4 / 3.10.12 / 3.9.17.  ``requires-python`` is ">=3.11",
+# so a 3.11.0-3.11.3 interpreter raises
+# ``TypeError: extractall() got an unexpected keyword argument 'filter'``
+# and every tar extraction path dies.  Probe once instead of try/except so a
+# genuine TypeError raised *inside* extraction is never silently swallowed
+# into an unfiltered (unsafe) retry.
+_TAR_EXTRACTALL_SUPPORTS_FILTER = (
+    "filter" in inspect.signature(tarfile.TarFile.extractall).parameters
+)
+
+
+def safe_tar_extractall(
+    tar: "tarfile.TarFile", dest, *, filter_name: str = "data"
+) -> None:
+    """Extract *tar* into *dest*, using PEP 706 filtering where available.
+
+    Pass ``filter="data"`` on interpreters that support it (3.12+, or the
+    3.11.4+ backport) so absolute paths, ``..`` traversal, links and device
+    nodes in an untrusted archive are rejected. On older 3.11 patch releases
+    the kwarg does not exist, so fall back to a plain extract — callers that
+    extract untrusted tars are expected to validate members themselves
+    (see ``agent/curator_backup.py``).
+    """
+    if _TAR_EXTRACTALL_SUPPORTS_FILTER:
+        tar.extractall(dest, filter=filter_name)  # type: ignore[call-arg]
+    else:
+        tar.extractall(dest)
 
 
 def get_bundled_skills_dir(default: Path | None = None) -> Path:

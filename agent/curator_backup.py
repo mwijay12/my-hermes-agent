@@ -48,7 +48,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from hermes_constants import get_hermes_home
+from hermes_constants import get_hermes_home, safe_tar_extractall
 from agent.skill_utils import is_excluded_skill_path
 
 logger = logging.getLogger(__name__)
@@ -632,11 +632,7 @@ def rollback(backup_id: Optional[str] = None) -> Tuple[bool, str, Optional[Path]
                     raise tarfile.TarError(
                         f"refusing to extract unsafe path: {name!r}"
                     )
-            try:
-                tf.extractall(str(skills), filter="data")  # type: ignore[call-arg]
-            except TypeError:
-                # Python < 3.12 — no filter kwarg
-                tf.extractall(str(skills))
+            safe_tar_extractall(tf, str(skills))
     except (OSError, tarfile.TarError) as e:
         # Best-effort recover: move staged contents back
         for orig, dest in moved:

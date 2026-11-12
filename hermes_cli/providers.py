@@ -524,11 +524,26 @@ def get_label(provider_id: str) -> str:
     if canonical in _LABEL_OVERRIDES:
         return _LABEL_OVERRIDES[canonical]
 
-    # Try models.dev
+    # Try models.dev — but only when it carries a real display name. Several
+    # providers (notably xai) have a models.dev entry whose name is just the
+    # provider id echoed back, which collapses the picker label to "xai"
+    # instead of Hermes's curated "xAI".
     pdef = get_provider(canonical)
-    if pdef:
+    if pdef and pdef.name and pdef.name.lower() != canonical.lower():
         return pdef.name
 
+    # Fall back to the curated label table before the bare id.
+    try:
+        from hermes_cli.models import _PROVIDER_LABELS
+
+        label = _PROVIDER_LABELS.get(canonical)
+        if label:
+            return label
+    except Exception:
+        pass
+
+    if pdef and pdef.name:
+        return pdef.name
     return canonical
 
 

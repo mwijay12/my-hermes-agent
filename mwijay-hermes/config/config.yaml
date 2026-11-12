@@ -1,0 +1,60 @@
+# Hermes Agent — Config ya Mwijay AI
+# Nakili faili hii kwenda: %LOCALAPPDATA%\hermes\config.yaml (Windows)
+# au ~/.hermes/config.yaml (Linux/WSL2)
+# API keys HAZIWEKI hapa — zinawekwa kwenye .env (angalia .env.example)
+
+model:
+  # Default: auto-detect kulingana na keys ulizoweka kwenye .env
+  # Ukipenda kulazimisha Gemini: provider: "gemini"
+  # Ukipenda Groq: provider: "custom" + base_url ya Groq (angalia chini)
+  provider: "auto"
+  default: "google/gemini-2.5-flash"
+  base_url: "https://openrouter.ai/api/v1"
+
+# --- Groq ni provider RASMI sasa (imeongezwa kwenye repo hii) ---
+# Badili sehemu ya "model" hapo juu iwe:
+# model:
+#   provider: "groq"
+#   default: "openai/gpt-oss-120b"     # au "openai/gpt-oss-20b" / "qwen/qwen3.8-27b"
+# Kisha weka GROQ_API_KEY kwenye .env. Inatumia https://api.groq.com/openai/v1
+# na inasaidia credential-pool rotation (funguo nyingi zinazunguka moja baada ya nyingine).
+#
+# Njia ya zamani (OpenAI-compatible custom endpoint) bado inafanya kazi:
+# model:
+#   provider: "custom"
+#   base_url: "https://api.groq.com/openai/v1"
+#   default: "llama-3.3-70b-versatile"
+
+# --- Personalities za Mwijay AI ---
+# Tumia: /personality mwijay  (kwenye chat)
+# NOTE: personalities lazima iwe chini ya sehemu ya "agent:" — kama inavyoonyeshwa hapa.
+agent:
+  personalities:
+    mwijay: "You are Mwijay AI, Mwijay's personal all-rounder assistant. Speak Swahili mixed with English technical terms, warm and friendly, teach simply then give technical detail. Help with coding, business, research and automation."
+    mwijay_teacher: "You are Mwijay AI in teacher mode. Explain concepts step by step in simple Swahili with examples, then add the technical detail. Be patient and encouraging."
+    mwijay_coder: "You are Mwijay AI in coding mode. Write clean code, debug systematically, explain what each part does in simple Swahili/English. Prefer practical solutions that work on a Windows PC with 8-16GB RAM."
+    mwijay_business: "You are Mwijay AI in business mode. Help with content, social media, marketing and business ideas for Tanzania/East Africa market. Be creative and practical."
+    helpful: "You are a helpful, friendly AI assistant."
+    concise: "You are a concise assistant. Keep responses brief and to the point."
+    technical: "You are a technical expert. Provide detailed, accurate technical information."
+
+# --- Skills ---
+# Njia rahisi ya kutokopi skills: weka external_dirs ielekeze kwenye folda
+# ya skills za repo hii. Badilisha path iwe ya PC yako.
+skills:
+  creation_nudge_interval: 15   # Agent anajikumbusha kutengeneza skill mpya baada ya kazi ngumu
+  # external_dirs:
+  #   - "C:\\Users\\MWIJAY\\my-hermes-agent\\mwijay-hermes\\skills"    # Windows
+  #   - "~/my-hermes-agent/skills/mwijay-ai"                          # Linux/WSL2
+
+# --- Toolsets: All-Rounder (kila kitu) ---
+platform_toolsets:
+  cli: [hermes-cli]
+  telegram: [hermes-telegram]
+  discord: [hermes-discord]
+  whatsapp: [hermes-whatsapp]
+  slack: [hermes-slack]
+  signal: [hermes-signal]
+
+# --- Memory ---
+# MEMORY.md na USER.md zinadhibitiwa kutoka profile/ — nakili kwenye HERMES_HOME

@@ -109,6 +109,18 @@ _MATCHING_PREFIX_STRIP_PROVIDERS: frozenset[str] = frozenset({
     "xai",
 })
 
+# Providers whose API serves ``vendor/model`` ids but whose endpoint can also
+# front arbitrary self-hosted models, so a bare name cannot be prefixed
+# blindly. A bare id is repaired only when the curated catalogue for that
+# provider holds exactly one entry ending in ``/<name>`` — a lookup, not a
+# guess. NVIDIA NIM is the case in hand: build.nvidia.com serves
+# ``nvidia/nemotron-…`` (and third-party ``z-ai/glm-…``), while the same
+# provider id also points at local NIM containers with their own naming.
+# Without this repair a bare ``nemotron-3-ultra-550b-a55b`` reaches the API
+# and returns a bare ``404 page not found`` that never names the model (#78796).
+_CATALOGUE_PREFIX_REPAIR_PROVIDERS: frozenset[str] = frozenset({
+    "nvidia"})
+
 # Providers whose APIs require lowercase model IDs.  Xiaomi's
 # ``api.xiaomimimo.com`` rejects mixed-case names like ``MiMo-V2.5-Pro``
 # that users might copy from marketing docs — it only accepts
@@ -324,6 +336,39 @@ def detect_vendor(model_name: str) -> Optional[str]:
     return None
 
 
+def _repair_prefix_from_catalogue(model_name: str, provider: str) -> str:
+    """Restore a dropped ``vendor/`` prefix — but only when the bare id matches
+    **exactly one** curated entry for this provider modulo the prefix.
+
+    A lookup, never a guess from name shape: NVIDIA's catalogue holds both
+    ``nvidia/nemotron-…`` and third-party ``z-ai/glm-…`` entries, so "which
+    vendor does this bare name belong to?" cannot be answered by pattern.
+    An id that already carries a prefix, or a bare id with no single match
+    (a local NIM container, a proxied model), is passed through untouched.
+
+    Examples::
+
+        >>> _repair_prefix_from_catalogue("nvidia/test-model", "nvidia")
+        'nvidia/test-model'
+    """
+    if "/" in model_name:
+        return model_name
+    try:
+        from hermes_cli.models import _PROVIDER_MODELS
+    except Exception:
+        return model_name
+    # Compare against the catalogue's own suffix, tag included: a bare
+    # ``…:free`` id must resolve to the ``:free`` entry, not its paid sibling.
+    needle = model_name.strip().lower()
+    catalogue = _PROVIDER_MODELS.get(provider) or []
+    matches = {
+        entry
+        for entry in catalogue
+        if "/" in entry and entry.split("/", 1)[1].strip().lower() == needle
+    }
+    return matches.pop() if len(matches) == 1 else model_name
+
+
 def _prepend_vendor(model_name: str) -> str:
     """Prepend the detected ``vendor/`` prefix if missing.
 
@@ -495,6 +540,17 @@ def normalize_model_for_provider(model_input: str, target_provider: str) -> str:
     # --- Authoritative native providers: preserve user-facing slugs as-is ---
     if provider in _AUTHORITATIVE_NATIVE_PROVIDERS:
         return name
+
+    # --- Vendor-prefixed catalogues: never strip, only repair ---
+    # NVIDIA NIM serves ``nvidia/nemotron-…`` (and third-party ``z-ai/glm-…``)
+    # from build.nvidia.com, while the same provider id also points at local
+    # NIM containers with their own naming. Stripping the vendor half the way
+    # we do for zai/xai/gemini sends ``nvidia/nemotron-3-ultra`` to the API as
+    # ``nemotron-3-ultra``, which 404s with a content-free "page not found"
+    # and never names the model (#78796). prefixed ids pass through; a bare id
+    # is repaired from the catalogue only when exactly one entry matches.
+    if provider in _CATALOGUE_PREFIX_REPAIR_PROVIDERS:
+        return _repair_prefix_from_catalogue(name, provider)
 
     # --- Custom & all others: strip matching provider prefix if present, otherwise pass through as-is ---
     return _strip_matching_provider_prefix(name, provider)

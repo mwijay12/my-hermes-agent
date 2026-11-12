@@ -61,7 +61,7 @@ export function useJarvisVoice({
   const [error, setError] = useState<string | null>(null);
 
   // Web Speech & Web Audio refs
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -120,7 +120,9 @@ export function useJarvisVoice({
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
 
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const legacyWindow = window as unknown as { webkitAudioContext?: typeof AudioContext };
+      const AudioCtx = window.AudioContext || legacyWindow.webkitAudioContext;
+      if (!AudioCtx) throw new Error("Web Audio API is unavailable in this browser.");
       const ctx = new AudioCtx();
       audioContextRef.current = ctx;
 
@@ -156,7 +158,7 @@ export function useJarvisVoice({
       };
 
       checkVolume();
-    } catch (err: any) {
+    } catch (err) {
       console.warn("Microphone audio analyser initialization:", err);
     }
   }, [stopSpeaking]);
@@ -179,14 +181,19 @@ export function useJarvisVoice({
 
   // Initialize Speech Recognition
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const voiceWindow = window as unknown as {
+      SpeechRecognition?: typeof SpeechRecognition;
+      webkitSpeechRecognition?: typeof SpeechRecognition;
+    };
+    const SpeechRecognitionCtor =
+      voiceWindow.SpeechRecognition ?? voiceWindow.webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
+    if (!SpeechRecognitionCtor) {
       setError("Web Speech Recognition is not supported by your browser. Please use Chrome, Edge, or Brave.");
       return;
     }
 
-    const rec = new SpeechRecognition();
+    const rec = new SpeechRecognitionCtor();
     rec.continuous = true;
     rec.interimResults = true;
     rec.lang = "en-US";
@@ -197,7 +204,7 @@ export function useJarvisVoice({
       initAudioAnalyser();
     };
 
-    rec.onresult = (event: any) => {
+    rec.onresult = (event: SpeechRecognitionEvent) => {
       let finalStr = "";
       let interimStr = "";
 
@@ -248,7 +255,7 @@ export function useJarvisVoice({
       }
     };
 
-    rec.onerror = (event: any) => {
+    rec.onerror = (event: SpeechRecognitionErrorEvent) => {
       if (event.error !== "no-speech") {
         setError(`Speech recognition notice: ${event.error}`);
       }
@@ -273,7 +280,9 @@ export function useJarvisVoice({
     return () => {
       try {
         rec.abort();
-      } catch {}
+      } catch {
+        /* nothing to clean up */
+      }
       stopAudioAnalyser();
     };
   }, [initAudioAnalyser, onInterimText, onPromptSubmit, stopAudioAnalyser, wakeWords]);
@@ -297,7 +306,9 @@ export function useJarvisVoice({
       recognitionRef.current.stop();
       setIsListening(false);
       stopAudioAnalyser();
-    } catch {}
+    } catch {
+        /* nothing to clean up */
+      }
   }, [stopAudioAnalyser]);
 
   const toggleContinuous = useCallback(() => {
@@ -325,7 +336,7 @@ export function useJarvisVoice({
       const cleaned = text
         .replace(/```[\s\S]*?```/g, "Code block.")
         .replace(/`([^`]+)`/g, "$1")
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
         .replace(/[*_#~]/g, "")
         .trim();
 
