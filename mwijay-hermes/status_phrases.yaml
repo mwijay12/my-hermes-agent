@@ -1,0 +1,67 @@
+# Misemo ya hali (status phrases) ya Mwijay AI — kwa Kiswahili.
+#
+# Haya ndiyo maneno madogo anayotuma Telegram (na gateway nyingine) wakati
+# bado anafanya kazi ndefu: "bado nipo nafanya", "subiri kidogo", n.k.
+#
+# Sakinisha:
+#   nakili faili hii -> <HERMES_HOME>/status_phrases/mwijay.yaml
+#     Windows: %LOCALAPPDATA%\hermes\status_phrases\mwijay.yaml
+#     Linux/WSL2/Termux: ~/.hermes/status_phrases/mwijay.yaml
+#
+# Kisha weka kwenye config.yaml (mode: replace = Kiswahili pekee;
+# mode: append  = changanya na zile za Kiingereza za Hermes):
+#   display:
+#     status_phrases:
+#       path: status_phrases/mwijay.yaml
+#       mode: replace
+#
+# Funuo mbili tu ndizo zinazotumika: "status" (kazi ndefu inaendelea) na
+# "generic" (jibu fupi la "nipo"). Usizidi misemo 80 kwa kila fungu.
+
+status:
+  - bado nipo, naendelea
+  - bado naifanyia kazi
+  - inachukua muda kidogo, bado inaendelea
+  - bado nakagua
+  - sijakwama, bado inaendesha
+  - nasubiri sehemu ya polepole
+  - bado hai, bado inafanya kazi
+  - naiachia imalize
+  - bado naichakata hii
+  - dakika moja, bado inaendesha
+  - bado naendelea vizuri
+  - nasubiri matokeo
+  - bado nipo, nakagua
+  - sehemu ya polepole bado inaendesha
+  - bado nafanyia kazi jibu lenye maana
+  - hakuna jibu bado, bado nasubiri
+  - bado naendesha ukaguzi
+  - nasubiri sehemu ya nyuma
+  - hii inahitaji dakika moja
+  - bado nasonga
+  - bado inaendelea, haijaganda
+  - nasubiri matokeo yenye maana
+  - bado naimeza hii polepole
+  - dakika moja, sehemu ndefu bado inaendesha
+  - bado nasubiri jibu
+  - nafanyia kazi hatua ya polepole
+  - hii inachukua muda kuliko kawaida
+  - bado nakagua, usijali
+  - bado inaendelea
+  - naiachia kitu cha polepole kimelizwe
+  - ngoja kidogo, bado naimalizia
+  - karibu tumemaliza
+
+generic:
+  - nipo
+  - dakika moja
+  - nakagua hilo sasa
+  - nipe sekunde
+  - naangalia hilo
+  - nafanyia kazi
+  - nakagua
+  - bado nafanya kazi
+  - sawa, nimeanza
+  - ngoja nione
+  - nipo kwenye hilo
+  - inaendelea

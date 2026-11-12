@@ -5,6 +5,9 @@
 #   nakili faili hii -> %LOCALAPPDATA%\hermes\skins\mwijay-mwanga.yaml   (Windows)
 #                    -> ~/.hermes/skins/mwijay-mwanga.yaml                (Linux/WSL2/Termux)
 #   kisha:  hermes skin mwijay-mwanga
+#
+# Ona mwonekano kabla ya kuitumia:
+#   python3 mwijay-hermes/scripts/preview_skin.py mwijay-mwanga
 
 name: mwijay-mwanga
 description: Mwijay AI — toleo angavu kwa terminal yenye background nyeupe
@@ -72,3 +75,28 @@ tool_emojis:
   write_file: "✍"
   memory: "🧠"
   cron: "⏰"
+
+banner_logo: |
+  [#8B6508]███╗   ███╗██╗    ██╗██╗     ██╗ █████╗ ██╗   ██╗     █████╗ ██╗[/]
+  [#A67C00]████╗ ████║██║    ██║██║     ██║██╔══██╗╚██╗ ██╔╝    ██╔══██╗██║[/]
+  [#B8860B]██╔████╔██║██║ █╗ ██║██║     ██║███████║ ╚████╔╝     ███████║██║[/]
+  [#0E7A2B]██║╚██╔╝██║██║███╗██║██║██   ██║██╔══██║  ╚██╔╝      ██╔══██║██║[/]
+  [#155A1E]██║ ╚═╝ ██║╚███╔███╔╝██║╚█████╔╝██║  ██║   ██║       ██║  ██║██║[/]
+  [#1B6B26]╚═╝     ╚═╝ ╚══╝╚══╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝[/]
+
+banner_hero: |
+  [#B8860B]                   ▄▄▄▄▄▄[/]
+  [#B8860B]                  ████████[/]
+  [#B8860B]                   ▀▀▀▀▀▀[/]
+  [#8B6508]              ✦      ✦      ✦[/]
+  [#6B6B6B]                    █████[/]
+  [#6B6B6B]                   ███████[/]
+  [#2E7A32]                  █████████[/]
+  [#276B2B]                █████████████[/]
+  [#1E7A2B]              █████████████████[/]
+  [#1B6B26]           ███████████████████████[/]
+  [#155A1E]        █████████████████████████████[/]
+  [#0B5F22]    ██████████████████████████████████████[/]
+  [#0B5F22] ██████████████████████████████████████████[/]
+  [#00668C]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/]
+  [#1E7A2B]          ⚕ Kilimanjaro · Tanzania[/]

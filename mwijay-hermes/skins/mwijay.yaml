@@ -1,4 +1,4 @@
-# Skin ya Mwijay AI — rangi za bendera ya Tanzania (dhahabu / kijani / buluu / nyeusi)
+# Skin ya Mwijay AI — rangi za bendera ya Tanzania (dhahabu / kijani / buluu)
 # Terminal yenye background NYEUSI (ndiyo default kwa Windows Terminal, PowerShell, WSL).
 #
 # Sakinisha:
@@ -6,6 +6,9 @@
 #                    -> ~/.hermes/skins/mwijay.yaml                (Linux/WSL2/Termux)
 #   kisha:  hermes skin mwijay
 #   au weka kwenye config.yaml:  display: { skin: mwijay }
+#
+# Ona mwonekano kabla ya kuitumia:
+#   python3 mwijay-hermes/scripts/preview_skin.py mwijay
 #
 # Thamani yoyote usiyobainisha hapa inarithiwa kutoka skin ya "default".
 
@@ -79,8 +82,29 @@ tool_emojis:
   memory: "🧠"
   cron: "⏰"
 
-# Nembo ndogo ya maandishi badala ya bendera ya Hermes (Rich markup inaruhusiwa)
+# Nembo kuu (inaonyeshwa terminal ikiwa na upana >= 95)
 banner_logo: |
-  [#FCD116]  ⚕  M W I J A Y   A I  ⚕  [/]
+  [#FCD116]███╗   ███╗██╗    ██╗██╗     ██╗ █████╗ ██╗   ██╗     █████╗ ██╗[/]
+  [#FFD700]████╗ ████║██║    ██║██║     ██║██╔══██╗╚██╗ ██╔╝    ██╔══██╗██║[/]
+  [#F5C518]██╔████╔██║██║ █╗ ██║██║     ██║███████║ ╚████╔╝     ███████║██║[/]
+  [#1EB53A]██║╚██╔╝██║██║███╗██║██║██   ██║██╔══██║  ╚██╔╝      ██╔══██║██║[/]
+  [#17A032]██║ ╚═╝ ██║╚███╔███╔╝██║╚█████╔╝██║  ██║   ██║       ██║  ██║██║[/]
+  [#0E7A2B]╚═╝     ╚═╝ ╚══╝╚══╝ ╚═╝ ╚════╝ ╚═╝  ╚═╝   ╚═╝       ╚═╝  ╚═╝╚═╝[/]
+
+# Mlima Kilimanjaro — inakaa upande wa kushoto wa paneli ya kuanza
 banner_hero: |
-  [#1EB53A]   Dar es Salaam  ·  Tanzania  [/]
+  [#FCD116]                   ▄▄▄▄▄▄[/]
+  [#FCD116]                  ████████[/]
+  [#FCD116]                   ▀▀▀▀▀▀[/]
+  [#FFD700]              ✦      ✦      ✦[/]
+  [#FFF8DC]                    █████[/]
+  [#FFF8DC]                   ███████[/]
+  [#2ECC71]                  █████████[/]
+  [#27AE60]                █████████████[/]
+  [#1EB53A]              █████████████████[/]
+  [#179130]           ███████████████████████[/]
+  [#0E7A2B]        █████████████████████████████[/]
+  [#0B5F22]    ██████████████████████████████████████[/]
+  [#0B5F22] ██████████████████████████████████████████[/]
+  [#00A3DD]▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀[/]
+  [#1EB53A]          ⚕ Kilimanjaro · Tanzania[/]

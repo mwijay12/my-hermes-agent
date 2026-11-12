@@ -6,8 +6,11 @@ Inafanya nini (hatua kwa hatua, na inauliza kabla ya kubadilisha chochote):
   1. Inakili SKINS  -> <HERMES_HOME>/skins/mwijay.yaml (+ mwijay-mwanga.yaml)
   2. Inakili BUNDLE -> <HERMES_HOME>/skill-bundles/mwijay.yaml   (amri: /mwijay)
   3. Inakili PROFILE-> <HERMES_HOME>/SOUL.md, USER.md, MEMORY.md
-  4. Inasanidi config.yaml:
+  4. Inakili MISEMO -> <HERMES_HOME>/status_phrases/mwijay.yaml  (Telegram kwa Kiswahili)
+  5. Inasanidi config.yaml (bila kufuta kilichopo):
        display.skin                = "mwijay"
+       display.personality         = "mwijay"      (tu kama halikuwa limewekwa)
+       display.status_phrases      = {path:..., mode: replace}  (tu kama halipo)
        skills.external_dirs        += <repo>/skills/mwijay-ai
 
 Matumizi:
@@ -22,7 +25,7 @@ Baada ya hapo:
     /mwijay                 # ndani ya chat
 
 Ni salama: hailazimishi, inaweka nakala ya akiba (config.yaml.bak) kabla ya
-kuandika config.yaml, na hailazwiwiwi kugusa .env wala API keys zako.
+kuandika config.yaml, na hailazimishwi kugusa .env wala API keys zako.
 """
 
 from __future__ import annotations
@@ -111,6 +114,28 @@ def merge_config(cfg_path: Path, skin: str, apply: bool) -> list[str]:
     else:
         lines.append("  =  skills.external_dirs tayari ina njia ya skills za Mwijay")
 
+    # Misemo ya Kiswahili kwa Telegram/gateway (tu kama hakuna iliyowekwa)
+    sp = display.get("status_phrases")
+    if not isinstance(sp, dict) or not sp.get("path"):
+        display["status_phrases"] = {
+            "path": "status_phrases/mwijay.yaml",
+            "mode": "replace",
+        }
+        cfg["display"] = display
+        changed = True
+        lines.append("  +  display.status_phrases -> status_phrases/mwijay.yaml (mode: replace)")
+    else:
+        lines.append("  =  display.status_phrases tayari imewekwa")
+
+    # Sauti ya Mwijay kama hakuna personality iliyochaguliwa
+    if not str(display.get("personality") or "").strip():
+        display["personality"] = "mwijay"
+        cfg["display"] = display
+        changed = True
+        lines.append("  +  display.personality -> mwijay")
+    else:
+        lines.append(f"  =  display.personality tayari ni {display.get('personality')}")
+
     if changed and apply:
         if cfg_path.is_file():
             shutil.copy2(cfg_path, cfg_path.with_suffix(cfg_path.suffix + ".bak"))
@@ -164,13 +189,18 @@ def main() -> int:
             _log(copy_into(src, dst, args.apply))
     _log()
 
-    _log("4) CONFIG")
+    _log("4) MISEMO YA KISWAHILI (Telegram / gateway)")
+    _log(copy_into(MWIJAY_DIR / "status_phrases.yaml",
+                   home / "status_phrases" / "mwijay.yaml", args.apply))
+    _log()
+
+    _log("5) CONFIG")
     for line in merge_config(home / "config.yaml", args.skin, args.apply):
         _log(line)
     _log()
 
     if args.profile:
-        _log(f"5) PROFILE MPYA: {args.profile}")
+        _log(f"6) PROFILE MPYA: {args.profile}")
         cmd = f"hermes profile create {args.profile}"
         if args.apply:
             _log(f"  ~  endesha mwenyewe:  {cmd}")

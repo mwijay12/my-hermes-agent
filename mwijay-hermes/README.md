@@ -238,29 +238,33 @@ kukwama kwa sababu ya rate limit ya provider mmoja.
 
 ---
 
-## 9. Kuibinafsisha — Terminal → Computer Use → Mobile → App yako
+## 9. Kuipendezesha Terminal (na Telegram)
 
 Mwongozo kamili: **`personalize.html`** (fungua kwenye browser).
+Uamuzi: **Telegram ipo** → mobile imemalizika. **Hatujengi app binafsi.**
+Tunachofanya: kufanya terminal iwe ya Mwijay AI kweli.
 
-| Ngazi | Faili / Amri | Unapata |
-|---|---|---|
-| **1. Terminal** | `personalize.html` §1 | Skin ya rangi za Tanzania, jina "Mwijay AI", pet/mascot, amri `/mwijay`, profile yako |
-| **2. Computer Use** | `hermes computer-use install` | Agent anadhibiti PC (background — haibi puku) kwenye Windows/macOS/Linux |
-| **3. Mobile** | `hermes gateway setup` · `hermes dashboard` + Tailscale · Termux | Mwijay AI mfukoni kupitia Telegram, PWA, au terminal halisi ya simu |
-| **4. App binafsi** | Rebrand `apps/desktop/` | Dirisha + ikoni yako — "Mwijay AI", siyo "Hermes Agent" |
-
-**Vitu vilivyotengenezwa tayari kwa ajili yako:**
+**Anza hapa (dakika 3):**
+```bash
+python3 mwijay-hermes/scripts/preview_skin.py mwijay     # 1. ona mwonekano
+python3 mwijay-hermes/scripts/setup_personal.py --apply   # 2. sakinisha
+```
 
 | Faili | Kazi yake |
 |---|---|
-| `skins/mwijay.yaml` | Skin ya dhahabu/kijani/buluu (bendera ya Tanzania) kwa terminal nyeusi — spinner za Kiswahili, nembo, jina "Mwijay AI" |
+| `skins/mwijay.yaml` | Rangi za bendera ya Tanzania (dhahabu/kijani/buluu), nembo ya **MWIJAY AI** ya herufi kubwa, mlima Kilimanjaro, spinner za Kiswahili ("inafikiria", "inatafiti"), jina "Mwijay AI" |
 | `skins/mwijay-mwanga.yaml` | Toleo la terminal yenye background nyeupe/angavu |
+| `status_phrases.yaml` | Misemo 44 ya Kiswahili anazotuma Telegram wakati anafanya kazi ("bado nipo, naendelea") |
 | `skill-bundles/mwijay.yaml` | Amri `/mwijay` — inapakia skills zote tano zako mara moja |
-| `scripts/setup_personal.py` | Inasanidi yote kwa amri moja: `python3 mwijay-hermes/scripts/setup_personal.py --apply` |
+| `scripts/preview_skin.py` | Kionjo: ona jinsi terminal itakavyoonekana kabla ya kuitumia — badilisha rangi, endesha tena |
+| `scripts/setup_personal.py` | Inasanidi yote kwa amri moja (kausa kavu kwa default, `--apply` kutekeleza) |
+| `config/config.yaml` | Sehemu ya `display:` yenye streaming, saa, markdown, muhtasari wa mwisho, mlio, na misemo |
 
-> ⚠️ **Tahadhari za msingi:** usiweke funguo kwenye Git; usifungue dashboard (bandari 9119)
-> kwenye intaneti ya wazi (tumia Tailscale/VPN); na computer use ni kumpa mtu funguo za nyumba —
-> anza na kazi ndogo zinazoweza kurudishwa nyuma, usimpe benki wala akaunti nyeti.
+**Ziada za hiari:** `/hatch <maelezo>` (zalisha pet/mascot yako), `hermes pets list`,
+`hermes profile create mwijay` (amri ya shell inayoitwa `mwijay`), `/personality mwijay`.
+
+> ⚠️ **Usalama:** funguo zibaki kwenye `.env` (`~/.hermes/.env` au `%LOCALAPPDATA%\hermes\.env`),
+> kamwe kwenye Git. `setup_personal.py` hailazimishwi kugusa `.env` — inanakili faili za muundo pekee.
 
 ---
 

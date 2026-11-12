@@ -57,6 +57,29 @@ platform_toolsets:
   signal: [hermes-signal]
 
 # =====================================================================
+# MWONO ONEKANO WA TERMINAL (display) — "kuipendezesha"
+# =====================================================================
+# Hiki ndicho kinachofanya terminal yako iwe ya Mwijay AI, si ya Hermes.
+# Maelezo zaidi: mwijay-hermes/personalize.html
+display:
+  skin: mwijay                 # rangi za Tanzania (au "mwijay-mwanga" kwa terminal nyeupe)
+  personality: mwijay          # sauti yake: Swahili rahisi + English ya kiufundi
+  # interface: cli             # "cli" = terminal ya kawaida (default), "tui" = paneli la kisasa
+  streaming: true              # maandishi yanatoka taratibu badala ya mara moja
+  timestamps: true             # onyesha saa kando ya kila ujumbe
+  timestamp_format: "%H:%M"
+  final_response_markdown: render   # render (zuri) | strip | raw
+  turn_summary: true           # mstari wa mwisho: "⋯ 12.4s · edited 2 files…"
+  spinner_token_flow: true     # onyesha tokeni zinazotumika kwenye spinner
+  friendly_tool_labels: true   # "Inasoma faili…" badala ya "read_file"
+  inline_diffs: true           # onyesha tofauti za faili moja kwa moja
+  bell_on_complete: true       # mlio mfupi anapomaliza (hata ukiwa kwenye dirisha lingine)
+  show_cost: true              # onyesha gharama ($0.00 kwa free tiers — inasaidia kuona uvujaji)
+  status_phrases:              # misemo ya Kiswahili anayotuma Telegram wakati anafanya kazi
+    path: status_phrases/mwijay.yaml
+    mode: replace              # replace = Kiswahili pekee | append = changanya na Kiingereza
+
+# =====================================================================
 # ROTATION YA FREE LLM — "akili inayozunguka"
 # =====================================================================
 # Orodha kamili ya providers wa bure + jinsi ya kupata keys:
