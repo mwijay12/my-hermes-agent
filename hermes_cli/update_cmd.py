@@ -3083,11 +3083,60 @@ def _normalize_managed_eol(git_cmd, repo_root):
             return None
         return {p for p in out.stdout.split("\0") if p}
 
+    # Paths per ``git diff --quiet`` probe. Small enough that the argv stays
+    # far below the Windows command-line limit even for long paths.
+    _PROBE_CHUNK = 200
+
+    def _cr_only(paths):
+        """Subset of *paths* whose only difference from the index is a CR at EOL.
+
+        ``--name-only`` decides purely from blob OIDs, so on git releases that
+        don't apply ``--ignore-cr-at-eol`` to that shortcut (2.39 doesn't) a
+        pure-CRLF file still counts as "really" dirty and ``all_dirty -
+        real_dirty`` collapses to nothing — the repair below then silently
+        never runs and the update keeps hitting "Your local changes would be
+        overwritten". ``--quiet`` diffs content and always honours the flag,
+        so probe in argv-sized batches: one call per batch in the common case
+        (everything is pure churn), splitting only the batch that really
+        changed.
+        """
+        ordered = sorted(paths)
+        cr_only: set[str] = set()
+        for start in range(0, len(ordered), _PROBE_CHUNK):
+            cr_only |= _cr_only_chunk(ordered[start:start + _PROBE_CHUNK])
+        return cr_only
+
+    def _cr_only_chunk(paths):
+        """Split-and-probe: ``--quiet`` takes a real diff, so it honours the
+        flag, but it has no stdin pathspec (``git diff`` rejects
+        ``--pathspec-from-file`` outright), so walk the set in argv-sized
+        chunks and only recurse into the chunk that actually changed."""
+        if not paths:
+            return set()
+        out = subprocess.run(
+            probe + ["diff", "--quiet", "--ignore-cr-at-eol", "--", *paths],
+            cwd=repo_root,
+            capture_output=True,
+            text=True, encoding="utf-8", errors="replace",
+            check=False,
+        )
+        if out.returncode == 0:
+            return set(paths)
+        if out.returncode != 1:
+            # git itself failed (no repo, bad flag, …) — never guess: a path
+            # we can't prove is CR-only must not be restored, because
+            # restoring it would throw away a real edit.
+            return set()
+        if len(paths) == 1:
+            return set()
+        mid = len(paths) // 2
+        return _cr_only_chunk(paths[:mid]) | _cr_only_chunk(paths[mid:])
+
     def _eol_only():
-        all_dirty, real_dirty = _dirty(), _dirty("--ignore-cr-at-eol")
-        if all_dirty is None or real_dirty is None:
+        all_dirty = _dirty()
+        if all_dirty is None:
             return None
-        return all_dirty - real_dirty
+        return _cr_only(all_dirty)
 
     try:
         effective = subprocess.run(
