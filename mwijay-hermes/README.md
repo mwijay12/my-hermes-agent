@@ -84,6 +84,10 @@ mwijay-hermes/
 
 ## 4. Jinsi ya kuinstall kwenye PC yako (Windows)
 
+> 💡 **Upo kwenye PC ya chuo/maabara?** (hakuna admin, hakuna Git, mtandao umezuiwa)
+> Ruka sehemu hii — nenda moja kwa moja kwenye **[Sehemu ya 9](#9-sakinisha-kwenye-pc-ya-chuo--maabara)**
+> na utumie `scripts/install-chuo.ps1`, ambayo inafanya hatua zote hizi yenyewe.
+
 ### Hatua 1 — Install Hermes
 
 Fungua **PowerShell** (kama Administrator si lazima) na uendeshe:
@@ -238,7 +242,33 @@ kukwama kwa sababu ya rate limit ya provider mmoja.
 
 ---
 
-## 9. Kuipendezesha Terminal (na Telegram)
+## 9. Sakinisha kwenye PC ya chuo / maabara
+
+Mwongozo kamili: **`install-chuo.html`** (fungua kwenye browser).
+Imeandikwa kwa hali halisi ya maabara: **huna admin**, **huna Git**, mtandao unaweza kuwa umezuiwa.
+
+```powershell
+# Windows (PowerShell) — baada ya kupata repo:
+git clone https://github.com/mwijay12/my-hermes-agent "$HOME\my-hermes-agent"
+powershell -ExecutionPolicy Bypass -File "$HOME\my-hermes-agent\mwijay-hermes\scripts\install-chuo.ps1"
+```
+```bash
+# Linux / macOS / WSL ya maabara:
+bash ~/my-hermes-agent/mwijay-hermes/scripts/install-chuo.sh
+```
+
+| Faili | Kazi yake |
+|---|---|
+| `scripts/install-chuo.ps1` | Installer ya Windows: inakagua Python/Git/mtandao, inapata repo (clone au ZIP ikiwa Git haipo), inatengeneza venv, inasakinisha Hermes, kisha inaendesha `setup_personal.py`. Ina `-Method official` (inajileta Python) na **`-Wipe`** (futa funguo kabla ya kuondoka). |
+| `scripts/install-chuo.sh` | Toleo la Linux/macOS/WSL — chaguo zilezile (`--official`, `--wipe`). |
+| `install-chuo.html` | Mwongozo: orodha ya ukaguzi, njia mbili, matatizo ya kawaida kwenye PC za chuo, na usalama wa kuondoka. |
+
+> ⚠️ **PC ya chuo ni ya watu wengi.** Kabla hujaondoka:
+> `powershell -ExecutionPolicy Bypass -File "...\install-chuo.ps1" -Wipe` (au futa `%LOCALAPPDATA%\hermes\.env` mwenyewe).
+
+---
+
+## 10. Kuipendezesha Terminal (na Telegram)
 
 Mwongozo kamili: **`personalize.html`** (fungua kwenye browser).
 Uamuzi: **Telegram ipo** → mobile imemalizika. **Hatujengi app binafsi.**

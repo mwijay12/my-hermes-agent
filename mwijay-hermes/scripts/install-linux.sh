@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Mwijay AI — Install Hermes kwenye Linux / WSL2
 # Endesha: bash mwijay-hermes/scripts/install-linux.sh
+#
+# Kwa PC ya chuo/maabara (hakuna sudo, hakuna Git, mtandao umezuiwa) tumia badala yake:
+#   bash mwijay-hermes/scripts/install-chuo.sh          (inafanya kila kitu yenyewe)
+#   bash mwijay-hermes/scripts/install-chuo.sh --wipe   (futa funguo kabla ya kuondoka)
 set -e
 
 echo "=== Mwijay AI — Hermes Installer (Linux/WSL2) ==="
